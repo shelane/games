@@ -165,12 +165,6 @@
 
     <!-- Game settings -->
     <div class="row2">
-      <div><span class="lbl" style="margin-top:0">Innings</span>
-        <select id="s-inn" onchange="updateSwitchOpts()">
-          <option value="4">4</option><option value="5">5</option>
-          <option value="6" selected>6</option><option value="7">7</option>
-        </select>
-      </div>
       <div><span class="lbl" style="margin-top:0">Limit style</span>
         <select id="s-ls" onchange="toggleLS()">
           <option value="tiered" selected>Tiered</option>
@@ -188,8 +182,14 @@
         <div><span class="lbl">Early limit</span><select id="s-el"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
         <div><span class="lbl">Late limit</span><select id="s-ll"><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="10" selected>10</option><option value="999">Unlimited</option></select></div>
       </div>
-      <span class="lbl">Switch after inning</span>
-      <select id="s-sw"></select>
+      <span class="lbl">Switch after inning #</span>
+      <select id="s-sw">
+        <option value="1">1 (late starts inn 2)</option>
+        <option value="2">2 (late starts inn 3)</option>
+        <option value="3" selected>3 (late starts inn 4)</option>
+        <option value="4">4 (late starts inn 5)</option>
+        <option value="5">5 (late starts inn 6)</option>
+      </select>
     </div>
     <button class="btn btn-start" onclick="startGame()">Start Game</button>
   </div>
@@ -261,6 +261,7 @@
       <button class="cbig c-next" onclick="nextHalf()"><span>→</span><small id="cl-nx">End half</small></button>
     </div>
     <button class="c-undo" onclick="undo()">↩ Undo last action</button>
+    <button class="c-undo" style="margin-top:4px;background:#f8d7da;color:#7a1a1a;border-color:#c07070" onclick="endGame()">⏹ End Game</button>
   </div>
 
   <div class="inn-card">
@@ -377,15 +378,13 @@
   function startGame(){
     const away=document.getElementById('s-away').value.trim()||'Away';
     const home=document.getElementById('s-home').value.trim()||'Home';
-    const inn=parseInt(document.getElementById('s-inn').value);
     const ls=document.getElementById('s-ls').value;
     const rl=parseInt(document.getElementById('s-rl').value)||0;
     const el=parseInt(document.getElementById('s-el').value)||0;
     const ll=parseInt(document.getElementById('s-ll').value)||0;
     const sw=parseInt(document.getElementById('s-sw').value)||3;
-    const z=n=>Array(n).fill(0);
-    g={away,home,cA:selA,cH:selH,inn,ls,rl,el,ll,sw,
-      aR:z(inn),hR:z(inn),outs:0,inning:0,half:'away',gameOver:false,
+    g={away,home,cA:selA,cH:selH,ls,rl,el,ll,sw,
+      aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
       luA:[...setupLineupAway],luH:[...setupLineupHome],
       bA:0,bH:0,pSt:{},date:new Date().toLocaleDateString(),_h:[]};
@@ -423,12 +422,10 @@
   }
   function addRun(t){
     if(g.gameOver)return;
-    const r=t==='away'?g.aR[g.inning]:g.hR[g.inning];
+    const runs=curRuns(t);
     const lim=limFor(g.inning);
-    if(lim&&r>=lim){alert(`Run limit (${lim}) reached!`);return;}
-    push(snap());
-    if(t==='away')g.aR[g.inning]++;else g.hR[g.inning]++;
-    save();render();
+    if(lim&&runs[g.inning]>=lim){alert(`Run limit (${lim}) reached!`);return;}
+    push(snap());runs[g.inning]++;save();render();
   }
   function addOut(){
     if(g.gameOver)return;push(snap());g.outs++;
@@ -438,8 +435,17 @@
   function adjC(t,d){if(g.gameOver)return;const mx=t==='balls'?4:3;g[t]=Math.max(0,Math.min(mx,g[t]+d));save();render();}
   function advHalf(){
     if(g.half==='away'){g.half='home';g.outs=0;}
-    else{g.inning++;g.half='away';g.outs=0;if(g.inning>=g.inn){g.gameOver=true;savePast(g);}}
+    else{g.inning++;g.half='away';g.outs=0;}
     g.bases=[false,false,false];g.balls=0;g.strikes=0;save();render();
+  }
+  function endGame(){
+    if(!confirm('End the game now?'))return;
+    push(snap());g.gameOver=true;savePast(g);save();render();
+  }
+  function curRuns(t){
+    const arr=t==='away'?g.aR:g.hR;
+    while(arr.length<=g.inning)arr.push(0);
+    return arr;
   }
   function nextHalf(){if(g.gameOver)return;push(snap());advHalf();}
   function setHalf(h){push(snap());g.half=h;save();render();}
@@ -516,23 +522,31 @@
     const th=document.getElementById('tog-h');th.textContent=g.home+' batting';
     if(g.half==='home'){th.style.borderColor=hC.bg;th.style.color=hC.bg;th.style.background=hC.lt;}
     else{th.style.borderColor='#ddd';th.style.color='#888';th.style.background='#f5f7fa';}
-    // run buttons
-    document.getElementById('btn-ra').style.background=aC.bg;
-    document.getElementById('cl-a').textContent=g.away+' run';
-    document.getElementById('btn-rh').style.background=hC.bg;
-    document.getElementById('cl-h').textContent=g.home+' run';
+    // run buttons — only show batting team's
+    const bra=document.getElementById('btn-ra');
+    const brh=document.getElementById('btn-rh');
+    if(g.half==='away'){
+      bra.style.display='flex';bra.style.background=aC.bg;
+      document.getElementById('cl-a').textContent=g.away+' run';
+      brh.style.display='none';
+    } else {
+      brh.style.display='flex';brh.style.background=hC.bg;
+      document.getElementById('cl-h').textContent=g.home+' run';
+      bra.style.display='none';
+    }
     document.getElementById('add-p-btn').style.background=(g.half==='away'?aC:hC).bg;
-    const isLast=g.inning>=g.inn-1;
-    document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':(isLast?'End game':'End bottom / next inn');
-    // inning table
+    document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
+    // inning table — use max played innings
+    const totalInnings=Math.max(g.aR.length,g.hR.length,g.inning+1);
     const tb=document.getElementById('inn-tbl');
-    let hdr='<tr><th>Team</th>';for(let i=0;i<g.inn;i++)hdr+=`<th>${i+1}</th>`;hdr+='<th>R</th></tr>';
+    let hdr='<tr><th>Team</th>';for(let i=0;i<totalInnings;i++)hdr+=`<th>${i+1}</th>`;hdr+='<th>R</th></tr>';
     const mkRow=(nm,runs,tot,isAct,col)=>{
       let r=`<tr><td class="tlbl" style="color:${col.bg}">${nm}</td>`;
-      for(let i=0;i<g.inn;i++){
+      for(let i=0;i<totalInnings;i++){
+        const v=runs[i]||0;
         const act=!g.gameOver&&i===g.inning&&isAct;
-        const atLim=limFor(i)&&runs[i]>=limFor(i);
-        const shown=i<g.inning||(i===g.inning&&!isAct)||g.gameOver?runs[i]:(act?`<b>${runs[i]}</b>`:'—');
+        const atLim=limFor(i)&&v>=limFor(i);
+        const shown=i<g.inning||g.gameOver?v:(act?`<b>${v}</b>`:'—');
         r+=`<td class="${act?'ainn':''}${atLim?' alim':''}"${act?` style="background:${col.lt}"`:''}>${shown}</td>`;
       }
       return r+`<td class="ttot" style="color:${col.bg}">${tot}</td></tr>`;
@@ -558,7 +572,7 @@
   }
 
   window.onload=()=>{
-    toggleLS();updateSwitchOpts();buildSwatches();
+    toggleLS();buildSwatches();
     try{const s=localStorage.getItem(LSK);if(s){g=JSON.parse(s);showGame();return;}}catch{}
     showSetup();
   };
