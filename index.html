@@ -281,8 +281,9 @@
 </div>
 
 <script>
-  const LSK='llsg4',LSH='llsg4h';
+  const LSK='llsg4',LSH='llsg4h',LSU='llsg4u';
   let g=null;
+  let _undoStack=[];
   const COLORS=[
     {n:'Red',    bg:'#c0392b',lt:'#fdf0ef'},
     {n:'Blue',   bg:'#1565c0',lt:'#eff4fd'},
@@ -363,9 +364,12 @@
     return idx<g.sw?(g.el||0):late;
   }
   function sum(a){return a.reduce((x,y)=>x+y,0);}
-  function save(){localStorage.setItem(LSK,JSON.stringify(g));}
-  function snap(){return JSON.stringify(g);}
-  function push(s){g._h.push(s);if(g._h.length>40)g._h.shift();}
+  function save(){
+    const {_h,...rest}=g;
+    localStorage.setItem(LSK,JSON.stringify(rest));
+  }
+  function snap(){const {_h,...rest}=g;return JSON.stringify(rest);}
+  function push(s){_undoStack.push(s);if(_undoStack.length>40)_undoStack.shift();try{localStorage.setItem(LSU,JSON.stringify(_undoStack));}catch{_undoStack.shift();}}
   function loadPast(){try{return JSON.parse(localStorage.getItem(LSH))||[];}catch{return[];}}
   function savePast(gm){
     const h=loadPast();
@@ -387,7 +391,9 @@
       aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
       luA:[...setupLineupAway],luH:[...setupLineupHome],
-      bA:0,bH:0,pSt:{},date:new Date().toLocaleDateString(),_h:[]};
+      bA:0,bH:0,pSt:{},date:new Date().toLocaleDateString()};
+    _undoStack=[];
+    localStorage.removeItem(LSU);
     save();showGame();
   }
   function goSetup(){
@@ -416,9 +422,11 @@
   }
 
   function undo(){
-    if(!g._h.length)return;
-    const prev=JSON.parse(g._h.pop());
-    const h=g._h;g=prev;g._h=h;save();render();
+    if(!_undoStack.length)return;
+    g=JSON.parse(_undoStack.pop());
+    g._h=[];
+    try{localStorage.setItem(LSU,JSON.stringify(_undoStack));}catch{}
+    save();render();
   }
   function addRun(t){
     if(g.gameOver)return;
@@ -468,17 +476,62 @@
     else{g.luH.splice(i,1);if(g.bH>=g.luH.length)g.bH=0;}
     save();render();
   }
-  function cycleStatus(t,i){
-    push(snap());const k=t+'-'+i;
-    const cur=(g.pSt||{})[k]||'none';
-    g.pSt[k]={none:'base',base:'scored',scored:'out',out:'none'}[cur];
-    save();render();
+  const ST_ORDER=['none','1st','2nd','3rd','scored','out'];
+  const ST_LBL={none:'—',  '1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
+  const ST_CLS={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
+
+  function getSt(t,i){return (g.pSt||{})[t+'-'+i]||'none';}
+  function setSt(t,i,v){push(snap());g.pSt[t+'-'+i]=v;save();render();}
+
+  function advanceSt(t,i){
+    const cur=getSt(t,i);
+    const next=ST_ORDER[(ST_ORDER.indexOf(cur)+1)%ST_ORDER.length];
+    setSt(t,i,next);
   }
+
+  function pickSt(t,i){
+    // build a simple overlay picker
+    const cur=getSt(t,i);
+    const existing=document.getElementById('st-picker');
+    if(existing) existing.remove();
+    const opts=ST_ORDER.filter(s=>s!=='none');
+    const div=document.createElement('div');
+    div.id='st-picker';
+    div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center';
+    div.innerHTML=`<div style="background:#fff;border-radius:14px;padding:16px;width:220px;box-shadow:0 4px 24px rgba(0,0,0,.18)">
+    <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px;text-align:center">Set runner status</div>
+    ${opts.map(s=>`<button onclick="setSt('${t}',${i},'${s}');document.getElementById('st-picker').remove()"
+      style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};font-size:14px;font-weight:700;cursor:pointer;color:#111">${ST_LBL[s]}</button>`).join('')}
+    <button onclick="setSt('${t}',${i},'none');document.getElementById('st-picker').remove()"
+      style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>
+    <button onclick="document.getElementById('st-picker').remove()"
+      style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>
+  </div>`;
+    div.addEventListener('click',e=>{if(e.target===div)div.remove();});
+    document.body.appendChild(div);
+  }
+
   function stLabel(t,i){
-    const v=(g.pSt||{})[t+'-'+i]||'none';
-    const lbl={none:'—',base:'On base',scored:'Scored',out:'Out'};
-    const cls={none:'bs0',base:'bs1',scored:'bs2',out:'bs3'};
-    return `<span class="bstat ${cls[v]}" onclick="event.stopPropagation();cycleStatus('${t}',${i})">${lbl[v]}</span>`;
+    const v=getSt(t,i);
+    const cls=ST_CLS[v];
+    const lbl=ST_LBL[v];
+    return `<span class="bstat ${cls}"
+    onclick="event.stopPropagation();advanceSt('${t}',${i})"
+    ondblclick="event.stopPropagation();pickSt('${t}',${i})"
+    ontouchstart="stTouch(event,'${t}',${i})"
+    ontouchend="stTouchEnd(event)"
+    >${lbl}</span>`;
+  }
+
+  // long-press detection for touch
+  let _lpTimer=null,_lpT=null,_lpI=null;
+  function stTouch(e,t,i){
+    e.stopPropagation();
+    _lpT=t;_lpI=i;
+    _lpTimer=setTimeout(()=>{_lpTimer=null;pickSt(t,i);},500);
+  }
+  function stTouchEnd(e){
+    if(_lpTimer){clearTimeout(_lpTimer);_lpTimer=null;advanceSt(_lpT,_lpI);}
   }
 
   function render(){
@@ -573,7 +626,7 @@
 
   window.onload=()=>{
     toggleLS();buildSwatches();
-    try{const s=localStorage.getItem(LSK);if(s){g=JSON.parse(s);showGame();return;}}catch{}
+    try{const s=localStorage.getItem(LSK);if(s){g=JSON.parse(s);g._h=[];_undoStack=JSON.parse(localStorage.getItem(LSU)||'[]');showGame();return;}}catch{}
     showSetup();
   };
 </script>
