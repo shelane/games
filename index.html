@@ -239,8 +239,8 @@
     <div class="cgrid">
       <button class="cbig" id="btn-ra" onclick="addRun('away')"><span>+1</span><small id="cl-a">Away</small></button>
       <button class="cbig" id="btn-rh" onclick="addRun('home')"><span>+1</span><small id="cl-h">Home</small></button>
-      <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
       <button class="cbig" id="btn-ob" onclick="addToBase()"><span>→1st</span><small>on base</small></button>
+      <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
       <button class="cbig c-next" onclick="nextHalf()"><span>→</span><small id="cl-nx">End half</small></button>
     </div>
     <button class="c-undo" onclick="undo()">↩ Undo last action</button>
@@ -449,7 +449,48 @@
   function adjC(t,d){
     if(g.gameOver) return;
     const mx=t==='balls'?4:3;
-    g[t]=Math.max(0,Math.min(mx,g[t]+d));
+    const newVal=Math.max(0,Math.min(mx,g[t]+d));
+    if(newVal===g[t]) return;
+    push(snap());
+    g[t]=newVal;
+
+    if(t==='strikes' && newVal===3){
+      // strikeout — record out, reset count
+      g.outs++;
+      g.balls=0; g.strikes=0;
+      if(g.outs>=3) advHalf();
+      else { save(); render(); }
+      return;
+    }
+
+    if(t==='balls' && newVal===4){
+      // walk — advance all runners, batter to 1st, reset count
+      const team=g.half;
+      const lu=team==='away'?g.luA:g.luH;
+      const bi=team==='away'?g.bA:g.bH;
+
+      // advance existing runners: 3rd→scored, 2nd→3rd, 1st→2nd
+      // only advance a runner if the base behind them is also occupied (force advance)
+      // simplest little-league rule: force advance all occupied bases in sequence
+      const k=(i)=>team+'-'+i;
+      // collect which players are on each base
+      const on1=lu.findIndex((p,i)=>getSt(team,i)==='1st');
+      const on2=lu.findIndex((p,i)=>getSt(team,i)==='2nd');
+      const on3=lu.findIndex((p,i)=>getSt(team,i)==='3rd');
+
+      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
+      if(on2>=0){ g.pSt[k(on2)]='3rd'; g.bases[2]=true; g.bases[1]=false; }
+      if(on1>=0){ g.pSt[k(on1)]='2nd'; g.bases[1]=true; g.bases[0]=false; }
+
+      // batter goes to 1st
+      if(lu.length>0) g.pSt[k(bi)]='1st';
+      g.bases[0]=true;
+
+      g.balls=0; g.strikes=0;
+      save(); render();
+      return;
+    }
+
     save(); render();
   }
   function advHalf(){
