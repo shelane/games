@@ -1,0 +1,6 @@
+
+# Copy the certificates into the container
+COPY *.crt /usr/local/share/ca-certificates/
+
+# Update the CA certificates
+RUN update-ca-certificates --fresh
