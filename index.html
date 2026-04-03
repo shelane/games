@@ -24,8 +24,9 @@
     .setup-lineup .add-row input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid #bbb;font-size:13px;color:#111}
     .setup-lineup .add-row button{padding:8px 12px;border-radius:8px;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:700}
     .setup-player{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#f5f7fa;border-radius:7px;margin-bottom:4px;border:1px solid #e8eaed}
-    .setup-player span{flex:1;font-size:13px;font-weight:600;color:#111}
+    .setup-player span{flex:1;font-size:13px;font-weight:600}
     .setup-player button{background:none;border:none;color:#bbb;font-size:15px;cursor:pointer;padding:2px 5px}
+    /* game header */
     .game-header{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:6px}
     .team-score{text-align:center}
@@ -33,6 +34,7 @@
     .t-score{font-size:44px;font-weight:800;line-height:1}
     .vs{font-size:16px;color:#bbb;font-weight:700}
     .game-meta{display:flex;justify-content:space-between;font-size:11px;color:#888;padding-top:7px;border-top:1px solid #eee;flex-wrap:wrap;gap:4px;font-weight:600}
+    /* status strip */
     .strip{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;text-align:center;border:1px solid #ddd}
     .slbl{font-size:10px;color:#777;display:block;text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:1px}
     .val{font-size:19px;font-weight:800;color:#111}
@@ -45,6 +47,7 @@
     .base{position:absolute;width:15px;height:15px;border:2.5px solid #bbb;transform:rotate(45deg);background:#fff;cursor:pointer}
     .base.on{background:#e67e00;border-color:#e67e00}
     .b1{top:21px;left:42px}.b2{top:0;left:21px}.b3{top:21px;left:0}
+    /* count */
     .count-card{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;border:1px solid #ddd}
     .count-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
     .count-hdr h3{font-size:12px;color:#666;font-weight:700}
@@ -60,18 +63,22 @@
     .cbtns{display:flex;gap:6px;justify-content:center;margin-top:5px}
     .cbtn{padding:4px 14px;border-radius:6px;border:1.5px solid #bbb;background:#fff;color:#333;font-size:16px;font-weight:700;cursor:pointer}
     .cbtn:active{background:#eee}
+    /* controls */
     .ctrl-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .ctrl-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .bat-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
     .tog{padding:9px;border-radius:8px;border:2.5px solid #ddd;cursor:pointer;font-size:12px;font-weight:700;background:#f5f7fa;color:#888}
-    .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-    .cbig{padding:14px 6px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff}
+    /* action row: 3 equal columns, full-width next button below */
+    .action-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+    .cbig{padding:14px 6px;border-radius:10px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;width:100%}
     .cbig span{font-size:20px}
     .cbig small{font-size:10px;font-weight:600;opacity:.9}
     .cbig:active{transform:scale(.96)}
     .c-out{background:#333;color:#fff}
-    .c-next{background:#1a7a34;color:#fff;grid-column:span 2}
+    .c-next{background:#1a7a34;color:#fff;width:100%;padding:14px 6px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+    .c-next:active{transform:scale(.98)}
     .c-undo{background:#e8eaed;color:#444;width:100%;margin-top:6px;padding:10px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-size:13px;font-weight:600}
+    /* inning table */
     .inn-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .inn-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:280px}
@@ -80,30 +87,32 @@
     td.tlbl{text-align:left;font-size:11px;white-space:nowrap;padding-right:6px;font-weight:700}
     td.ttot{font-weight:800}
     td.alim{color:#e67e00;font-weight:700}
+    /* lineup */
     .lineup-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #ddd}
     .lineup-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .lscroll{max-height:220px;overflow-y:auto}
-    .litem{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:8px;margin-bottom:4px;background:#f5f7fa;cursor:pointer;border:1.5px solid #e8eaed}
+    .litem{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:8px;margin-bottom:4px;background:#f5f7fa;border:1.5px solid #e8eaed}
     .litem.deck{background:#f5f5e8;border-color:#b8a000}
     .lnum{font-size:12px;color:#999;width:18px;flex-shrink:0;font-weight:600}
     .lname{font-size:14px;color:#111;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-    .bstat{font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;cursor:pointer;font-weight:700}
+    .bstat{font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;cursor:pointer;font-weight:700;user-select:none}
     .bs0{background:#f0f0f0;color:#aaa;border:1px solid #ddd}
     .bs1{background:#fff3cd;color:#7a5800;border:1px solid #e6c200}
     .bs2{background:#d4edda;color:#155724;border:1px solid #5a9a6a}
     .bs3{background:#f8d7da;color:#7a1a1a;border:1px solid #c07070}
     .bbadge{font-size:11px;padding:2px 7px;border-radius:5px;flex-shrink:0;font-weight:700;color:#fff}
     .deck-badge{background:#b8a000}
+    .pick-btn{font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid #ddd;background:#f5f7fa;color:#888;cursor:pointer;flex-shrink:0;font-weight:600;user-select:none}
     .ladd{display:flex;gap:7px;margin-top:8px}
     .ladd input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid #bbb;background:#fff;color:#111;font-size:13px}
     .ladd button{padding:8px 12px;border-radius:8px;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:700}
     .lnext{margin-top:6px;width:100%;padding:9px;border-radius:8px;border:1px solid #ccc;background:#e8eaed;color:#333;font-size:13px;cursor:pointer;font-weight:600}
+    /* misc */
     .over-banner{background:#d4edda;border:1.5px solid #5a9a6a;border-radius:10px;padding:11px;text-align:center;margin-bottom:8px;font-size:14px;color:#155724;font-weight:700}
     .pg{background:#f5f7fa;border-radius:8px;padding:11px;margin-bottom:7px;border:1px solid #e0e0e0}
     .pg-teams{font-size:14px;font-weight:700;margin-bottom:3px}
     .pg-meta{font-size:12px;color:#888}
     .divider{height:1px;background:#eee;margin:12px 0}
-    .end-game-card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #ddd}
   </style>
 </head>
 <body>
@@ -119,8 +128,8 @@
     <span class="lbl">Away Lineup (optional)</span>
     <div class="setup-lineup">
       <div class="add-row">
-        <input type="text" id="sl-away" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')setupAddPlayer('away')">
-        <button id="sl-away-btn" onclick="setupAddPlayer('away')">Add</button>
+        <input type="text" id="sl-away" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')setupAdd('away')">
+        <button id="sl-away-btn" onclick="setupAdd('away')">Add</button>
       </div>
       <div id="sl-away-list"></div>
     </div>
@@ -132,8 +141,8 @@
     <span class="lbl">Home Lineup (optional)</span>
     <div class="setup-lineup">
       <div class="add-row">
-        <input type="text" id="sl-home" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')setupAddPlayer('home')">
-        <button id="sl-home-btn" onclick="setupAddPlayer('home')">Add</button>
+        <input type="text" id="sl-home" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')setupAdd('home')">
+        <button id="sl-home-btn" onclick="setupAdd('home')">Add</button>
       </div>
       <div id="sl-home-list"></div>
     </div>
@@ -154,8 +163,12 @@
     </div>
     <div id="sr-tiered">
       <div class="row2">
-        <div><span class="lbl">Early limit</span><select id="s-el"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
-        <div><span class="lbl">Late limit</span><select id="s-ll"><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="10" selected>10</option><option value="999">Unlimited</option></select></div>
+        <div><span class="lbl">Early limit</span>
+          <select id="s-el"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
+        </div>
+        <div><span class="lbl">Late limit</span>
+          <select id="s-ll"><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="10" selected>10</option><option value="999">Unlimited</option></select>
+        </div>
       </div>
       <span class="lbl">Switch after inning #</span>
       <select id="s-sw">
@@ -236,13 +249,13 @@
       <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
       <button class="tog" id="tog-h" onclick="setHalf('home')"></button>
     </div>
-    <div class="cgrid">
-      <button class="cbig" id="btn-ra" onclick="addRun('away')"><span>+1</span><small id="cl-a">Away</small></button>
-      <button class="cbig" id="btn-rh" onclick="addRun('home')"><span>+1</span><small id="cl-h">Home</small></button>
+    <!-- single run button slot — swapped by render -->
+    <div class="action-row" id="action-row">
+      <button class="cbig" id="btn-run" onclick="addRun()"><span>+1</span><small id="cl-run">Run</small></button>
       <button class="cbig" id="btn-ob" onclick="addToBase()"><span>→1st</span><small>on base</small></button>
       <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
-      <button class="cbig c-next" onclick="nextHalf()"><span>→</span><small id="cl-nx">End half</small></button>
     </div>
+    <button class="c-next" onclick="nextHalf()"><span id="cl-nx-icon">→</span> <span id="cl-nx">End top / start bottom</span></button>
     <button class="c-undo" onclick="undo()">↩ Undo last action</button>
   </div>
 
@@ -261,14 +274,14 @@
     <button class="lnext" onclick="advanceBatter()">Next batter ↓</button>
   </div>
 
-  <div class="end-game-card">
+  <div class="card" style="margin-bottom:10px">
     <button class="btn" style="background:#f8d7da;color:#7a1a1a;border:1.5px solid #c07070" onclick="endGame()">⏹ End Game</button>
   </div>
 </div>
 
 <script>
-  const LSK='llsg4', LSH='llsg4h', LSU='llsg4u';
-  let g=null, _undoStack=[];
+  const LSK='llsg5', LSH='llsg5h', LSU='llsg5u';
+  let g=null, _undo=[];
 
   const COLORS=[
     {n:'Red',    bg:'#c0392b',lt:'#fdf0ef'},
@@ -285,56 +298,51 @@
     {n:'Pink',   bg:'#c2185b',lt:'#fde8f1'},
   ];
   let selA=0, selH=1;
-  let setupLineupAway=[], setupLineupHome=[];
+  let setupLA=[], setupLH=[];
 
-  function C(t){ return COLORS[t==='away' ? g.cA : g.cH]; }
+  function col(t){ return COLORS[t==='away'?g.cA:g.cH]; }
   function sum(a){ return a.reduce((x,y)=>x+y,0); }
 
   // ── Storage ───────────────────────────────────────────────────
   function save(){
-    const copy=Object.assign({},g);
-    delete copy._h;
-    localStorage.setItem(LSK, JSON.stringify(copy));
+    const c={...g}; delete c._h;
+    localStorage.setItem(LSK,JSON.stringify(c));
   }
   function snap(){
-    const copy=Object.assign({},g);
-    delete copy._h;
-    return JSON.stringify(copy);
+    const c={...g}; delete c._h;
+    return JSON.stringify(c);
   }
-  function push(s){
-    _undoStack.push(s);
-    if(_undoStack.length>40) _undoStack.shift();
-    try{ localStorage.setItem(LSU, JSON.stringify(_undoStack)); }catch(e){ _undoStack.shift(); }
+  function pushUndo(s){
+    _undo.push(s);
+    if(_undo.length>40) _undo.shift();
+    try{ localStorage.setItem(LSU,JSON.stringify(_undo)); }catch(e){ _undo.shift(); }
   }
   function loadPast(){ try{ return JSON.parse(localStorage.getItem(LSH))||[]; }catch{ return []; } }
   function savePast(gm){
     const h=loadPast();
     h.unshift({away:gm.away,home:gm.home,aS:sum(gm.aR),hS:sum(gm.hR),date:gm.date,cA:gm.cA,cH:gm.cH});
     if(h.length>6) h.pop();
-    localStorage.setItem(LSH, JSON.stringify(h));
+    localStorage.setItem(LSH,JSON.stringify(h));
   }
   function clearHist(){ localStorage.removeItem(LSH); showSetup(); }
 
   // ── Run limit ─────────────────────────────────────────────────
   function limFor(idx){
-    if(!g) return 0;
-    if(g.ls==='none') return 0;
+    if(!g||g.ls==='none') return 0;
     if(g.ls==='single') return g.rl||0;
-    const late = g.ll===999 ? 0 : (g.ll||0);
-    return idx < g.sw ? (g.el||0) : late;
+    return idx<g.sw ? (g.el||0) : (g.ll===999?0:g.ll||0);
   }
 
-  // ── Setup UI ──────────────────────────────────────────────────
+  // ── Setup helpers ─────────────────────────────────────────────
   function toggleLS(){
     const v=document.getElementById('s-ls').value;
-    document.getElementById('sr-single').style.display = v==='single' ? 'block' : 'none';
-    document.getElementById('sr-tiered').style.display = v==='tiered' ? 'block' : 'none';
+    document.getElementById('sr-single').style.display=v==='single'?'block':'none';
+    document.getElementById('sr-tiered').style.display=v==='tiered'?'block':'none';
   }
-
   function buildSwatches(){
     ['away','home'].forEach(t=>{
       const el=document.getElementById('sw-'+t);
-      const sel=t==='away' ? selA : selH;
+      const sel=t==='away'?selA:selH;
       el.innerHTML=COLORS.map((c,i)=>
               `<div class="sw${sel===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickC('${t}',${i})"></div>`
       ).join('');
@@ -342,25 +350,21 @@
       if(btn) btn.style.background=COLORS[t==='away'?selA:selH].bg;
     });
   }
-  function pickC(t,i){
-    if(t==='away') selA=i; else selH=i;
-    buildSwatches();
-  }
-
-  function setupAddPlayer(t){
+  function pickC(t,i){ if(t==='away')selA=i; else selH=i; buildSwatches(); }
+  function setupAdd(t){
     const inp=document.getElementById('sl-'+t);
     const v=inp.value.trim(); if(!v) return;
-    if(t==='away') setupLineupAway.push(v); else setupLineupHome.push(v);
-    inp.value=''; renderSetupLineup(t);
+    if(t==='away')setupLA.push(v); else setupLH.push(v);
+    inp.value=''; renderSetupList(t);
   }
-  function setupRemovePlayer(t,i){
-    if(t==='away') setupLineupAway.splice(i,1); else setupLineupHome.splice(i,1);
-    renderSetupLineup(t);
+  function setupRemove(t,i){
+    if(t==='away')setupLA.splice(i,1); else setupLH.splice(i,1);
+    renderSetupList(t);
   }
-  function renderSetupLineup(t){
-    const arr=t==='away' ? setupLineupAway : setupLineupHome;
+  function renderSetupList(t){
+    const arr=t==='away'?setupLA:setupLH;
     document.getElementById('sl-'+t+'-list').innerHTML=arr.map((p,i)=>
-            `<div class="setup-player"><span>${i+1}. ${p}</span><button onclick="setupRemovePlayer('${t}',${i})">✕</button></div>`
+            `<div class="setup-player"><span>${i+1}. ${p}</span><button onclick="setupRemove('${t}',${i})">✕</button></div>`
     ).join('');
   }
 
@@ -376,10 +380,9 @@
     g={away,home,cA:selA,cH:selH,ls,rl,el,ll,sw,
       aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
-      luA:[...setupLineupAway],luH:[...setupLineupHome],
+      luA:[...setupLA],luH:[...setupLH],
       bA:0,bH:0,pSt:{},date:new Date().toLocaleDateString()};
-    _undoStack=[];
-    localStorage.removeItem(LSU);
+    _undo=[]; localStorage.removeItem(LSU);
     save(); showGame();
   }
   function goSetup(){
@@ -389,10 +392,12 @@
   function showSetup(){
     document.getElementById('ss').classList.add('active');
     document.getElementById('sg').classList.remove('active');
-    setupLineupAway=[]; setupLineupHome=[];
-    renderSetupLineup('away'); renderSetupLineup('home');
+    setupLA=[]; setupLH=[];
+    renderSetupList('away'); renderSetupList('home');
     buildSwatches();
-    const hist=loadPast(), sec=document.getElementById('past-sec'), lst=document.getElementById('past-list');
+    const hist=loadPast();
+    const sec=document.getElementById('past-sec');
+    const lst=document.getElementById('past-list');
     if(hist.length){
       sec.style.display='block';
       lst.innerHTML=hist.map(h=>`<div class="pg">
@@ -408,90 +413,47 @@
 
   // ── Undo ──────────────────────────────────────────────────────
   function undo(){
-    if(!_undoStack.length) return;
-    g=JSON.parse(_undoStack.pop());
-    try{ localStorage.setItem(LSU, JSON.stringify(_undoStack)); }catch(e){}
+    if(!_undo.length) return;
+    g=JSON.parse(_undo.pop());
+    try{ localStorage.setItem(LSU,JSON.stringify(_undo)); }catch(e){}
     save(); render();
   }
 
   // ── Game actions ──────────────────────────────────────────────
-  function curRuns(t){
-    const arr=t==='away' ? g.aR : g.hR;
-    while(arr.length<=g.inning) arr.push(0);
-    return arr;
+  function ensureInning(){
+    while(g.aR.length<=g.inning) g.aR.push(0);
+    while(g.hR.length<=g.inning) g.hR.push(0);
   }
-  function addRun(t){
+  function addRun(){
     if(g.gameOver) return;
-    const runs=curRuns(t);
+    ensureInning();
+    const t=g.half;
+    const runs=t==='away'?g.aR:g.hR;
     const lim=limFor(g.inning);
-    if(lim && runs[g.inning]>=lim){ alert(`Run limit (${lim}) reached!`); return; }
-    push(snap()); runs[g.inning]++; save(); render();
+    if(lim&&runs[g.inning]>=lim){ alert(`Run limit (${lim}) reached!`); return; }
+    pushUndo(snap());
+    runs[g.inning]++;
+    save(); render();
   }
   function addOut(){
     if(g.gameOver) return;
-    push(snap()); g.outs++;
+    pushUndo(snap());
+    g.outs++;
     if(g.outs>=3) advHalf(); else { save(); render(); }
   }
   function addToBase(){
     if(g.gameOver) return;
     const t=g.half;
-    const lu=t==='away' ? g.luA : g.luH;
-    const bi=t==='away' ? g.bA : g.bH;
-    if(!lu.length) return;
-    push(snap());
-    g.pSt[t+'-'+bi]='1st';
+    const lu=t==='away'?g.luA:g.luH;
+    const bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    if(lu.length>0) g.pSt[t+'-'+bi]='1st';
+    g.bases[0]=true;
     save(); render();
   }
   function toggleBase(i){
     if(g.gameOver) return;
-    push(snap()); g.bases[i]=!g.bases[i]; save(); render();
-  }
-  function adjC(t,d){
-    if(g.gameOver) return;
-    const mx=t==='balls'?4:3;
-    const newVal=Math.max(0,Math.min(mx,g[t]+d));
-    if(newVal===g[t]) return;
-    push(snap());
-    g[t]=newVal;
-
-    if(t==='strikes' && newVal===3){
-      // strikeout — record out, reset count
-      g.outs++;
-      g.balls=0; g.strikes=0;
-      if(g.outs>=3) advHalf();
-      else { save(); render(); }
-      return;
-    }
-
-    if(t==='balls' && newVal===4){
-      // walk — advance all runners, batter to 1st, reset count
-      const team=g.half;
-      const lu=team==='away'?g.luA:g.luH;
-      const bi=team==='away'?g.bA:g.bH;
-
-      // advance existing runners: 3rd→scored, 2nd→3rd, 1st→2nd
-      // only advance a runner if the base behind them is also occupied (force advance)
-      // simplest little-league rule: force advance all occupied bases in sequence
-      const k=(i)=>team+'-'+i;
-      // collect which players are on each base
-      const on1=lu.findIndex((p,i)=>getSt(team,i)==='1st');
-      const on2=lu.findIndex((p,i)=>getSt(team,i)==='2nd');
-      const on3=lu.findIndex((p,i)=>getSt(team,i)==='3rd');
-
-      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
-      if(on2>=0){ g.pSt[k(on2)]='3rd'; g.bases[2]=true; g.bases[1]=false; }
-      if(on1>=0){ g.pSt[k(on1)]='2nd'; g.bases[1]=true; g.bases[0]=false; }
-
-      // batter goes to 1st
-      if(lu.length>0) g.pSt[k(bi)]='1st';
-      g.bases[0]=true;
-
-      g.balls=0; g.strikes=0;
-      save(); render();
-      return;
-    }
-
-    save(); render();
+    pushUndo(snap()); g.bases[i]=!g.bases[i]; save(); render();
   }
   function advHalf(){
     if(g.half==='away'){ g.half='home'; g.outs=0; }
@@ -501,15 +463,48 @@
   }
   function nextHalf(){
     if(g.gameOver) return;
-    push(snap()); advHalf();
+    pushUndo(snap()); advHalf();
   }
-  function setHalf(h){ push(snap()); g.half=h; save(); render(); }
+  function setHalf(h){ pushUndo(snap()); g.half=h; save(); render(); }
   function endGame(){
     if(!confirm('End the game now?')) return;
-    push(snap()); g.gameOver=true; savePast(g); save(); render();
+    pushUndo(snap()); g.gameOver=true; savePast(g); save(); render();
   }
 
-  // ── Lineup actions ────────────────────────────────────────────
+  // ── Count ─────────────────────────────────────────────────────
+  function adjC(type,d){
+    if(g.gameOver) return;
+    const mx=type==='balls'?4:3;
+    const nv=Math.max(0,Math.min(mx,g[type]+d));
+    if(nv===g[type]) return;
+    pushUndo(snap());
+    g[type]=nv;
+    if(type==='strikes'&&nv===3){
+      g.outs++; g.balls=0; g.strikes=0;
+      if(g.outs>=3) advHalf(); else { save(); render(); }
+      return;
+    }
+    if(type==='balls'&&nv===4){
+      const t=g.half;
+      const lu=t==='away'?g.luA:g.luH;
+      const bi=t==='away'?g.bA:g.bH;
+      const k=i=>t+'-'+i;
+      const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
+      const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
+      const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
+      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
+      if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
+      if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
+      if(lu.length>0) g.pSt[k(bi)]='1st';
+      g.bases[0]=true;
+      g.balls=0; g.strikes=0;
+      save(); render();
+      return;
+    }
+    save(); render();
+  }
+
+  // ── Lineup ────────────────────────────────────────────────────
   function addBatter(){
     const inp=document.getElementById('new-p');
     const v=inp.value.trim(); if(!v) return;
@@ -517,50 +512,50 @@
     inp.value=''; save(); render();
   }
   function advanceBatter(){
-    push(snap()); g.balls=0; g.strikes=0;
+    pushUndo(snap()); g.balls=0; g.strikes=0;
     if(g.half==='away'){ const n=g.luA.length; if(!n) return; g.bA=(g.bA+1)%n; }
     else{ const n=g.luH.length; if(!n) return; g.bH=(g.bH+1)%n; }
     save(); render();
   }
   function setBatter(t,i){
-    push(snap()); g.balls=0; g.strikes=0;
+    pushUndo(snap()); g.balls=0; g.strikes=0;
     if(t==='away') g.bA=i; else g.bH=i;
     save(); render();
   }
   function removeBatter(t,i){
     const name=t==='away'?g.luA[i]:g.luH[i];
     if(!confirm(`Remove "${name}" from the lineup?`)) return;
-    push(snap());
+    pushUndo(snap());
     if(t==='away'){ g.luA.splice(i,1); if(g.bA>=g.luA.length) g.bA=0; }
     else{ g.luH.splice(i,1); if(g.bH>=g.luH.length) g.bH=0; }
     save(); render();
   }
 
   // ── Runner status ─────────────────────────────────────────────
-  const ST_ORDER=['none','1st','2nd','3rd','scored','out'];
-  const ST_LBL={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
-  const ST_CLS={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
+  const ST=['none','1st','2nd','3rd','scored','out'];
+  const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
+  const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
 
   function getSt(t,i){ return (g.pSt||{})[t+'-'+i]||'none'; }
-  function setSt(t,i,v){ push(snap()); g.pSt[t+'-'+i]=v; save(); render(); }
-  function advanceSt(t,i){
+  function setSt(t,i,v){ pushUndo(snap()); g.pSt[t+'-'+i]=v; save(); render(); }
+  function advSt(t,i){
     const cur=getSt(t,i);
-    const next=ST_ORDER[(ST_ORDER.indexOf(cur)+1)%ST_ORDER.length];
-    setSt(t,i,next);
+    setSt(t,i,ST[(ST.indexOf(cur)+1)%ST.length]);
   }
   function pickSt(t,i){
     const cur=getSt(t,i);
-    const existing=document.getElementById('st-picker');
-    if(existing) existing.remove();
+    const old=document.getElementById('st-picker');
+    if(old) old.remove();
     const div=document.createElement('div');
     div.id='st-picker';
     div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center';
     div.innerHTML=`<div style="background:#fff;border-radius:14px;padding:16px;width:220px">
     <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px;text-align:center">Set runner status</div>
-    ${ST_ORDER.filter(s=>s!=='none').map(s=>`
+    ${ST.filter(s=>s!=='none').map(s=>`
       <button onclick="setSt('${t}',${i},'${s}');document.getElementById('st-picker').remove()"
-        style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};font-size:14px;font-weight:700;cursor:pointer;color:#111">
-        ${ST_LBL[s]}</button>`).join('')}
+        style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;
+        border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};
+        font-size:14px;font-weight:700;cursor:pointer;color:#111">${ST_L[s]}</button>`).join('')}
     <button onclick="setSt('${t}',${i},'none');document.getElementById('st-picker').remove()"
       style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>
     <button onclick="document.getElementById('st-picker').remove()"
@@ -569,30 +564,20 @@
     div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
     document.body.appendChild(div);
   }
-  function stLabel(t,i){
-    const v=getSt(t,i);
-    return `<span class="bstat ${ST_CLS[v]}"
-    onclick="event.stopPropagation();advanceSt('${t}',${i})"
-    ontouchstart="stTouch(event,'${t}',${i})"
-    ontouchend="stTouchEnd(event)"
-    >${ST_LBL[v]}</span><span
-    style="font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid #ddd;background:#f5f7fa;color:#888;cursor:pointer;flex-shrink:0;font-weight:600"
-    onclick="event.stopPropagation();pickSt('${t}',${i})"
-    title="Pick status">⋯</span>`;
-  }
-  let _lpTimer=null, _lpT=null, _lpI=null;
+  let _lpT=null,_lpI=null,_lpTmr=null;
   function stTouch(e,t,i){
     e.stopPropagation(); _lpT=t; _lpI=i;
-    _lpTimer=setTimeout(()=>{ _lpTimer=null; pickSt(t,i); },500);
+    _lpTmr=setTimeout(()=>{ _lpTmr=null; pickSt(t,i); },500);
   }
-  function stTouchEnd(e){
-    if(_lpTimer){ clearTimeout(_lpTimer); _lpTimer=null; advanceSt(_lpT,_lpI); }
+  function stTouchEnd(){
+    if(_lpTmr){ clearTimeout(_lpTmr); _lpTmr=null; advSt(_lpT,_lpI); }
   }
 
   // ── Render ────────────────────────────────────────────────────
   function render(){
     if(!g) return;
-    const aC=C('away'), hC=C('home');
+    ensureInning();
+    const aC=col('away'), hC=col('home'), curC=col(g.half);
     const aT=sum(g.aR), hT=sum(g.hR);
 
     // header
@@ -606,12 +591,11 @@
     const ld=()=>{
       if(g.ls==='none') return '';
       if(g.ls==='single') return `Limit: ${g.rl}/inn`;
-      const l=g.ll===999?'∞':g.ll;
-      return `${g.el}→${l} (inn ${g.sw+1}+)`;
+      return `${g.el}→${g.ll===999?'∞':g.ll} (inn ${g.sw+1}+)`;
     };
     document.getElementById('h-lim').textContent=ld();
 
-    // game over banner
+    // over banner
     const ob=document.getElementById('over-banner');
     if(g.gameOver){
       ob.style.display='block';
@@ -623,8 +607,6 @@
     for(let i=0;i<3;i++) document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
 
     // inning runs / runs left
-    while(g.aR.length<=g.inning) g.aR.push(0);
-    while(g.hR.length<=g.inning) g.hR.push(0);
     const ir=g.half==='away'?g.aR[g.inning]:g.hR[g.inning];
     const lim=g.gameOver?0:limFor(g.inning);
     document.getElementById('st-ir').textContent=g.gameOver?'—':ir;
@@ -634,8 +616,7 @@
 
     // bases diamond
     ['b1','b2','b3'].forEach((id,i)=>{
-      const el=document.getElementById(id);
-      el.className='base '+id+(g.bases[i]?' on':'');
+      document.getElementById(id).className='base '+id+(g.bases[i]?' on':'');
     });
 
     // count
@@ -645,56 +626,50 @@
     document.getElementById('sd').innerHTML=[0,1,2].map(i=>`<div class="cdot${i<g.strikes?' s':''}"></div>`).join('');
 
     // batting toggles
-    const ta=document.getElementById('tog-a'); ta.textContent=g.away+' batting';
+    const ta=document.getElementById('tog-a');
+    ta.textContent=g.away+' batting';
     ta.style.borderColor=g.half==='away'?aC.bg:'#ddd';
     ta.style.color=g.half==='away'?aC.bg:'#888';
     ta.style.background=g.half==='away'?aC.lt:'#f5f7fa';
-    const th=document.getElementById('tog-h'); th.textContent=g.home+' batting';
+    const th=document.getElementById('tog-h');
+    th.textContent=g.home+' batting';
     th.style.borderColor=g.half==='home'?hC.bg:'#ddd';
     th.style.color=g.half==='home'?hC.bg:'#888';
     th.style.background=g.half==='home'?hC.lt:'#f5f7fa';
 
-    // run buttons — show only batting team's
-    const bra=document.getElementById('btn-ra');
-    const brh=document.getElementById('btn-rh');
-    if(g.half==='away'){
-      bra.style.display='flex'; bra.style.background=aC.bg;
-      document.getElementById('cl-a').textContent=g.away+' run';
-      brh.style.display='none';
-    } else {
-      brh.style.display='flex'; brh.style.background=hC.bg;
-      document.getElementById('cl-h').textContent=g.home+' run';
-      bra.style.display='none';
-    }
+    // single run button (always visible, reflects batting team)
+    const br=document.getElementById('btn-run');
+    br.style.background=curC.bg;
+    document.getElementById('cl-run').textContent=g.half==='away'?g.away+' run':g.home+' run';
 
-    // on base button
-    const curC=g.half==='away'?aC:hC;
-    const ob2=document.getElementById('btn-ob');
-    ob2.style.background=curC.lt;
-    ob2.style.color=curC.bg;
-    ob2.style.border=`2px solid ${curC.bg}`;
+    // on base button styled to team
+    const bo=document.getElementById('btn-ob');
+    bo.style.background=curC.lt;
+    bo.style.color=curC.bg;
+    bo.style.borderColor=curC.bg;
 
     // add batter button
     document.getElementById('add-p-btn').style.background=curC.bg;
 
+    // next half label
     document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
 
     // inning table
-    const totalInnings=Math.max(g.aR.length, g.hR.length, g.inning+1);
+    const totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
     const tb=document.getElementById('inn-tbl');
     let hdr='<tr><th>Team</th>';
-    for(let i=0;i<totalInnings;i++) hdr+=`<th>${i+1}</th>`;
+    for(let i=0;i<totalInns;i++) hdr+=`<th>${i+1}</th>`;
     hdr+='<th>R</th></tr>';
-    const mkRow=(nm,runs,tot,isAct,col)=>{
-      let r=`<tr><td class="tlbl" style="color:${col.bg}">${nm}</td>`;
-      for(let i=0;i<totalInnings;i++){
+    const mkRow=(nm,runs,tot,isAct,c)=>{
+      let r=`<tr><td class="tlbl" style="color:${c.bg}">${nm}</td>`;
+      for(let i=0;i<totalInns;i++){
         const v=runs[i]||0;
         const act=!g.gameOver&&i===g.inning&&isAct;
         const atLim=limFor(i)&&v>=limFor(i);
         const shown=i<g.inning||g.gameOver?v:(act?`<b>${v}</b>`:'—');
-        r+=`<td class="${act?'ainn':''}${atLim?' alim':''}"${act?` style="background:${col.lt}"`:''}>${shown}</td>`;
+        r+=`<td class="${act?'ainn':''}${atLim?' alim':''}"${act?` style="background:${c.lt}"`:''}>${shown}</td>`;
       }
-      return r+`<td class="ttot" style="color:${col.bg}">${tot}</td></tr>`;
+      return r+`<td class="ttot" style="color:${c.bg}">${tot}</td></tr>`;
     };
     tb.innerHTML=hdr
             +mkRow(g.away,g.aR,aT,!g.gameOver&&g.half==='away',aC)
@@ -705,23 +680,31 @@
     const lu=t==='away'?g.luA:g.luH;
     const bi=t==='away'?g.bA:g.bH;
     const od=lu.length>1?(bi+1)%lu.length:null;
-    const lut=document.getElementById('lu-team'); lut.textContent=t==='away'?g.away:g.home; lut.style.color=curC.bg;
+    const lut=document.getElementById('lu-team');
+    lut.textContent=t==='away'?g.away:g.home; lut.style.color=curC.bg;
     const ll=document.getElementById('lu-list');
     if(!lu.length){
       ll.innerHTML='<div style="color:#aaa;font-size:13px;padding:6px 0">No players added yet.</div>';
     } else {
       ll.innerHTML=lu.map((p,i)=>{
         const isUp=i===bi, isDeck=i===od;
-        const upSt=isUp?`background:${curC.lt};border-color:${curC.bg}`:'';
+        const upStyle=isUp?`background:${curC.lt};border-color:${curC.bg}`:'';
         const badge=isUp
                 ?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`
                 :isDeck?`<span class="bbadge deck-badge">On deck</span>`:'';
-        return `<div class="litem${isDeck?' deck':''}" style="${upSt}" onclick="setBatter('${t}',${i})">
-        <span class="lnum">${i+1}</span>
-        <span class="lname">${p}</span>
-        ${stLabel(t,i)}
+        const v=getSt(t,i);
+        return `<div class="litem${isDeck?' deck':''}" style="${upStyle}">
+        <span class="lnum" onclick="setBatter('${t}',${i})">${i+1}</span>
+        <span class="lname" onclick="setBatter('${t}',${i})">${p}</span>
+        <span class="bstat ${ST_C[v]}"
+          onclick="event.stopPropagation();advSt('${t}',${i})"
+          ontouchstart="stTouch(event,'${t}',${i})"
+          ontouchend="stTouchEnd()">${ST_L[v]}</span>
+        <span class="pick-btn"
+          onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
         ${badge}
-        <span style="color:#ccc;font-size:15px;padding:2px 4px" onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
+        <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer"
+          onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
       </div>`;
       }).join('');
     }
@@ -734,10 +717,10 @@
       const s=localStorage.getItem(LSK);
       if(s){
         g=JSON.parse(s);
-        _undoStack=JSON.parse(localStorage.getItem(LSU)||'[]');
+        _undo=JSON.parse(localStorage.getItem(LSU)||'[]');
         showGame(); return;
       }
-    } catch(e){}
+    }catch(e){}
     showSetup();
   };
 </script>
