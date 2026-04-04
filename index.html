@@ -26,7 +26,6 @@
     .setup-player{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#f5f7fa;border-radius:7px;margin-bottom:4px;border:1px solid #e8eaed}
     .setup-player span{flex:1;font-size:13px;font-weight:600}
     .setup-player button{background:none;border:none;color:#bbb;font-size:15px;cursor:pointer;padding:2px 5px}
-    /* game header */
     .game-header{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:6px}
     .team-score{text-align:center}
@@ -34,7 +33,6 @@
     .t-score{font-size:44px;font-weight:800;line-height:1}
     .vs{font-size:16px;color:#bbb;font-weight:700}
     .game-meta{display:flex;justify-content:space-between;font-size:11px;color:#888;padding-top:7px;border-top:1px solid #eee;flex-wrap:wrap;gap:4px;font-weight:600}
-    /* status strip */
     .strip{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;text-align:center;border:1px solid #ddd}
     .slbl{font-size:10px;color:#777;display:block;text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:1px}
     .val{font-size:19px;font-weight:800;color:#111}
@@ -47,7 +45,6 @@
     .base{position:absolute;width:15px;height:15px;border:2.5px solid #bbb;transform:rotate(45deg);background:#fff;cursor:pointer}
     .base.on{background:#e67e00;border-color:#e67e00}
     .b1{top:21px;left:42px}.b2{top:0;left:21px}.b3{top:21px;left:0}
-    /* count */
     .count-card{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;border:1px solid #ddd}
     .count-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
     .count-hdr h3{font-size:12px;color:#666;font-weight:700}
@@ -63,22 +60,19 @@
     .cbtns{display:flex;gap:6px;justify-content:center;margin-top:5px}
     .cbtn{padding:4px 14px;border-radius:6px;border:1.5px solid #bbb;background:#fff;color:#333;font-size:16px;font-weight:700;cursor:pointer}
     .cbtn:active{background:#eee}
-    /* controls */
     .ctrl-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .ctrl-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .bat-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
     .tog{padding:9px;border-radius:8px;border:2.5px solid #ddd;cursor:pointer;font-size:12px;font-weight:700;background:#f5f7fa;color:#888}
-    /* action row: 3 equal columns, full-width next button below */
     .action-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
     .cbig{padding:14px 6px;border-radius:10px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;width:100%}
     .cbig span{font-size:20px}
     .cbig small{font-size:10px;font-weight:600;opacity:.9}
     .cbig:active{transform:scale(.96)}
     .c-out{background:#333;color:#fff}
-    .c-next{background:#1a7a34;color:#fff;width:100%;padding:14px 6px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
-    .c-next:active{transform:scale(.98)}
+    .c-next{background:#1a7a34;color:#fff;width:100%;padding:14px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-weight:700}
+    .c-next:active{opacity:.85}
     .c-undo{background:#e8eaed;color:#444;width:100%;margin-top:6px;padding:10px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-size:13px;font-weight:600}
-    /* inning table */
     .inn-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .inn-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:280px}
@@ -87,12 +81,10 @@
     td.tlbl{text-align:left;font-size:11px;white-space:nowrap;padding-right:6px;font-weight:700}
     td.ttot{font-weight:800}
     td.alim{color:#e67e00;font-weight:700}
-    /* lineup */
     .lineup-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #ddd}
     .lineup-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .lscroll{max-height:220px;overflow-y:auto}
     .litem{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:8px;margin-bottom:4px;background:#f5f7fa;border:1.5px solid #e8eaed}
-    .litem.deck{background:#f5f5e8;border-color:#b8a000}
     .lnum{font-size:12px;color:#999;width:18px;flex-shrink:0;font-weight:600}
     .lname{font-size:14px;color:#111;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
     .bstat{font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;cursor:pointer;font-weight:700;user-select:none}
@@ -107,7 +99,6 @@
     .ladd input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid #bbb;background:#fff;color:#111;font-size:13px}
     .ladd button{padding:8px 12px;border-radius:8px;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:700}
     .lnext{margin-top:6px;width:100%;padding:9px;border-radius:8px;border:1px solid #ccc;background:#e8eaed;color:#333;font-size:13px;cursor:pointer;font-weight:600}
-    /* misc */
     .over-banner{background:#d4edda;border:1.5px solid #5a9a6a;border-radius:10px;padding:11px;text-align:center;margin-bottom:8px;font-size:14px;color:#155724;font-weight:700}
     .pg{background:#f5f7fa;border-radius:8px;padding:11px;margin-bottom:7px;border:1px solid #e0e0e0}
     .pg-teams{font-size:14px;font-weight:700;margin-bottom:3px}
@@ -196,9 +187,7 @@
     <button style="background:none;border:none;color:#888;font-size:12px;cursor:pointer;font-weight:600" onclick="goSetup()">← New Game</button>
     <span id="g-date" style="font-size:11px;color:#999"></span>
   </div>
-
   <div id="over-banner" class="over-banner" style="display:none"></div>
-
   <div class="game-header">
     <div class="teams-row">
       <div class="team-score"><div class="t-name" id="h-an"></div><div class="t-score" id="h-as">0</div></div>
@@ -207,7 +196,6 @@
     </div>
     <div class="game-meta"><span id="h-inn">Inning 1</span><span id="h-half"></span><span id="h-lim"></span></div>
   </div>
-
   <div class="strip">
     <div>
       <span class="slbl">Outs</span>
@@ -224,46 +212,39 @@
       </div></div>
     </div>
   </div>
-
   <div class="count-card">
     <div class="count-hdr"><h3>Count (optional)</h3><small>resets on next batter</small></div>
     <div class="count-row">
       <div class="cbox">
-        <span class="clbl">Balls</span>
-        <div class="cnum" id="ct-b">0</div>
+        <span class="clbl">Balls</span><div class="cnum" id="ct-b">0</div>
         <div class="cdots" id="bd"></div>
         <div class="cbtns"><button class="cbtn" onclick="adjC('balls',-1)">−</button><button class="cbtn" onclick="adjC('balls',1)">+</button></div>
       </div>
       <div class="cbox">
-        <span class="clbl">Strikes</span>
-        <div class="cnum" id="ct-s">0</div>
+        <span class="clbl">Strikes</span><div class="cnum" id="ct-s">0</div>
         <div class="cdots" id="sd"></div>
         <div class="cbtns"><button class="cbtn" onclick="adjC('strikes',-1)">−</button><button class="cbtn" onclick="adjC('strikes',1)">+</button></div>
       </div>
     </div>
   </div>
-
   <div class="ctrl-card">
     <h3>Batting team</h3>
     <div class="bat-toggle">
       <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
       <button class="tog" id="tog-h" onclick="setHalf('home')"></button>
     </div>
-    <!-- single run button slot — swapped by render -->
-    <div class="action-row" id="action-row">
+    <div class="action-row">
       <button class="cbig" id="btn-run" onclick="addRun()"><span>+1</span><small id="cl-run">Run</small></button>
       <button class="cbig" id="btn-ob" onclick="addToBase()"><span>→1st</span><small>on base</small></button>
       <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
     </div>
-    <button class="c-next" onclick="nextHalf()"><span id="cl-nx-icon">→</span> <span id="cl-nx">End top / start bottom</span></button>
+    <button class="c-next" id="btn-next" onclick="nextHalf()">→ <span id="cl-nx">End top / start bottom</span></button>
     <button class="c-undo" onclick="undo()">↩ Undo last action</button>
   </div>
-
   <div class="inn-card">
     <h3>Inning breakdown</h3>
     <div style="overflow-x:auto"><table id="inn-tbl"></table></div>
   </div>
-
   <div class="lineup-card">
     <h3>Batting order — <span id="lu-team"></span></h3>
     <div class="lscroll" id="lu-list"></div>
@@ -273,15 +254,14 @@
     </div>
     <button class="lnext" onclick="advanceBatter()">Next batter ↓</button>
   </div>
-
   <div class="card" style="margin-bottom:10px">
     <button class="btn" style="background:#f8d7da;color:#7a1a1a;border:1.5px solid #c07070" onclick="endGame()">⏹ End Game</button>
   </div>
 </div>
 
 <script>
-  const LSK='llsg5', LSH='llsg5h', LSU='llsg5u';
-  let g=null, _undo=[];
+  const LSK='llsg6',LSH='llsg6h',LSU='llsg6u';
+  let g=null,_undo=[];
 
   const COLORS=[
     {n:'Red',    bg:'#c0392b',lt:'#fdf0ef'},
@@ -297,43 +277,35 @@
     {n:'Gray',   bg:'#555555',lt:'#f0f0f0'},
     {n:'Pink',   bg:'#c2185b',lt:'#fde8f1'},
   ];
-  let selA=0, selH=1;
-  let setupLA=[], setupLH=[];
+  let selA=0,selH=1,setupLA=[],setupLH=[];
 
-  function col(t){ return COLORS[t==='away'?g.cA:g.cH]; }
-  function sum(a){ return a.reduce((x,y)=>x+y,0); }
+  function col(t){return COLORS[t==='away'?g.cA:g.cH];}
+  function sum(a){return a.reduce((x,y)=>x+y,0);}
 
   // ── Storage ───────────────────────────────────────────────────
-  function save(){
-    const c={...g}; delete c._h;
-    localStorage.setItem(LSK,JSON.stringify(c));
-  }
-  function snap(){
-    const c={...g}; delete c._h;
-    return JSON.stringify(c);
-  }
+  function save(){const c={...g};delete c._h;localStorage.setItem(LSK,JSON.stringify(c));}
+  function snap(){const c={...g};delete c._h;return JSON.stringify(c);}
   function pushUndo(s){
-    _undo.push(s);
-    if(_undo.length>40) _undo.shift();
-    try{ localStorage.setItem(LSU,JSON.stringify(_undo)); }catch(e){ _undo.shift(); }
+    _undo.push(s);if(_undo.length>40)_undo.shift();
+    try{localStorage.setItem(LSU,JSON.stringify(_undo));}catch(e){_undo.shift();}
   }
-  function loadPast(){ try{ return JSON.parse(localStorage.getItem(LSH))||[]; }catch{ return []; } }
+  function loadPast(){try{return JSON.parse(localStorage.getItem(LSH))||[];}catch{return[];}}
   function savePast(gm){
     const h=loadPast();
     h.unshift({away:gm.away,home:gm.home,aS:sum(gm.aR),hS:sum(gm.hR),date:gm.date,cA:gm.cA,cH:gm.cH});
-    if(h.length>6) h.pop();
+    if(h.length>6)h.pop();
     localStorage.setItem(LSH,JSON.stringify(h));
   }
-  function clearHist(){ localStorage.removeItem(LSH); showSetup(); }
+  function clearHist(){localStorage.removeItem(LSH);showSetup();}
 
   // ── Run limit ─────────────────────────────────────────────────
   function limFor(idx){
-    if(!g||g.ls==='none') return 0;
-    if(g.ls==='single') return g.rl||0;
-    return idx<g.sw ? (g.el||0) : (g.ll===999?0:g.ll||0);
+    if(!g||g.ls==='none')return 0;
+    if(g.ls==='single')return g.rl||0;
+    return idx<g.sw?(g.el||0):(g.ll===999?0:g.ll||0);
   }
 
-  // ── Setup helpers ─────────────────────────────────────────────
+  // ── Setup UI ──────────────────────────────────────────────────
   function toggleLS(){
     const v=document.getElementById('s-ls').value;
     document.getElementById('sr-single').style.display=v==='single'?'block':'none';
@@ -347,18 +319,18 @@
               `<div class="sw${sel===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickC('${t}',${i})"></div>`
       ).join('');
       const btn=document.getElementById('sl-'+t+'-btn');
-      if(btn) btn.style.background=COLORS[t==='away'?selA:selH].bg;
+      if(btn)btn.style.background=COLORS[t==='away'?selA:selH].bg;
     });
   }
-  function pickC(t,i){ if(t==='away')selA=i; else selH=i; buildSwatches(); }
+  function pickC(t,i){if(t==='away')selA=i;else selH=i;buildSwatches();}
   function setupAdd(t){
     const inp=document.getElementById('sl-'+t);
-    const v=inp.value.trim(); if(!v) return;
-    if(t==='away')setupLA.push(v); else setupLH.push(v);
-    inp.value=''; renderSetupList(t);
+    const v=inp.value.trim();if(!v)return;
+    if(t==='away')setupLA.push(v);else setupLH.push(v);
+    inp.value='';renderSetupList(t);
   }
   function setupRemove(t,i){
-    if(t==='away')setupLA.splice(i,1); else setupLH.splice(i,1);
+    if(t==='away')setupLA.splice(i,1);else setupLH.splice(i,1);
     renderSetupList(t);
   }
   function renderSetupList(t){
@@ -382,28 +354,26 @@
       bases:[false,false,false],balls:0,strikes:0,
       luA:[...setupLA],luH:[...setupLH],
       bA:0,bH:0,pSt:{},date:new Date().toLocaleDateString()};
-    _undo=[]; localStorage.removeItem(LSU);
-    save(); showGame();
+    _undo=[];localStorage.removeItem(LSU);
+    save();showGame();
   }
   function goSetup(){
-    if(g&&!g.gameOver){ if(!confirm('End current game?')) return; savePast(g); }
-    localStorage.removeItem(LSK); g=null; showSetup();
+    if(g&&!g.gameOver){if(!confirm('End current game?'))return;savePast(g);}
+    localStorage.removeItem(LSK);g=null;showSetup();
   }
   function showSetup(){
     document.getElementById('ss').classList.add('active');
     document.getElementById('sg').classList.remove('active');
-    setupLA=[]; setupLH=[];
-    renderSetupList('away'); renderSetupList('home');
+    setupLA=[];setupLH=[];
+    renderSetupList('away');renderSetupList('home');
     buildSwatches();
-    const hist=loadPast();
-    const sec=document.getElementById('past-sec');
-    const lst=document.getElementById('past-list');
+    const hist=loadPast(),sec=document.getElementById('past-sec'),lst=document.getElementById('past-list');
     if(hist.length){
       sec.style.display='block';
       lst.innerHTML=hist.map(h=>`<div class="pg">
       <div class="pg-teams"><span style="color:${COLORS[h.cA||0].bg}">${h.away}</span> ${h.aS} – ${h.hS} <span style="color:${COLORS[h.cH||1].bg}">${h.home}</span></div>
       <div class="pg-meta">${h.date}</div></div>`).join('');
-    } else sec.style.display='none';
+    }else sec.style.display='none';
   }
   function showGame(){
     document.getElementById('ss').classList.remove('active');
@@ -413,39 +383,28 @@
 
   // ── Undo ──────────────────────────────────────────────────────
   function undo(){
-    if(!_undo.length) return;
+    if(!_undo.length)return;
     g=JSON.parse(_undo.pop());
-    try{ localStorage.setItem(LSU,JSON.stringify(_undo)); }catch(e){}
-    save(); render();
+    try{localStorage.setItem(LSU,JSON.stringify(_undo));}catch(e){}
+    save();render();
   }
 
-  // ── Game actions ──────────────────────────────────────────────
+  // ── Helpers ───────────────────────────────────────────────────
   function ensureInning(){
-    while(g.aR.length<=g.inning) g.aR.push(0);
-    while(g.hR.length<=g.inning) g.hR.push(0);
-  }
-  function addRun(){
-    if(g.gameOver) return;
-    ensureInning();
-    const t=g.half;
-    const runs=t==='away'?g.aR:g.hR;
-    const lim=limFor(g.inning);
-    if(lim&&runs[g.inning]>=lim){ alert(`Run limit (${lim}) reached!`); return; }
-    pushUndo(snap());
-    runs[g.inning]++;
-    save(); render();
-  }
-  function addOut(){
-    if(g.gameOver) return;
-    pushUndo(snap());
-    g.outs++;
-    nextBatter();
-    if(g.outs>=3) advHalf(); else { save(); render(); }
+    while(g.aR.length<=g.inning)g.aR.push(0);
+    while(g.hR.length<=g.inning)g.hR.push(0);
   }
   function nextBatter(){
-    if(g.half==='away'){ const n=g.luA.length; if(n) g.bA=(g.bA+1)%n; }
-    else{ const n=g.luH.length; if(n) g.bH=(g.bH+1)%n; }
-    g.balls=0; g.strikes=0;
+    if(g.half==='away'){const n=g.luA.length;if(n)g.bA=(g.bA+1)%n;}
+    else{const n=g.luH.length;if(n)g.bH=(g.bH+1)%n;}
+    g.balls=0;g.strikes=0;
+  }
+  function scoreRun(){
+    ensureInning();
+    const runs=g.half==='away'?g.aR:g.hR;
+    const lim=limFor(g.inning);
+    if(lim&&runs[g.inning]>=lim)return false;
+    runs[g.inning]++;return true;
   }
   function checkRunLimit(){
     ensureInning();
@@ -453,21 +412,48 @@
     const lim=limFor(g.inning);
     if(lim&&runs[g.inning]>=lim){
       const next=g.half==='away'?'bottom of this inning':`inning ${g.inning+2}`;
-      setTimeout(()=>{
-        if(confirm(`Run limit reached! Advance to the ${next}?`)) advHalf();
-      },50);
+      setTimeout(()=>{if(confirm(`Run limit reached! Advance to the ${next}?`))advHalf();},50);
     }
   }
-  function scoreRun(){
+  function advHalf(){
+    if(g.half==='away'){g.half='home';g.outs=0;}
+    else{g.inning++;g.half='away';g.outs=0;}
+    g.bases=[false,false,false];g.balls=0;g.strikes=0;
+    save();render();
+  }
+
+  // ── Game actions ──────────────────────────────────────────────
+  function addRun(){
+    if(g.gameOver)return;
     ensureInning();
-    const runs=g.half==='away'?g.aR:g.hR;
+    const t=g.half;
+    const runs=t==='away'?g.aR:g.hR;
     const lim=limFor(g.inning);
-    if(lim&&runs[g.inning]>=lim) return false;
+    if(lim&&runs[g.inning]>=lim){alert(`Run limit (${lim}) reached!`);return;}
+    pushUndo(snap());
     runs[g.inning]++;
-    return true;
+    // mark furthest runner as scored and clear that base
+    const lu=t==='away'?g.luA:g.luH;
+    const k=i=>t+'-'+i;
+    const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
+    const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
+    const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
+    if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;}
+    else if(on2>=0){g.pSt[k(on2)]='scored';g.bases[1]=false;}
+    else if(on1>=0){g.pSt[k(on1)]='scored';g.bases[0]=false;}
+    nextBatter();
+    save();render();
+    checkRunLimit();
+  }
+  function addOut(){
+    if(g.gameOver)return;
+    pushUndo(snap());
+    g.outs++;
+    nextBatter();
+    if(g.outs>=3)advHalf();else{save();render();}
   }
   function addToBase(){
-    if(g.gameOver) return;
+    if(g.gameOver)return;
     const t=g.half;
     const lu=t==='away'?g.luA:g.luH;
     const bi=t==='away'?g.bA:g.bH;
@@ -476,46 +462,40 @@
     const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
     const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
     const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-    if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; scoreRun(); }
-    if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
-    if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
-    if(lu.length>0) g.pSt[k(bi)]='1st';
+    if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;scoreRun();}
+    if(on2>=0){g.pSt[k(on2)]='3rd';g.bases[2]=true;g.bases[1]=false;}
+    if(on1>=0){g.pSt[k(on1)]='2nd';g.bases[1]=true;g.bases[0]=false;}
+    if(lu.length>0)g.pSt[k(bi)]='1st';
     g.bases[0]=true;
     nextBatter();
-    save(); render();
+    save();render();
     checkRunLimit();
   }
   function toggleBase(i){
-    if(g.gameOver) return;
-    pushUndo(snap()); g.bases[i]=!g.bases[i]; save(); render();
-  }
-  function advHalf(){
-    if(g.half==='away'){ g.half='home'; g.outs=0; }
-    else{ g.inning++; g.half='away'; g.outs=0; }
-    g.bases=[false,false,false]; g.balls=0; g.strikes=0;
-    save(); render();
+    if(g.gameOver)return;
+    pushUndo(snap());g.bases[i]=!g.bases[i];save();render();
   }
   function nextHalf(){
-    if(g.gameOver) return;
-    pushUndo(snap()); advHalf();
+    if(g.gameOver)return;
+    pushUndo(snap());advHalf();
   }
-  function setHalf(h){ pushUndo(snap()); g.half=h; save(); render(); }
+  function setHalf(h){pushUndo(snap());g.half=h;save();render();}
   function endGame(){
-    if(!confirm('End the game now?')) return;
-    pushUndo(snap()); g.gameOver=true; savePast(g); save(); render();
+    if(!confirm('End the game now?'))return;
+    pushUndo(snap());g.gameOver=true;savePast(g);save();render();
   }
 
   // ── Count ─────────────────────────────────────────────────────
   function adjC(type,d){
-    if(g.gameOver) return;
+    if(g.gameOver)return;
     const mx=type==='balls'?4:3;
     const nv=Math.max(0,Math.min(mx,g[type]+d));
-    if(nv===g[type]) return;
+    if(nv===g[type])return;
     pushUndo(snap());
     g[type]=nv;
     if(type==='strikes'&&nv===3){
-      g.outs++; nextBatter();
-      if(g.outs>=3) advHalf(); else { save(); render(); }
+      g.outs++;nextBatter();
+      if(g.outs>=3)advHalf();else{save();render();}
       return;
     }
     if(type==='balls'&&nv===4){
@@ -526,61 +506,56 @@
       const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
       const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
       const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; scoreRun(); }
-      if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
-      if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
-      if(lu.length>0) g.pSt[k(bi)]='1st';
+      if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;scoreRun();}
+      if(on2>=0){g.pSt[k(on2)]='3rd';g.bases[2]=true;g.bases[1]=false;}
+      if(on1>=0){g.pSt[k(on1)]='2nd';g.bases[1]=true;g.bases[0]=false;}
+      if(lu.length>0)g.pSt[k(bi)]='1st';
       g.bases[0]=true;
       nextBatter();
-      save(); render();
+      save();render();
       checkRunLimit();
       return;
     }
-    save(); render();
+    save();render();
   }
 
   // ── Lineup ────────────────────────────────────────────────────
   function addBatter(){
     const inp=document.getElementById('new-p');
-    const v=inp.value.trim(); if(!v) return;
-    if(g.half==='away') g.luA.push(v); else g.luH.push(v);
-    inp.value=''; save(); render();
+    const v=inp.value.trim();if(!v)return;
+    if(g.half==='away')g.luA.push(v);else g.luH.push(v);
+    inp.value='';save();render();
   }
   function advanceBatter(){
-    pushUndo(snap()); g.balls=0; g.strikes=0;
-    if(g.half==='away'){ const n=g.luA.length; if(!n) return; g.bA=(g.bA+1)%n; }
-    else{ const n=g.luH.length; if(!n) return; g.bH=(g.bH+1)%n; }
-    save(); render();
+    pushUndo(snap());nextBatter();save();render();
   }
   function setBatter(t,i){
-    if(t==='away') g.bA=i; else g.bH=i;
-    g.balls=0; g.strikes=0;
-    save(); render();
+    if(t==='away')g.bA=i;else g.bH=i;
+    g.balls=0;g.strikes=0;
+    save();render();
   }
   function removeBatter(t,i){
     const name=t==='away'?g.luA[i]:g.luH[i];
-    if(!confirm(`Remove "${name}" from the lineup?`)) return;
+    if(!confirm(`Remove "${name}" from the lineup?`))return;
     pushUndo(snap());
-    if(t==='away'){ g.luA.splice(i,1); if(g.bA>=g.luA.length) g.bA=0; }
-    else{ g.luH.splice(i,1); if(g.bH>=g.luH.length) g.bH=0; }
-    save(); render();
+    if(t==='away'){g.luA.splice(i,1);if(g.bA>=g.luA.length)g.bA=0;}
+    else{g.luH.splice(i,1);if(g.bH>=g.luH.length)g.bH=0;}
+    save();render();
   }
 
   // ── Runner status ─────────────────────────────────────────────
   const ST=['none','1st','2nd','3rd','scored','out'];
   const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
   const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
-
-  function getSt(t,i){ return (g.pSt||{})[t+'-'+i]||'none'; }
-  function setSt(t,i,v){ pushUndo(snap()); g.pSt[t+'-'+i]=v; save(); render(); }
+  function getSt(t,i){return(g.pSt||{})[t+'-'+i]||'none';}
+  function setSt(t,i,v){pushUndo(snap());g.pSt[t+'-'+i]=v;save();render();}
   function advSt(t,i){
     const cur=getSt(t,i);
     setSt(t,i,ST[(ST.indexOf(cur)+1)%ST.length]);
   }
   function pickSt(t,i){
     const cur=getSt(t,i);
-    const old=document.getElementById('st-picker');
-    if(old) old.remove();
+    const old=document.getElementById('st-picker');if(old)old.remove();
     const div=document.createElement('div');
     div.id='st-picker';
     div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center';
@@ -596,71 +571,64 @@
     <button onclick="document.getElementById('st-picker').remove()"
       style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>
   </div>`;
-    div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
+    div.addEventListener('click',e=>{if(e.target===div)div.remove();});
     document.body.appendChild(div);
   }
   let _lpT=null,_lpI=null,_lpTmr=null;
   function stTouch(e,t,i){
-    e.stopPropagation(); _lpT=t; _lpI=i;
-    _lpTmr=setTimeout(()=>{ _lpTmr=null; pickSt(t,i); },500);
+    e.stopPropagation();_lpT=t;_lpI=i;
+    _lpTmr=setTimeout(()=>{_lpTmr=null;pickSt(t,i);},500);
   }
   function stTouchEnd(){
-    if(_lpTmr){ clearTimeout(_lpTmr); _lpTmr=null; advSt(_lpT,_lpI); }
+    if(_lpTmr){clearTimeout(_lpTmr);_lpTmr=null;advSt(_lpT,_lpI);}
   }
 
   // ── Render ────────────────────────────────────────────────────
   function render(){
-    if(!g) return;
+    if(!g)return;
     ensureInning();
-    const aC=col('away'), hC=col('home'), curC=col(g.half);
-    const aT=sum(g.aR), hT=sum(g.hR);
-
+    const aC=col('away'),hC=col('home'),curC=col(g.half);
+    const aT=sum(g.aR),hT=sum(g.hR);
     // header
-    const an=document.getElementById('h-an'); an.textContent=g.away; an.style.color=aC.bg;
-    const hn=document.getElementById('h-hn'); hn.textContent=g.home; hn.style.color=hC.bg;
-    const as=document.getElementById('h-as'); as.textContent=aT; as.style.color=aC.bg;
-    const hs=document.getElementById('h-hs'); hs.textContent=hT; hs.style.color=hC.bg;
+    const an=document.getElementById('h-an');an.textContent=g.away;an.style.color=aC.bg;
+    const hn=document.getElementById('h-hn');hn.textContent=g.home;hn.style.color=hC.bg;
+    const as=document.getElementById('h-as');as.textContent=aT;as.style.color=aC.bg;
+    const hs=document.getElementById('h-hs');hs.textContent=hT;hs.style.color=hC.bg;
     document.getElementById('g-date').textContent=g.date;
     document.getElementById('h-inn').textContent=g.gameOver?'Final':`Inning ${g.inning+1}`;
     document.getElementById('h-half').textContent=g.gameOver?'':(g.half==='away'?`${g.away} batting`:`${g.home} batting`);
     const ld=()=>{
-      if(g.ls==='none') return '';
-      if(g.ls==='single') return `Limit: ${g.rl}/inn`;
+      if(g.ls==='none')return '';
+      if(g.ls==='single')return `Limit: ${g.rl}/inn`;
       return `${g.el}→${g.ll===999?'∞':g.ll} (inn ${g.sw+1}+)`;
     };
     document.getElementById('h-lim').textContent=ld();
-
     // over banner
     const ob=document.getElementById('over-banner');
     if(g.gameOver){
       ob.style.display='block';
       const w=aT>hT?g.away:hT>aT?g.home:null;
       ob.textContent=w?`Game over — ${w} wins! (${aT}–${hT})`:`Tie game! (${aT}–${aT})`;
-    } else ob.style.display='none';
-
+    }else ob.style.display='none';
     // outs
-    for(let i=0;i<3;i++) document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
-
-    // inning runs / runs left
+    for(let i=0;i<3;i++)document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
+    // inn runs / left
     const ir=g.half==='away'?g.aR[g.inning]:g.hR[g.inning];
     const lim=g.gameOver?0:limFor(g.inning);
     document.getElementById('st-ir').textContent=g.gameOver?'—':ir;
     const le=document.getElementById('st-rl');
-    if(!lim||g.gameOver){ le.textContent='—'; le.className='val'; }
-    else{ const left=Math.max(0,lim-ir); le.textContent=left; le.className='val'+(left===0?' danger':left<=1?' warn':''); }
-
-    // bases diamond
+    if(!lim||g.gameOver){le.textContent='—';le.className='val';}
+    else{const left=Math.max(0,lim-ir);le.textContent=left;le.className='val'+(left===0?' danger':left<=1?' warn':'');}
+    // bases
     ['b1','b2','b3'].forEach((id,i)=>{
       document.getElementById(id).className='base '+id+(g.bases[i]?' on':'');
     });
-
     // count
     document.getElementById('ct-b').textContent=g.balls;
     document.getElementById('ct-s').textContent=g.strikes;
     document.getElementById('bd').innerHTML=[0,1,2,3].map(i=>`<div class="cdot${i<g.balls?' b':''}"></div>`).join('');
     document.getElementById('sd').innerHTML=[0,1,2].map(i=>`<div class="cdot${i<g.strikes?' s':''}"></div>`).join('');
-
-    // batting toggles
+    // toggles
     const ta=document.getElementById('tog-a');
     ta.textContent=g.away+' batting';
     ta.style.borderColor=g.half==='away'?aC.bg:'#ddd';
@@ -671,29 +639,22 @@
     th.style.borderColor=g.half==='home'?hC.bg:'#ddd';
     th.style.color=g.half==='home'?hC.bg:'#888';
     th.style.background=g.half==='home'?hC.lt:'#f5f7fa';
-
-    // single run button (always visible, reflects batting team)
+    // run button
     const br=document.getElementById('btn-run');
-    br.style.background=curC.bg;
-    document.getElementById('cl-run').textContent=g.half==='away'?g.away+' run':g.home+' run';
-
-    // on base button styled to team
+    br.style.background=curC.bg;br.style.borderColor=curC.bg;
+    document.getElementById('cl-run').textContent=(g.half==='away'?g.away:g.home)+' run';
+    // on base button
     const bo=document.getElementById('btn-ob');
-    bo.style.background=curC.lt;
-    bo.style.color=curC.bg;
-    bo.style.borderColor=curC.bg;
-
+    bo.style.background=curC.lt;bo.style.color=curC.bg;bo.style.borderColor=curC.bg;
     // add batter button
     document.getElementById('add-p-btn').style.background=curC.bg;
-
-    // next half label
+    // next half button
     document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
-
     // inning table
     const totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
     const tb=document.getElementById('inn-tbl');
     let hdr='<tr><th>Team</th>';
-    for(let i=0;i<totalInns;i++) hdr+=`<th>${i+1}</th>`;
+    for(let i=0;i<totalInns;i++)hdr+=`<th>${i+1}</th>`;
     hdr+='<th>R</th></tr>';
     const mkRow=(nm,runs,tot,isAct,c)=>{
       let r=`<tr><td class="tlbl" style="color:${c.bg}">${nm}</td>`;
@@ -709,58 +670,51 @@
     tb.innerHTML=hdr
             +mkRow(g.away,g.aR,aT,!g.gameOver&&g.half==='away',aC)
             +mkRow(g.home,g.hR,hT,!g.gameOver&&g.half==='home',hC);
-
     // lineup
-    const t=g.half;
-    const lu=t==='away'?g.luA:g.luH;
+    const t=g.half,lu=t==='away'?g.luA:g.luH;
     const bi=t==='away'?g.bA:g.bH;
     const od=lu.length>1?(bi+1)%lu.length:null;
     const lut=document.getElementById('lu-team');
-    lut.textContent=t==='away'?g.away:g.home; lut.style.color=curC.bg;
+    lut.textContent=t==='away'?g.away:g.home;lut.style.color=curC.bg;
     const ll=document.getElementById('lu-list');
     if(!lu.length){
       ll.innerHTML='<div style="color:#aaa;font-size:13px;padding:6px 0">No players added yet.</div>';
-    } else {
-      ll.innerHTML=lu.map((p,i)=>{
-        const isUp=i===bi, isDeck=i===od;
-        const upStyle=isUp?`background:${curC.lt};border-color:${curC.bg}`:'';
-        const badge=isUp
-                ?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`
-                :isDeck?`<span class="bbadge deck-badge">On deck</span>`:'';
-        const v=getSt(t,i);
-        const rowStyle=isUp
-                ?`background:${curC.lt};border-color:${curC.bg};border-width:2px`
-                :isDeck?`background:#f5f5e8;border-color:#b8a000;border-width:2px`:'';
-        return `<div class="litem" style="${rowStyle}">
-        <button onclick="setBatter('${t}',${i})"
-          style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;flex:1;min-width:0;padding:0;text-align:left">
-          <span class="lnum">${i+1}</span>
-          <span class="lname">${p}</span>
-          ${badge}
-        </button>
-        <span class="bstat ${ST_C[v]}"
-          onclick="event.stopPropagation();advSt('${t}',${i})"
-          ontouchstart="stTouch(event,'${t}',${i})"
-          ontouchend="stTouchEnd()">${ST_L[v]}</span>
-        <span class="pick-btn"
-          onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
-        <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer"
-          onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
-      </div>`;
-      }).join('');
+      return;
     }
+    ll.innerHTML=lu.map((p,i)=>{
+      const isUp=i===bi,isDeck=i===od;
+      const rowStyle=isUp
+              ?`background:${curC.lt};border-color:${curC.bg};border-width:2px`
+              :isDeck?`background:#f5f5e8;border-color:#b8a000;border-width:2px`:'';
+      const badge=isUp
+              ?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`
+              :isDeck?`<span class="bbadge deck-badge">On deck</span>`:'';
+      const v=getSt(t,i);
+      return `<div class="litem" style="${rowStyle}">
+      <button onclick="setBatter('${t}',${i})"
+        style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;flex:1;min-width:0;padding:0">
+        <span class="lnum">${i+1}</span>
+        <span class="lname">${p}</span>
+        ${badge}
+      </button>
+      <span class="bstat ${ST_C[v]}"
+        onclick="event.stopPropagation();advSt('${t}',${i})"
+        ontouchstart="stTouch(event,'${t}',${i})"
+        ontouchend="stTouchEnd()">${ST_L[v]}</span>
+      <span class="pick-btn"
+        onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
+      <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer"
+        onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
+    </div>`;
+    }).join('');
   }
 
   // ── Init ──────────────────────────────────────────────────────
   window.onload=()=>{
-    toggleLS(); buildSwatches();
+    toggleLS();buildSwatches();
     try{
       const s=localStorage.getItem(LSK);
-      if(s){
-        g=JSON.parse(s);
-        _undo=JSON.parse(localStorage.getItem(LSU)||'[]');
-        showGame(); return;
-      }
+      if(s){g=JSON.parse(s);_undo=JSON.parse(localStorage.getItem(LSU)||'[]');showGame();return;}
     }catch(e){}
     showSetup();
   };
