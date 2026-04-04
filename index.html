@@ -434,7 +434,7 @@
         </div>
       </div>
     </div>
-    <div class="ctrl-card">
+    <div class="ctrl-card" id="game-controls">
       <h3>Batting team</h3>
       <div class="bat-toggle">
         <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
@@ -461,7 +461,7 @@
       </div>
       <button class="lnext" onclick="advanceBatter()">Next batter ↓</button>
     </div>
-    <div class="card" style="margin-bottom:10px">
+    <div class="card" id="end-game-card" style="margin-bottom:10px">
       <button class="btn btn-red" onclick="endGame()">⏹ End Game</button>
     </div>
   </div>
@@ -1374,8 +1374,13 @@
     document.getElementById('h-lim').textContent=ld();
 
     const ob=document.getElementById('over-banner');
-    if(g.gameOver){ob.style.display='block';const w=aT>hT?g.away:hT>aT?g.home:null;ob.textContent=w?`Game over — ${w} wins! (${aT}–${hT})`:`Tie! (${aT}–${aT})`;}
-    else ob.style.display='none';
+    if(g.gameOver){
+      ob.style.display='block';
+      const w=aT>hT?g.away:hT>aT?g.home:null;
+      ob.textContent=w?`Game over — ${w} wins! (${aT}–${hT})`:`Tie! (${aT}–${aT})`;
+    } else ob.style.display='none';
+    document.getElementById('game-controls').style.display=g.gameOver?'none':'block';
+    document.getElementById('end-game-card').style.display=g.gameOver?'none':'block';
 
     for(let i=0;i<3;i++)document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
 
