@@ -453,7 +453,9 @@
     const lim=limFor(g.inning);
     if(lim&&runs[g.inning]>=lim){
       const next=g.half==='away'?'bottom of this inning':`inning ${g.inning+2}`;
-      if(confirm(`Run limit reached! Advance to the ${next}?`)) advHalf();
+      setTimeout(()=>{
+        if(confirm(`Run limit reached! Advance to the ${next}?`)) advHalf();
+      },50);
     }
   }
   function scoreRun(){
