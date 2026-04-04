@@ -447,6 +447,14 @@
     else{ const n=g.luH.length; if(n) g.bH=(g.bH+1)%n; }
     g.balls=0; g.strikes=0;
   }
+  function scoreRun(){
+    ensureInning();
+    const runs=g.half==='away'?g.aR:g.hR;
+    const lim=limFor(g.inning);
+    if(lim&&runs[g.inning]>=lim) return false;
+    runs[g.inning]++;
+    return true;
+  }
   function addToBase(){
     if(g.gameOver) return;
     const t=g.half;
@@ -454,14 +462,12 @@
     const bi=t==='away'?g.bA:g.bH;
     pushUndo(snap());
     const k=i=>t+'-'+i;
-    // force-advance any runners already on base
     const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
     const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
     const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-    if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
+    if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; scoreRun(); }
     if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
     if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
-    // batter takes 1st
     if(lu.length>0) g.pSt[k(bi)]='1st';
     g.bases[0]=true;
     nextBatter();
@@ -508,7 +514,7 @@
       const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
       const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
       const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
+      if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; scoreRun(); }
       if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
       if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
       if(lu.length>0) g.pSt[k(bi)]='1st';
