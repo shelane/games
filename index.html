@@ -283,7 +283,7 @@
     </div>
     <div class="action-row">
       <button class="cbig" id="btn-run" onclick="addRun()"><span>+1</span><small id="cl-run">Run</small></button>
-      <button class="cbig" id="btn-ob" onclick="addToBase()"><span>→1st</span><small>on base</small></button>
+      <button class="cbig" id="btn-ob" onclick="showHitPicker()"><span>BIP</span><small>Ball in play</small></button>
       <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
     </div>
     <button class="c-next" onclick="nextHalf()">→ <span id="cl-nx">End top / start bottom</span></button>
@@ -529,22 +529,144 @@
     g.outs++;nextBatter();
     if(g.outs>=3)advHalf();else{save();render();}
   }
-  function addToBase(){
-    if(g.gameOver)return;
+  function showHitPicker(){
+    if(g.gameOver) return;
+    const old=document.getElementById('hit-picker'); if(old) old.remove();
+    const div=document.createElement('div');
+    div.id='hit-picker';
+    div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center';
+    div.innerHTML=`<div style="background:#fff;border-radius:14px;padding:16px;width:260px">
+    <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px;text-align:center">Ball in play</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button onclick="recordHit(1);document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer;color:#111">1B</button>
+      <button onclick="recordHit(2);document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer;color:#111">2B</button>
+      <button onclick="recordHit(3);document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer;color:#111">3B</button>
+      <button onclick="recordHit(4);document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer;color:#111">HR</button>
+      <button onclick="recordFC();document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:16px;font-weight:800;cursor:pointer;color:#1565c0">FC</button>
+      <button onclick="recordDP();document.getElementById('hit-picker').remove()"
+        style="padding:16px 8px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:16px;font-weight:800;cursor:pointer;color:#c0392b">DP</button>
+    </div>
+    <button onclick="document.getElementById('hit-picker').remove()"
+      style="display:block;width:100%;margin-top:10px;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>
+  </div>`;
+    div.addEventListener('click',e=>{if(e.target===div)div.remove();});
+    document.body.appendChild(div);
+  }
+
+  function syncDiamond(){
+    const t=g.half, lu=t==='away'?g.luA:g.luH;
+    g.bases=[false,false,false];
+    lu.forEach((_,i)=>{
+      const s=getSt(t,i);
+      if(s==='1st') g.bases[0]=true;
+      if(s==='2nd') g.bases[1]=true;
+      if(s==='3rd') g.bases[2]=true;
+    });
+  }
+
+  function advanceBase(cur,n){
+    const order=['none','1st','2nd','3rd','scored'];
+    const idx=order.indexOf(cur);
+    if(idx<=0) return {pos:'none',scored:false};
+    const newIdx=Math.min(idx+n,4);
+    return {pos:order[newIdx],scored:newIdx>=4};
+  }
+
+  function recordHit(bases){
+    if(g.gameOver) return;
     const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
     pushUndo(snap());
     const k=i=>t+'-'+i;
-    const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
-    const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
-    const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-    if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;scoreRun();}
-    if(on2>=0){g.pSt[k(on2)]='3rd';g.bases[2]=true;g.bases[1]=false;}
-    if(on1>=0){g.pSt[k(on1)]='2nd';g.bases[1]=true;g.bases[0]=false;}
-    if(lu.length>0)g.pSt[k(bi)]='1st';
-    g.bases[0]=true;
+    lu.forEach((_,i)=>{
+      const cur=getSt(t,i);
+      if(cur==='none'||cur==='scored'||cur==='out') return;
+      const {pos,scored:s}=advanceBase(cur,bases);
+      g.pSt[k(i)]=pos;
+      if(s) scoreRun();
+    });
+    if(bases>=4){
+      if(lu.length>0) g.pSt[k(bi)]='scored';
+      scoreRun();
+    } else {
+      if(lu.length>0) g.pSt[k(bi)]=['none','1st','2nd','3rd'][bases];
+    }
+    syncDiamond();
     nextBatter();
-    save();render();
+    save(); render();
     checkRunLimit();
+  }
+
+  function recordFC(){
+    if(g.gameOver) return;
+    const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    const k=i=>t+'-'+i;
+    // batter reaches 1st
+    if(lu.length>0) g.pSt[k(bi)]='1st';
+    syncDiamond();
+    nextBatter();
+    save(); render();
+    // show base picker to mark which runner was thrown out
+    showFCOutPicker(t);
+  }
+
+  function showFCOutPicker(t){
+    const old=document.getElementById('fc-picker'); if(old) old.remove();
+    const lu=t==='away'?g.luA:g.luH;
+    // find runners on base (exclude batter who just reached 1st — they're "up-1" now)
+    const runners=lu.map((p,i)=>({p,i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st));
+    if(!runners.length) return; // no runners to throw out
+    const div=document.createElement('div');
+    div.id='fc-picker';
+    div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center';
+    div.innerHTML=`<div style="background:#fff;border-radius:14px;padding:16px;width:240px">
+    <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:4px;text-align:center">FC — who was thrown out?</div>
+    <div style="font-size:11px;color:#aaa;text-align:center;margin-bottom:12px">Tap the runner</div>
+    ${runners.map(r=>`
+      <button onclick="fcMarkOut('${t}',${r.i});document.getElementById('fc-picker').remove()"
+        style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;
+        border:2px solid #e0e0e0;background:#fff;font-size:14px;font-weight:700;cursor:pointer;color:#111;text-align:left">
+        <span style="color:#888;font-size:12px;margin-right:8px">${r.st}</span>${r.p}
+      </button>`).join('')}
+    <button onclick="document.getElementById('fc-picker').remove()"
+      style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Skip</button>
+  </div>`;
+    div.addEventListener('click',e=>{if(e.target===div)div.remove();});
+    document.body.appendChild(div);
+  }
+
+  function fcMarkOut(t,i){
+    pushUndo(snap());
+    g.pSt[t+'-'+i]='out';
+    g.outs++;
+    syncDiamond();
+    if(g.outs>=3) advHalf(); else { save(); render(); }
+  }
+
+  function recordDP(){
+    if(g.gameOver) return;
+    const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    const k=i=>t+'-'+i;
+    // mark batter out
+    if(lu.length>0) g.pSt[k(bi)]='out';
+    // mark the lead runner (furthest base) out
+    const runners=lu.map((p,i)=>({i,st:getSt(t,i)}))
+            .filter(r=>['1st','2nd','3rd'].includes(r.st));
+    const order=['3rd','2nd','1st'];
+    for(const base of order){
+      const lead=runners.find(r=>r.st===base);
+      if(lead){ g.pSt[k(lead.i)]='out'; break; }
+    }
+    g.outs+=2;
+    syncDiamond();
+    nextBatter();
+    if(g.outs>=3) advHalf(); else { save(); render(); }
   }
   function toggleBase(i){
     if(g.gameOver)return;
@@ -576,14 +698,22 @@
     if(type==='balls'&&nv===4){
       const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
       const k=i=>t+'-'+i;
+      // force-advance only runners on occupied bases in sequence
       const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
       const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
       const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-      if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;scoreRun();}
-      if(on2>=0){g.pSt[k(on2)]='3rd';g.bases[2]=true;g.bases[1]=false;}
-      if(on1>=0){g.pSt[k(on1)]='2nd';g.bases[1]=true;g.bases[0]=false;}
-      if(lu.length>0)g.pSt[k(bi)]='1st';
-      g.bases[0]=true;
+      if(on3>=0){g.pSt[k(on3)]='scored';scoreRun();}
+      if(on2>=0) g.pSt[k(on2)]='3rd';
+      if(on1>=0) g.pSt[k(on1)]='2nd';
+      if(lu.length>0) g.pSt[k(bi)]='1st';
+      // sync diamond
+      g.bases=[false,false,false];
+      lu.forEach((_,i)=>{
+        const s=getSt(t,i);
+        if(s==='1st') g.bases[0]=true;
+        if(s==='2nd') g.bases[1]=true;
+        if(s==='3rd') g.bases[2]=true;
+      });
       nextBatter();
       save();render();
       checkRunLimit();
