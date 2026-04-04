@@ -37,8 +37,6 @@
     .setup-player input{flex:1;padding:5px 8px;border-radius:6px;border:1px solid #bbb;font-size:13px;color:#111;min-width:0}
     .setup-player .pnum{font-size:12px;color:#999;width:18px;flex-shrink:0;font-weight:600}
     .setup-player button{background:none;border:none;color:#bbb;font-size:15px;cursor:pointer;padding:2px 5px;flex-shrink:0}
-    /* inning indicator */
-    .inning-indicator{text-align:center;margin-bottom:8px;font-size:22px;font-weight:800;color:#111;letter-spacing:1px}
     /* game header */
     .game-header{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:6px}
@@ -96,8 +94,8 @@
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:280px}
     th{color:#888;font-weight:700;padding:3px 5px;text-align:center;font-size:11px}
     td{padding:5px;text-align:center;border-top:1px solid #eee;color:#111}
-    td.tlbl{text-align:left;font-size:11px;white-space:nowrap;padding-right:6px;font-weight:700}
-    td.ttot{font-weight:800}
+    td.tlbl{text-align:left;font-size:11px;white-space:nowrap;padding-right:6px;font-weight:700;color:inherit}
+    td.ttot{font-weight:800;color:inherit}
     td.alim{color:#e67e00;font-weight:700}
     /* lineup */
     .lineup-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #ddd}
@@ -227,11 +225,9 @@
 
 <!-- GAME -->
 <div id="sg" class="screen">
-  <!-- inning indicator -->
-  <div id="inn-indicator" class="inning-indicator"></div>
-
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
     <button style="background:none;border:none;color:#888;font-size:12px;cursor:pointer;font-weight:600" onclick="goSetup()">← New Game</button>
+    <div id="inn-indicator" style="font-size:20px;font-weight:800;color:#111;letter-spacing:1px;text-align:center"></div>
     <span id="g-date" style="font-size:11px;color:#999"></span>
   </div>
 
@@ -748,7 +744,9 @@
         const v=runs[i]||0;
         const act=!g.gameOver&&i===g.inning&&isAct;
         const atLim=limFor(i)&&v>=limFor(i);
-        const shown=i<g.inning||g.gameOver?v:(act?`<b>${v}</b>`:'—');
+        // show number if: past inning, game over, or this half has already batted (i < inning, or i == inning and isAct or not yet their turn but runs exist)
+        const halfDone=i<g.inning||(i===g.inning&&!isAct&&runs[i]!==undefined);
+        const shown=g.gameOver||halfDone?v:(act?`<b>${v}</b>`:'—');
         r+=`<td class="${act?'ainn':''}${atLim?' alim':''}"${act?` style="background:${c.lt}"`:''}>${shown}</td>`;
       }
       return r+`<td class="ttot" style="color:${c.bg}">${tot}</td></tr>`;
