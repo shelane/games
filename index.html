@@ -447,6 +447,15 @@
     else{ const n=g.luH.length; if(n) g.bH=(g.bH+1)%n; }
     g.balls=0; g.strikes=0;
   }
+  function checkRunLimit(){
+    ensureInning();
+    const runs=g.half==='away'?g.aR:g.hR;
+    const lim=limFor(g.inning);
+    if(lim&&runs[g.inning]>=lim){
+      const next=g.half==='away'?'bottom of this inning':`inning ${g.inning+2}`;
+      if(confirm(`Run limit reached! Advance to the ${next}?`)) advHalf();
+    }
+  }
   function scoreRun(){
     ensureInning();
     const runs=g.half==='away'?g.aR:g.hR;
@@ -472,6 +481,7 @@
     g.bases[0]=true;
     nextBatter();
     save(); render();
+    checkRunLimit();
   }
   function toggleBase(i){
     if(g.gameOver) return;
@@ -521,6 +531,7 @@
       g.bases[0]=true;
       nextBatter();
       save(); render();
+      checkRunLimit();
       return;
     }
     save(); render();
