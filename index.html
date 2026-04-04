@@ -439,7 +439,13 @@
     if(g.gameOver) return;
     pushUndo(snap());
     g.outs++;
+    nextBatter();
     if(g.outs>=3) advHalf(); else { save(); render(); }
+  }
+  function nextBatter(){
+    if(g.half==='away'){ const n=g.luA.length; if(n) g.bA=(g.bA+1)%n; }
+    else{ const n=g.luH.length; if(n) g.bH=(g.bH+1)%n; }
+    g.balls=0; g.strikes=0;
   }
   function addToBase(){
     if(g.gameOver) return;
@@ -449,6 +455,7 @@
     pushUndo(snap());
     if(lu.length>0) g.pSt[t+'-'+bi]='1st';
     g.bases[0]=true;
+    nextBatter();
     save(); render();
   }
   function toggleBase(i){
@@ -480,7 +487,7 @@
     pushUndo(snap());
     g[type]=nv;
     if(type==='strikes'&&nv===3){
-      g.outs++; g.balls=0; g.strikes=0;
+      g.outs++; nextBatter();
       if(g.outs>=3) advHalf(); else { save(); render(); }
       return;
     }
@@ -497,7 +504,7 @@
       if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
       if(lu.length>0) g.pSt[k(bi)]='1st';
       g.bases[0]=true;
-      g.balls=0; g.strikes=0;
+      nextBatter();
       save(); render();
       return;
     }
