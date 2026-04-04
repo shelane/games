@@ -453,7 +453,16 @@
     const lu=t==='away'?g.luA:g.luH;
     const bi=t==='away'?g.bA:g.bH;
     pushUndo(snap());
-    if(lu.length>0) g.pSt[t+'-'+bi]='1st';
+    const k=i=>t+'-'+i;
+    // force-advance any runners already on base
+    const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
+    const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
+    const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
+    if(on3>=0){ g.pSt[k(on3)]='scored'; g.bases[2]=false; }
+    if(on2>=0){ g.pSt[k(on2)]='3rd';    g.bases[2]=true;  g.bases[1]=false; }
+    if(on1>=0){ g.pSt[k(on1)]='2nd';    g.bases[1]=true;  g.bases[0]=false; }
+    // batter takes 1st
+    if(lu.length>0) g.pSt[k(bi)]='1st';
     g.bases[0]=true;
     nextBatter();
     save(); render();
