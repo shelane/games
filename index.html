@@ -518,8 +518,8 @@
     save(); render();
   }
   function setBatter(t,i){
-    pushUndo(snap()); g.balls=0; g.strikes=0;
     if(t==='away') g.bA=i; else g.bH=i;
+    g.balls=0; g.strikes=0;
     save(); render();
   }
   function removeBatter(t,i){
@@ -693,16 +693,22 @@
                 ?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`
                 :isDeck?`<span class="bbadge deck-badge">On deck</span>`:'';
         const v=getSt(t,i);
-        return `<div class="litem${isDeck?' deck':''}" style="${upStyle}">
-        <span class="lnum" onclick="setBatter('${t}',${i})">${i+1}</span>
-        <span class="lname" onclick="setBatter('${t}',${i})">${p}</span>
+        const rowStyle=isUp
+                ?`background:${curC.lt};border-color:${curC.bg};border-width:2px`
+                :isDeck?`background:#f5f5e8;border-color:#b8a000;border-width:2px`:'';
+        return `<div class="litem" style="${rowStyle}">
+        <button onclick="setBatter('${t}',${i})"
+          style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;flex:1;min-width:0;padding:0;text-align:left">
+          <span class="lnum">${i+1}</span>
+          <span class="lname">${p}</span>
+          ${badge}
+        </button>
         <span class="bstat ${ST_C[v]}"
           onclick="event.stopPropagation();advSt('${t}',${i})"
           ontouchstart="stTouch(event,'${t}',${i})"
           ontouchend="stTouchEnd()">${ST_L[v]}</span>
         <span class="pick-btn"
           onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
-        ${badge}
         <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer"
           onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
       </div>`;
