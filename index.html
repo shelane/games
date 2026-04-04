@@ -1116,13 +1116,24 @@
     if(lim&&runs[g.inning]>=lim) return false;
     runs[g.inning]++; return true;
   }
+  function showToast(msg){
+    const old=document.getElementById('_toast');if(old)old.remove();
+    const t=document.createElement('div');
+    t.id='_toast';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;pointer-events:none;opacity:1;transition:opacity .4s';
+    t.textContent=msg;
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),400);},2200);
+  }
+
   function checkRunLimit(){
     ensureInning();
     const runs=g.half==='away'?g.aR:g.hR;
     const lim=limFor(g.inning);
     if(lim&&runs[g.inning]>=lim){
-      const next=g.half==='away'?'bottom of this inning':`inning ${g.inning+2}`;
-      setTimeout(()=>{if(confirm(`Run limit reached! Advance to the ${next}?`))advHalf();},50);
+      const next=g.half==='away'?'Bottom of inning '+(g.inning+1):'Inning '+(g.inning+2);
+      showToast('Run limit reached — advancing to '+next);
+      setTimeout(()=>advHalf(),800);
     }
   }
   function syncDiamond(){
