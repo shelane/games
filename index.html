@@ -244,9 +244,43 @@
   <div class="navbar">
     <button class="back" onclick="nav('s-home')">← Home</button>
     <span class="title">Opponents</span>
-    <button class="action" onclick="showAddOpponent()">+ New</button>
+    <button class="action" onclick="showEditOpp(null)">+ New</button>
   </div>
   <div class="page" id="opp-list" style="padding-top:10px"></div>
+</div>
+
+<!-- EDIT OPPONENT -->
+<div id="s-edit-opp" class="screen">
+  <div class="navbar">
+    <button class="back" onclick="nav('s-opponents')">← Opponents</button>
+    <span class="title" id="edit-opp-title">New Opponent</span>
+    <button class="action" onclick="saveOpp()">Save</button>
+  </div>
+  <div class="page" style="padding-top:10px">
+    <div class="card">
+      <span class="lbl">Opponent Name</span>
+      <input type="text" id="eo-name" placeholder="e.g. Blue Jays" maxlength="30">
+      <span class="lbl">Sport</span>
+      <div class="gt-row">
+        <div class="gt-btn sel" id="eo-baseball" onclick="setEOSport('baseball')">⚾ Baseball</div>
+        <div class="gt-btn" id="eo-softball" onclick="setEOSport('softball')">🥎 Softball</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Roster (optional)</div>
+      <div id="eo-roster-list"></div>
+      <div style="display:flex;gap:7px;margin-top:6px">
+        <input type="text" id="eo-pnum" placeholder="#" style="width:60px">
+        <input type="text" id="eo-pname" placeholder="Player name" maxlength="30" style="flex:1" onkeydown="if(event.key==='Enter')addOppRosterPlayer()">
+        <button class="btn-sm" style="background:#555;color:#fff" onclick="addOppRosterPlayer()">Add</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input type="number" id="eo-preload-n" placeholder="#" min="1" max="25" style="width:70px">
+        <button class="btn-sm btn-outline" onclick="preloadOppRoster()" style="flex:1">Preload players</button>
+      </div>
+    </div>
+    <button class="btn btn-red" id="eo-delete-btn" style="display:none;margin-bottom:10px" onclick="deleteOpp2()">Delete Opponent</button>
+  </div>
 </div>
 
 <!-- NEW GAME SETUP -->
@@ -262,6 +296,13 @@
       <div id="ng-team-list"></div>
       <div id="ng-no-teams" style="display:none;color:#aaa;font-size:13px;padding:6px 0">
         No teams yet. <span style="color:#1565c0;cursor:pointer" onclick="showTeams()">Create a team first →</span>
+      </div>
+      <div id="ng-ha-row" style="display:none;margin-top:10px">
+        <span class="lbl" style="margin-top:0">Your team is</span>
+        <div class="gt-row">
+          <div class="gt-btn sel" id="ng-home-btn" onclick="setNGHA('home')">🏠 Home</div>
+          <div class="gt-btn" id="ng-away-btn" onclick="setNGHA('away')">✈️ Away</div>
+        </div>
       </div>
     </div>
 
@@ -280,6 +321,11 @@
           <button class="btn-sm" style="background:#1565c0;color:#fff" onclick="addQuickOpponent()">Add</button>
         </div>
       </div>
+    </div>
+
+    <div class="card" id="ng-opp-lineup-card" style="display:none">
+      <div class="card-title">Opponent Lineup — drag to set batting order</div>
+      <div id="ng-opp-lineup-list"></div>
     </div>
 
     <div class="card">
@@ -409,7 +455,7 @@
   // ── In-memory state ───────────────────────────────────────────
   let teams=[], opps=[], g=null, _undo=[];
   let etTeamId=null, etSport='baseball', etColor=0;
-  let ngTeamId=null, ngOppId=null, ngLineup=[];
+  let ngTeamId=null, ngOppId=null, ngLineup=[], ngOppLineup=[], ngHA='home';
   let dragSrc=null;
 
   // ── Colour palette ────────────────────────────────────────────
@@ -573,6 +619,8 @@
   }
 
   // ── Opponents ─────────────────────────────────────────────────
+  let eoOppId=null, eoSport='baseball', eoRoster=[];
+
   function showOpponents(){
     nav('s-opponents');
     const el=document.getElementById('opp-list');
@@ -581,32 +629,109 @@
       return;
     }
     el.innerHTML=opps.map(o=>`
-    <div class="opp-item">
-      <span class="opp-name">${o.name}</span>
-      <span class="opp-sport">${o.sport==='softball'?'🥎':'⚾'}</span>
-      <button class="btn-sm" style="background:#f8d7da;color:#c0392b;margin-left:6px" onclick="deleteOpp('${o.id}')">✕</button>
+    <div class="list-item" onclick="showEditOpp('${o.id}')">
+      <div class="li-text">
+        <div class="li-title">${o.name}</div>
+        <div class="li-sub">${o.sport==='softball'?'🥎 Softball':'⚾ Baseball'} · ${(o.roster||[]).length} players</div>
+      </div>
+      <span class="li-arrow">›</span>
     </div>`).join('');
   }
-  function showAddOpponent(){
-    const name=prompt('Opponent name:');
-    if(!name) return;
-    const sport=confirm('Is this a softball opponent? (OK = Softball, Cancel = Baseball)')?'softball':'baseball';
-    opps.push({id:uid(),name:name.trim(),sport});
-    saveOpps(); showOpponents();
+
+  function showEditOpp(id){
+    eoOppId=id;
+    const opp=id?opps.find(o=>o.id===id):null;
+    eoSport=opp?opp.sport:'baseball';
+    eoRoster=opp?[...(opp.roster||[])]:[];
+    document.getElementById('edit-opp-title').textContent=opp?'Edit Opponent':'New Opponent';
+    document.getElementById('eo-name').value=opp?opp.name:'';
+    document.getElementById('eo-delete-btn').style.display=opp?'block':'none';
+    setEOSport(eoSport);
+    renderEORoster();
+    nav('s-edit-opp');
+  }
+
+  function setEOSport(s){
+    eoSport=s;
+    document.getElementById('eo-baseball').className='gt-btn'+(s==='baseball'?' sel':'');
+    document.getElementById('eo-softball').className='gt-btn'+(s==='softball'?' sel':'');
+  }
+
+  function renderEORoster(){
+    const el=document.getElementById('eo-roster-list');
+    if(!eoRoster.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>';return;}
+    el.innerHTML=eoRoster.map((p,i)=>`
+    <div class="roster-item">
+      <div class="ri-num" style="background:#555">${p.num||'?'}</div>
+      <div class="ri-name">${p.name}</div>
+      <div class="ri-btns">
+        <button class="btn-sm btn-outline" onclick="editOppPlayer(${i})" style="padding:5px 10px">Edit</button>
+        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:5px 10px" onclick="removeOppPlayer(${i})">✕</button>
+      </div>
+    </div>`).join('');
+  }
+  function addOppRosterPlayer(){
+    const num=document.getElementById('eo-pnum').value.trim();
+    const name=document.getElementById('eo-pname').value.trim();
+    if(!name)return;
+    eoRoster.push({id:uid(),num,name});
+    document.getElementById('eo-pnum').value='';
+    document.getElementById('eo-pname').value='';
+    renderEORoster();
+  }
+  function removeOppPlayer(i){eoRoster.splice(i,1);renderEORoster();}
+  function editOppPlayer(i){
+    const p=eoRoster[i];
+    const num=prompt('Jersey number:',p.num||'');
+    if(num===null)return;
+    const name=prompt('Player name:',p.name);
+    if(!name)return;
+    eoRoster[i]={...p,num,name};
+    renderEORoster();
+  }
+  function preloadOppRoster(){
+    const n=parseInt(document.getElementById('eo-preload-n').value)||0;
+    if(n<1||n>25)return;
+    for(let i=eoRoster.length;i<n;i++) eoRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
+    renderEORoster();
+  }
+  function saveOpp(){
+    const name=document.getElementById('eo-name').value.trim();
+    if(!name){alert('Please enter an opponent name.');return;}
+    if(eoOppId){
+      const o=opps.find(o=>o.id===eoOppId);
+      o.name=name;o.sport=eoSport;o.roster=eoRoster;
+    } else {
+      opps.push({id:uid(),name,sport:eoSport,roster:eoRoster});
+    }
+    saveOpps();showOpponents();
+  }
+  function deleteOpp2(){
+    if(!confirm('Delete this opponent?'))return;
+    opps=opps.filter(o=>o.id!==eoOppId);
+    saveOpps();showOpponents();
   }
   function deleteOpp(id){
-    if(!confirm('Remove this opponent?')) return;
+    if(!confirm('Remove this opponent?'))return;
     opps=opps.filter(o=>o.id!==id);
-    saveOpps(); showOpponents();
+    saveOpps();showOpponents();
   }
 
   // ── New Game Setup ────────────────────────────────────────────
   function showNewGame(){
-    ngTeamId=null; ngOppId=null; ngLineup=[];
+    ngTeamId=null; ngOppId=null; ngLineup=[]; ngOppLineup=[]; ngHA='home';
     toggleNGLimit();
     renderNGTeams();
     renderNGOpps();
+    document.getElementById('ng-ha-row').style.display='none';
+    document.getElementById('ng-opp-lineup-card').style.display='none';
+    setNGHA('home');
     nav('s-new-game');
+  }
+  function setNGHA(ha){
+    ngHA=ha;
+    document.getElementById('ng-home-btn').className='gt-btn'+(ha==='home'?' sel':'');
+    document.getElementById('ng-away-btn').className='gt-btn'+(ha==='away'?' sel':'');
   }
   function toggleNGLimit(){
     const v=document.getElementById('ng-ls').value;
@@ -635,6 +760,8 @@
     renderNGTeams();
     renderNGLineup();
     document.getElementById('ng-lineup-card').style.display='block';
+    document.getElementById('ng-ha-row').style.display='block';
+    renderNGOpps();
   }
   function renderNGOpps(){
     const el=document.getElementById('ng-opp-list');
@@ -649,7 +776,68 @@
       ${ngOppId===o.id?'<span style="color:#1565c0;font-weight:700">✓</span>':''}
     </div>`).join('');
   }
-  function selectNGOpp(id){ ngOppId=id; renderNGOpps(); }
+  function selectNGOpp(id){
+    ngOppId=id;
+    const opp=opps.find(o=>o.id===id);
+    if(opp&&(opp.roster||[]).length){
+      ngOppLineup=opp.roster.map(p=>({...p,inLineup:true}));
+      renderNGOppLineup();
+      document.getElementById('ng-opp-lineup-card').style.display='block';
+    } else {
+      ngOppLineup=[];
+      document.getElementById('ng-opp-lineup-card').style.display='none';
+    }
+    renderNGOpps();
+  }
+
+  function renderNGOppLineup(){
+    const el=document.getElementById('ng-opp-lineup-list');
+    const selected=ngOppLineup.filter(p=>p.inLineup);
+    const unselected=ngOppLineup.filter(p=>!p.inLineup);
+    let html='';
+    if(selected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER (drag to reorder)</div>';
+      html+=selected.map((p,i)=>`
+      <div class="lu-item selected" draggable="true"
+        ondragstart="dragOppStart(event,'${p.id}')"
+        ondragover="dragOver(event)"
+        ondrop="dragOppDrop(event,'${p.id}')"
+        ondragend="dragEnd(event)">
+        <span class="lu-order">${i+1}</span>
+        <span class="lu-num" style="background:#555">${p.num||'?'}</span>
+        <span class="lu-name">${p.name}</span>
+        <span class="lu-handle">⠿</span>
+        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleOppLineup('${p.id}')">✕</button>
+      </div>`).join('');
+    }
+    if(unselected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH (tap to add)</div>';
+      html+=unselected.map(p=>`
+      <div class="lu-item" onclick="toggleOppLineup('${p.id}')">
+        <span class="lu-num" style="background:#bbb">${p.num||'?'}</span>
+        <span class="lu-name" style="color:#888">${p.name}</span>
+        <span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span>
+      </div>`).join('');
+    }
+    el.innerHTML=html;
+  }
+  function toggleOppLineup(pid){
+    const p=ngOppLineup.find(x=>x.id===pid);
+    if(p){p.inLineup=!p.inLineup;renderNGOppLineup();}
+  }
+  let dragOppSrc=null;
+  function dragOppStart(e,id){dragOppSrc=id;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+  function dragOppDrop(e,targetId){
+    e.preventDefault();
+    if(dragOppSrc===targetId)return;
+    const sel=ngOppLineup.filter(p=>p.inLineup);
+    const rest=ngOppLineup.filter(p=>!p.inLineup);
+    const si=sel.findIndex(p=>p.id===dragOppSrc);
+    const ti=sel.findIndex(p=>p.id===targetId);
+    if(si<0||ti<0)return;
+    const[moved]=sel.splice(si,1);sel.splice(ti,0,moved);
+    ngOppLineup=[...sel,...rest];renderNGOppLineup();
+  }
   function addQuickOpponent(){
     const name=document.getElementById('ng-opp-name').value.trim();
     if(!name) return;
@@ -738,14 +926,24 @@
     const ll=parseInt(document.getElementById('ng-ll').value)||0;
     const sw=parseInt(document.getElementById('ng-sw').value)||3;
 
+    const isHome=ngHA==='home';
+    const myName=team.name;
+    const myColor=team.color;
+    const luMe=lineup.map(p=>`#${p.num} ${p.name}`);
+
+    const oppLineup=ngOppLineup.filter(p=>p.inLineup).map(p=>`#${p.num} ${p.name}`);
+
     g={
-      away:oppName, home:team.name,
-      cA:0, cH:team.color,           // away gets red by default; home = team color
+      away:  isHome ? oppName : myName,
+      home:  isHome ? myName  : oppName,
+      cA:    isHome ? 0       : myColor,
+      cH:    isHome ? myColor : 0,
       type:team.sport,
       ls,rl,el,ll,sw,
       aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
-      luA:[], luH:lineup.map(p=>`#${p.num} ${p.name}`),
+      luA: isHome ? oppLineup : luMe,
+      luH: isHome ? luMe      : oppLineup,
       bA:0,bH:0,pSt:{},
       date:new Date().toLocaleDateString()
     };
