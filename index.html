@@ -1226,9 +1226,15 @@
     }
     pushUndo(snap());
     g.pSt[t+'-'+i]=v;
-    // if an existing runner is manually moved to scored, count the run
+    // manually scoring a runner counts the run
     if(v==='scored'&&prev!=='scored'&&!wasInBox){
       scoreRun();
+    }
+    // manually marking a baserunner out counts the out
+    if(v==='out'&&prev!=='out'&&!wasInBox){
+      g.outs++;
+      syncDiamond();
+      if(g.outs>=3){saveGame();advHalf();return;}
     }
     syncDiamond();
     if(wasUp&&(goingOnBase||v==='scored'||v==='out')&&wasInBox)nextBatter();
