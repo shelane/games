@@ -1,0 +1,25 @@
+{
+  "name": "Game Tracker",
+  "short_name": "Game Tracker",
+  "description": "Little league baseball and softball scorekeeper with team management, lineup tracking, and game history.",
+  "start_url": "/games/",
+  "scope": "/games/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f2f5",
+  "theme_color": "#f0f2f5",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
