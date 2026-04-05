@@ -153,6 +153,9 @@
 
 <!-- HOME -->
 <div id="s-home" class="screen active">
+  <div id="update-banner" style="display:none;background:#1565c0;color:#fff;padding:10px 14px;text-align:center;font-size:13px;font-weight:600;cursor:pointer" onclick="applyUpdate()">
+    🔄 Update available — tap to refresh
+  </div>
   <div class="page">
     <div class="home-title">⚾ Game Tracker</div>
     <div class="home-subtitle">Youth League Scorekeeper</div>
@@ -176,6 +179,7 @@
       <span class="icon">🆚</span>
       <span class="hb-text"><div class="hb-title">Manage Opponents</div><div class="hb-sub">Saved opponents by sport</div></span>
     </button>
+    <div id="app-version" style="text-align:center;font-size:11px;color:#bbb;padding:16px 0 8px"></div>
   </div>
 </div>
 
@@ -450,9 +454,9 @@
 </div>
 
 <script>
+  const APP_VERSION = 'v1-rc1';
   const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
   let teams=[],opps=[],games=[],g=null,_undo=[];
-  let etTeamId=null,etSport='baseball',etColor=0,etRoster=[];
   let eoOppId=null,eoSport='baseball',eoColor=0,eoRoster=[];
   let ngTeamId=null,ngOppId=null,ngLineup=[],ngOppLineup=[],ngHA='home';
   let dragSrc=null,dragOppSrc=null;
@@ -1392,10 +1396,36 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
+  let _swWaiting=null;
+  function applyUpdate(){
+    if(_swWaiting){_swWaiting.postMessage('skipWaiting');}
+    else window.location.reload();
+  }
+
   window.onload=()=>{
     loadLS();showHome();
+    document.getElementById('app-version').textContent=APP_VERSION;
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('sw.js').catch(()=>{});
+      navigator.serviceWorker.register('sw.js').then(reg=>{
+        // new SW waiting on first install — no banner needed
+        // new SW waiting after an update
+        reg.addEventListener('updatefound',()=>{
+          const newSW=reg.installing;
+          newSW.addEventListener('statechange',()=>{
+            if(newSW.state==='installed'&&navigator.serviceWorker.controller){
+              _swWaiting=newSW;
+              document.getElementById('update-banner').style.display='block';
+            }
+          });
+        });
+        // if a SW is already waiting when page loads
+        if(reg.waiting&&navigator.serviceWorker.controller){
+          _swWaiting=reg.waiting;
+          document.getElementById('update-banner').style.display='block';
+        }
+      }).catch(()=>{});
+      // reload all tabs after SW activates
+      navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
     }
   };
 </script>
