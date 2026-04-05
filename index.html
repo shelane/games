@@ -487,7 +487,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v1.1.0-alpha1';
+  const APP_VERSION = 'v1.1.0-alpha2';
   const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
   let teams=[],opps=[],games=[],g=null,_undo=[];
   let eoOppId=null,eoSport='baseball',eoColor=0,eoRoster=[];
@@ -691,9 +691,21 @@
   function removeRosterPlayer(i){etRoster.splice(i,1);renderETRoster();}
   function editRosterPlayer(i){
     const p=etRoster[i];
-    const num=prompt('Jersey number:',p.num||'');if(num===null)return;
-    const name=prompt('Player name:',p.name);if(!name)return;
-    etRoster[i]={...p,num,name};renderETRoster();
+    showModal(`<div class="modal-title">Edit Player</div>
+    <span class="lbl" style="margin-top:0">Jersey Number</span>
+    <input type="number" id="ep-num" value="${p.num||''}" min="0" max="99" style="margin-bottom:10px">
+    <span class="lbl">Player Name</span>
+    <input type="text" id="ep-name" value="${p.name}" maxlength="30" style="margin-bottom:14px">
+    <button onclick="saveRosterEdit(${i})" class="btn btn-dark" style="margin-bottom:8px">Save</button>
+    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
+    setTimeout(()=>document.getElementById('ep-num').focus(),50);
+  }
+  function saveRosterEdit(i){
+    const num=document.getElementById('ep-num').value.trim();
+    const name=document.getElementById('ep-name').value.trim();
+    if(!name){alert('Player name is required.');return;}
+    etRoster[i]={...etRoster[i],num,name};
+    closeModal();renderETRoster();
   }
   function preloadRoster(){
     const n=parseInt(document.getElementById('et-preload-n').value)||0;
@@ -790,9 +802,21 @@
   function removeOppPlayer(i){eoRoster.splice(i,1);renderEORoster();}
   function editOppPlayer(i){
     const p=eoRoster[i];
-    const num=prompt('Jersey number:',p.num||'');if(num===null)return;
-    const name=prompt('Player name:',p.name);if(!name)return;
-    eoRoster[i]={...p,num,name};renderEORoster();
+    showModal(`<div class="modal-title">Edit Player</div>
+    <span class="lbl" style="margin-top:0">Jersey Number</span>
+    <input type="number" id="ep-num" value="${p.num||''}" min="0" max="99" style="margin-bottom:10px">
+    <span class="lbl">Player Name</span>
+    <input type="text" id="ep-name" value="${p.name}" maxlength="30" style="margin-bottom:14px">
+    <button onclick="saveOppEdit(${i})" class="btn btn-dark" style="margin-bottom:8px">Save</button>
+    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
+    setTimeout(()=>document.getElementById('ep-num').focus(),50);
+  }
+  function saveOppEdit(i){
+    const num=document.getElementById('ep-num').value.trim();
+    const name=document.getElementById('ep-name').value.trim();
+    if(!name){alert('Player name is required.');return;}
+    eoRoster[i]={...eoRoster[i],num,name};
+    closeModal();renderEORoster();
   }
   function preloadOppRoster(){
     const n=parseInt(document.getElementById('eo-preload-n').value)||0;
