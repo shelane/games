@@ -125,7 +125,6 @@
     td.alim{color:#e67e00;font-weight:700}
     .lineup-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #ddd}
     .lineup-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
-    .lscroll{max-height:220px;overflow-y:auto}
     .litem{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:8px;margin-bottom:4px;background:#f5f7fa;border:1.5px solid #e8eaed}
     .lnum2{font-size:12px;color:#999;width:18px;flex-shrink:0;font-weight:600}
     .lname2{font-size:14px;color:#111;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
@@ -434,7 +433,7 @@
     </div>
     <div class="lineup-card">
       <h3>Batting order — <span id="lu-team"></span></h3>
-      <div class="lscroll" id="lu-list"></div>
+      <div id="lu-list"></div>
       <div class="ladd">
         <input type="text" id="new-p" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')addBatter()">
         <button id="add-p-btn" onclick="addBatter()">Add</button>
