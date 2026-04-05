@@ -211,7 +211,7 @@
       <div class="card-title">Roster</div>
       <div id="et-roster-list"></div>
       <div style="display:flex;gap:7px;margin-top:6px">
-        <input type="text" id="et-pnum" placeholder="#" style="width:60px">
+        <input type="number" id="et-pnum" placeholder="#" style="width:60px" min="0" max="99">
         <input type="text" id="et-pname" placeholder="Player name" maxlength="30" style="flex:1" onkeydown="if(event.key==='Enter')addRosterPlayer()">
         <button class="btn-sm" id="et-add-btn" onclick="addRosterPlayer()" style="color:#fff">Add</button>
       </div>
@@ -257,7 +257,7 @@
       <div class="card-title">Roster (optional)</div>
       <div id="eo-roster-list"></div>
       <div style="display:flex;gap:7px;margin-top:6px">
-        <input type="text" id="eo-pnum" placeholder="#" style="width:60px">
+        <input type="number" id="eo-pnum" placeholder="#" style="width:60px" min="0" max="99">
         <input type="text" id="eo-pname" placeholder="Player name" maxlength="30" style="flex:1" onkeydown="if(event.key==='Enter')addOppRosterPlayer()">
         <button class="btn-sm" style="background:#555;color:#fff" onclick="addOppRosterPlayer()">Add</button>
       </div>
@@ -585,6 +585,7 @@
     document.getElementById('et-pnum').value='';
     document.getElementById('et-pname').value='';
     renderETRoster();
+    document.getElementById('et-pnum').focus();
   }
   function removeRosterPlayer(i){etRoster.splice(i,1);renderETRoster();}
   function editRosterPlayer(i){
@@ -683,6 +684,7 @@
     document.getElementById('eo-pnum').value='';
     document.getElementById('eo-pname').value='';
     renderEORoster();
+    document.getElementById('eo-pnum').focus();
   }
   function removeOppPlayer(i){eoRoster.splice(i,1);renderEORoster();}
   function editOppPlayer(i){
