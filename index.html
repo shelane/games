@@ -1022,6 +1022,11 @@
     if(g.half==='away'){const n=g.luA.length;if(n)g.bA=(g.bA+1)%n;}
     else{const n=g.luH.length;if(n)g.bH=(g.bH+1)%n;}
     g.balls=0;g.strikes=0;
+    // clear terminal status if batter is cycling back around
+    const t=g.half,bi=t==='away'?g.bA:g.bH;
+    const k=t+'-'+bi;
+    const cur=(g.pSt||{})[k]||'none';
+    if(cur==='scored'||cur==='out') g.pSt[k]='none';
   }
   function scoreRun(){
     ensureInning();
@@ -1198,7 +1203,15 @@
     inp.value='';saveGame();render();
   }
   function advanceBatter(){pushUndo(snap());nextBatter();saveGame();render();}
-  function setBatter(t,i){if(t==='away')g.bA=i;else g.bH=i;g.balls=0;g.strikes=0;saveGame();render();}
+  function setBatter(t,i){
+    if(t==='away')g.bA=i;else g.bH=i;
+    g.balls=0;g.strikes=0;
+    // clear terminal status so batter can bat again (bat around)
+    const k=t+'-'+i;
+    const cur=(g.pSt||{})[k]||'none';
+    if(cur==='scored'||cur==='out') g.pSt[k]='none';
+    saveGame();render();
+  }
   function removeBatter(t,i){
     const name=t==='away'?g.luA[i]:g.luH[i];
     if(!confirm(`Remove "${name}" from the lineup?`))return;
@@ -1243,6 +1256,8 @@
   }
   function advSt(t,i){
     const cur=getSt(t,i);
+    // terminal states — tap does nothing
+    if(cur==='scored'||cur==='out') return;
     const bi=t==='away'?g.bA:g.bH;
     const wasUp=i===bi;
     const wasInBox=cur==='none'||cur==='out'||cur==='scored';
@@ -1253,12 +1268,25 @@
   }
   function pickSt(t,i){
     const cur=getSt(t,i);
+    // terminal states — picker only allows clearing
+    const options=cur==='scored'||cur==='out'
+            ? []
+            : ST.filter(s=>s!=='none'&&s!=='scored'||cur==='none');
+    // available options: if on base, can move to further base or scored or out
+    // if none (batter), handled via recordHit — show all
+    const avail=cur==='none'
+            ? ST.filter(s=>s!=='none')
+            : cur==='scored'||cur==='out'
+                    ? [] // terminal — no progression options
+                    : ST.filter(s=>s!=='none'&&s!==cur);
+
     showModal(`<div class="modal-title">Set runner status</div>
-    ${ST.filter(s=>s!=='none').map(s=>`
+    ${avail.map(s=>`
       <button onclick="setSt('${t}',${i},'${s}');closeModal()"
         style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;
         border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};
         font-size:14px;font-weight:700;cursor:pointer;color:#111">${ST_L[s]}</button>`).join('')}
+    ${avail.length===0?`<div style="color:#aaa;font-size:13px;text-align:center;padding:8px 0">${ST_L[cur]} — no further advancement</div>`:''}
     <button onclick="setSt('${t}',${i},'none');closeModal()"
       style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>
     <button onclick="closeModal()"
