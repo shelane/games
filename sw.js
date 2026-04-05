@@ -1,8 +1,9 @@
-const CACHE = 'game-tracker-v1';
+const CACHE = 'game-tracker-v1-rc1';
 const ASSETS = [
     '/games/',
     '/games/index.html',
     '/games/manifest.json',
+    '/games/favicon.ico',
     '/games/icons/icon-192.png',
     '/games/icons/icon-512.png'
 ];
