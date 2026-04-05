@@ -1226,9 +1226,14 @@
     }
     pushUndo(snap());
     g.pSt[t+'-'+i]=v;
+    // if an existing runner is manually moved to scored, count the run
+    if(v==='scored'&&prev!=='scored'&&!wasInBox){
+      scoreRun();
+    }
     syncDiamond();
     if(wasUp&&(goingOnBase||v==='scored'||v==='out')&&wasInBox)nextBatter();
     saveGame();render();
+    checkRunLimit();
   }
   function advSt(t,i){
     const cur=getSt(t,i);
