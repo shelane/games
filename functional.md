@@ -6,7 +6,7 @@ Version 1.0
 
 ## Overview
 
-Game Tracker is a single-page web application for scoring little league baseball and softball games in real time. It runs entirely in the browser with no server dependency. All state is persisted to `localStorage`.
+Game Tracker is a single-page web application for scoring youth league baseball and softball games in real time. It runs entirely in the browser with no server dependency. All state is persisted to `localStorage`.
 
 ---
 

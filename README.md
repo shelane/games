@@ -1,6 +1,6 @@
 # Game Tracker
 
-A mobile-first progressive web app (PWA) for scoring little league baseball and softball games. Designed to be used on an iPhone during live games with no backend, no login, and no cost to run.
+A mobile-first progressive web app (PWA) for scoring youth league baseball and softball games. Designed to be used on an iPhone during live games with no backend, no login, and no cost to run.
 
 ---
 
@@ -50,11 +50,11 @@ games/
    ```
 
 3. Enable GitHub Pages:
-    - Go to your repo on GitHub
-    - Navigate to **Settings → Pages**
-    - Under **Source**, select **Deploy from a branch**
-    - Select branch: `main`, folder: `/ (root)`
-    - Click **Save**
+   - Go to your repo on GitHub
+   - Navigate to **Settings → Pages**
+   - Under **Source**, select **Deploy from a branch**
+   - Select branch: `main`, folder: `/ (root)`
+   - Click **Save**
 
 4. After a minute or two, your app will be live at:
    ```
