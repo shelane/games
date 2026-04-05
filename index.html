@@ -1082,11 +1082,14 @@
     const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
     const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
     const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
+    let batterScored=false;
     if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;}
     else if(on2>=0){g.pSt[k(on2)]='scored';g.bases[1]=false;}
     else if(on1>=0){g.pSt[k(on1)]='scored';g.bases[0]=false;}
-    else if(lu.length>0){g.pSt[k(bi)]='scored';} // no runners — batter scored (e.g. solo HR)
-    nextBatter();saveGame();render();checkRunLimit();
+    else if(lu.length>0){g.pSt[k(bi)]='scored';batterScored=true;}
+    // only advance batter if they were the one who scored
+    if(batterScored)nextBatter();
+    saveGame();render();checkRunLimit();
   }
   function addOut(){
     if(g.gameOver)return;
