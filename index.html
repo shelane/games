@@ -1334,9 +1334,46 @@
   const ST=['none','1st','2nd','3rd','scored','out'];
   const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
   const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
-  function getSt(t,i){return(g.pSt||{})[t+'-'+i]||'none';}
-  function setSt(t,i,v){pushUndo(snap());g.pSt[t+'-'+i]=v;syncDiamond();saveGame();render();}
-  function advSt(t,i){setSt(t,i,ST[(ST.indexOf(getSt(t,i))+1)%ST.length]);}
+  function setSt(t,i,v){
+    pushUndo(snap());
+    const prev=(g.pSt||{})[t+'-'+i]||'none';
+    const bi=t==='away'?g.bA:g.bH;
+    const wasUp=i===bi;
+    const wasInBox=prev==='none'||prev==='out'||prev==='scored';
+    const goingOnBase=['1st','2nd','3rd'].includes(v);
+
+    // if the current batter is being put on base, use hit logic to advance runners
+    if(wasUp&&wasInBox&&goingOnBase){
+      const bases={'1st':1,'2nd':2,'3rd':3};
+      // undo the snap we just pushed since recordHit will push its own
+      _undo.pop();
+      recordHit(bases[v]);
+      return;
+    }
+
+    g.pSt[t+'-'+i]=v;
+    syncDiamond();
+    // advance batter if they left the box
+    if(wasUp&&(goingOnBase||v==='scored'||v==='out')&&wasInBox) nextBatter();
+    saveGame();render();
+  }
+
+  function advSt(t,i){
+    const cur=getSt(t,i);
+    const bi=t==='away'?g.bA:g.bH;
+    const wasUp=i===bi;
+    const wasInBox=cur==='none'||cur==='out'||cur==='scored';
+    const next=ST[(ST.indexOf(cur)+1)%ST.length];
+    const goingOnBase=['1st','2nd','3rd'].includes(next);
+
+    // if current batter taps badge to go on base, use hit logic
+    if(wasUp&&wasInBox&&goingOnBase){
+      const bases={'1st':1,'2nd':2,'3rd':3};
+      recordHit(bases[next]);
+      return;
+    }
+    setSt(t,i,next);
+  }
   function pickSt(t,i){
     const cur=getSt(t,i);
     showModal(`<div class="modal-title">Set runner status</div>
