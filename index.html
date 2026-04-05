@@ -236,7 +236,7 @@
   <div class="page" style="padding-top:10px">
     <div class="card">
       <span class="lbl">Team Name</span>
-      <input type="text" id="et-name" placeholder="e.g. Sarah's Tigers" maxlength="30">
+      <input type="text" id="et-name" placeholder="e.g. Sarah's Tigers" maxlength="30" autocorrect="off" autocapitalize="words">
       <span class="lbl">Sport</span>
       <div class="gt-row">
         <div class="gt-btn sel" id="et-baseball" onclick="setETSport('baseball')">⚾ Baseball</div>
@@ -250,7 +250,7 @@
       <div id="et-roster-list"></div>
       <div style="display:flex;gap:7px;margin-top:6px">
         <input type="number" id="et-pnum" placeholder="#" style="width:60px" min="0" max="99">
-        <input type="text" id="et-pname" placeholder="Player name" maxlength="30" style="flex:1" onkeydown="if(event.key==='Enter')addRosterPlayer()">
+        <input type="text" id="et-pname" placeholder="Player name" maxlength="30" style="flex:1" autocorrect="off" autocapitalize="words" onkeydown="if(event.key==='Enter')addRosterPlayer()">
         <button class="btn-sm" id="et-add-btn" onclick="addRosterPlayer()" style="color:#fff">Add</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px">
@@ -282,7 +282,7 @@
   <div class="page" style="padding-top:10px">
     <div class="card">
       <span class="lbl">Opponent Name</span>
-      <input type="text" id="eo-name" placeholder="e.g. Blue Jays" maxlength="30">
+      <input type="text" id="eo-name" placeholder="e.g. Blue Jays" maxlength="30" autocorrect="off" autocapitalize="words">
       <span class="lbl">Sport</span>
       <div class="gt-row">
         <div class="gt-btn sel" id="eo-baseball" onclick="setEOSport('baseball')">⚾ Baseball</div>
@@ -296,7 +296,7 @@
       <div id="eo-roster-list"></div>
       <div style="display:flex;gap:7px;margin-top:6px">
         <input type="number" id="eo-pnum" placeholder="#" style="width:60px" min="0" max="99">
-        <input type="text" id="eo-pname" placeholder="Player name" maxlength="30" style="flex:1" onkeydown="if(event.key==='Enter')addOppRosterPlayer()">
+        <input type="text" id="eo-pname" placeholder="Player name" maxlength="30" style="flex:1" autocorrect="off" autocapitalize="words" onkeydown="if(event.key==='Enter')addOppRosterPlayer()">
         <button class="btn-sm" style="background:#555;color:#fff" onclick="addOppRosterPlayer()">Add</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px">
@@ -475,7 +475,7 @@
       <h3>Batting order — <span id="lu-team"></span></h3>
       <div id="lu-list"></div>
       <div class="ladd">
-        <input type="text" id="new-p" placeholder="Player name / #" maxlength="30" onkeydown="if(event.key==='Enter')addBatter()">
+        <input type="text" id="new-p" placeholder="Player name / #" maxlength="30" autocorrect="off" autocapitalize="words" onkeydown="if(event.key==='Enter')addBatter()">
         <button id="add-p-btn" onclick="addBatter()">Add</button>
       </div>
       <button class="lnext" onclick="advanceBatter()">Next batter ↓</button>
@@ -695,7 +695,7 @@
     <span class="lbl" style="margin-top:0">Jersey Number</span>
     <input type="number" id="ep-num" value="${p.num||''}" min="0" max="99" style="margin-bottom:10px">
     <span class="lbl">Player Name</span>
-    <input type="text" id="ep-name" value="${p.name}" maxlength="30" style="margin-bottom:14px">
+    <input type="text" id="ep-name" value="${p.name}" maxlength="30" autocorrect="off" autocapitalize="words" style="margin-bottom:14px">
     <button onclick="saveRosterEdit(${i})" class="btn btn-dark" style="margin-bottom:8px">Save</button>
     <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
     setTimeout(()=>document.getElementById('ep-num').focus(),50);
