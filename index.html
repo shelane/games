@@ -1059,6 +1059,8 @@
     if(g.half==='away'){g.half='home';g.outs=0;}
     else{g.inning++;g.half='away';g.outs=0;}
     g.bases=[false,false,false];g.balls=0;g.strikes=0;
+    // clear all runner statuses for both teams at inning change
+    g.pSt={};
     saveGame();render();
   }
 
