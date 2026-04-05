@@ -179,11 +179,44 @@
       <span class="icon">🆚</span>
       <span class="hb-text"><div class="hb-title">Manage Opponents</div><div class="hb-sub">Saved opponents by sport</div></span>
     </button>
+    <button class="home-btn" onclick="showDataManager()">
+      <span class="icon">💾</span>
+      <span class="hb-text"><div class="hb-title">Export / Import Data</div><div class="hb-sub">Backup or restore all data</div></span>
+    </button>
     <div id="app-version" style="text-align:center;font-size:11px;color:#bbb;padding:16px 0 8px"></div>
   </div>
 </div>
 
-<!-- TEAMS LIST -->
+<!-- DATA MANAGER -->
+<div id="s-data" class="screen">
+  <div class="navbar">
+    <button class="back" onclick="nav('s-home')">← Home</button>
+    <span class="title">Export / Import</span>
+    <span></span>
+  </div>
+  <div class="page" style="padding-top:10px">
+    <div class="card">
+      <div class="card-title">Export</div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Download all your teams, opponents, and game history as a JSON backup file. Save it to Files or email it to yourself.</p>
+      <button class="btn btn-dark" onclick="exportData()">⬇ Download Backup</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Import</div>
+      <p style="font-size:13px;color:#666;margin-bottom:6px;line-height:1.6">Restore from a previously exported backup file.</p>
+      <p style="font-size:12px;color:#c0392b;font-weight:600;margin-bottom:12px">⚠ This will overwrite all current data.</p>
+      <label style="display:block;width:100%;padding:13px;border-radius:10px;background:#e8eaed;color:#333;font-size:15px;font-weight:700;text-align:center;cursor:pointer;border:1.5px solid #ccc">
+        ⬆ Choose Backup File
+        <input type="file" accept=".json" onchange="importData(event)" style="display:none">
+      </label>
+      <div id="import-status" style="margin-top:10px;font-size:13px;text-align:center;display:none"></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#c0392b">Danger Zone</div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Permanently delete all teams, opponents, and game history. This cannot be undone.</p>
+      <button class="btn btn-red" onclick="clearAllData()">🗑 Clear All Data</button>
+    </div>
+  </div>
+</div>
 <div id="s-teams" class="screen">
   <div class="navbar">
     <button class="back" onclick="nav('s-home')">← Home</button>
@@ -454,7 +487,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v1-rc1';
+  const APP_VERSION = 'v1.1.0-alpha1';
   const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
   let teams=[],opps=[],games=[],g=null,_undo=[];
   let eoOppId=null,eoSport='baseball',eoColor=0,eoRoster=[];
@@ -504,7 +537,70 @@
     document.getElementById(id).classList.add('active');
   }
 
-  // ── Home ──────────────────────────────────────────────────────
+  // ── Data Manager ──────────────────────────────────────────────
+  function showDataManager(){nav('s-data');}
+
+  function exportData(){
+    const payload={
+      version:APP_VERSION,
+      exported:new Date().toISOString(),
+      teams,opps,games,
+      activeGame:g||null
+    };
+    const json=JSON.stringify(payload,null,2);
+    const blob=new Blob([json],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const date=new Date().toISOString().slice(0,10);
+    a.href=url;
+    a.download=`game-tracker-backup-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Backup downloaded');
+  }
+
+  function importData(e){
+    const file=e.target.files[0];
+    if(!file)return;
+    const status=document.getElementById('import-status');
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!data.teams||!data.opps||!data.games)throw new Error('Invalid backup file');
+        if(!confirm('This will replace all current data with the backup. Continue?')){
+          e.target.value='';return;
+        }
+        teams=data.teams||[];
+        opps=data.opps||[];
+        games=data.games||[];
+        g=data.activeGame||null;
+        saveTeams();saveOpps();saveGames();
+        if(g)saveGame();else localStorage.removeItem(LS.GAME);
+        localStorage.removeItem(LS.UNDO);_undo=[];
+        status.style.display='block';
+        status.style.color='#1a7a34';
+        status.textContent=`✓ Restored ${teams.length} team(s), ${opps.length} opponent(s), ${games.length} game(s)`;
+        showToast('Data restored successfully');
+        showHome();
+      }catch(err){
+        status.style.display='block';
+        status.style.color='#c0392b';
+        status.textContent='✕ Invalid backup file — no data was changed';
+      }
+      e.target.value='';
+    };
+    reader.readAsText(file);
+  }
+
+  function clearAllData(){
+    if(!confirm('Delete ALL teams, opponents, and game history? This cannot be undone.'))return;
+    if(!confirm('Are you sure? This is permanent.'))return;
+    teams=[];opps=[];games=[];g=null;_undo=[];
+    Object.values(LS).forEach(k=>localStorage.removeItem(k));
+    showToast('All data cleared');
+    showHome();
+  }
   function showHome(){
     nav('s-home');
     const rb=document.getElementById('resume-btn');

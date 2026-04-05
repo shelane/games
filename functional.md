@@ -286,7 +286,27 @@ Each color has a `bg` (primary) and `lt` (light tint) variant used for backgroun
 
 ---
 
-## PWA / Offline
+## Data management
+
+Accessible from the Home screen under **Export / Import Data**.
+
+### Export
+- Serializes all `localStorage` data (teams, opponents, game history, active game) plus the app version and export timestamp into a JSON file
+- File is named `game-tracker-backup-YYYY-MM-DD.json`
+- On iPhone, the file can be saved to Files or shared via email/AirDrop
+
+### Import
+- Accepts a `.json` file previously exported from the app
+- Validates that the file contains `teams`, `opps`, and `games` keys before proceeding
+- Requires two confirmations before overwriting existing data
+- Restores teams, opponents, game history, and active game state
+- Clears the undo stack after import
+- Shows a summary of restored records on success
+
+### Clear All Data
+- Permanently removes all data from `localStorage`
+- Requires two confirmations
+- Resets all in-memory state
 
 - `manifest.json` defines the app for home screen installation
 - `sw.js` implements a cache-first strategy for all app assets
