@@ -1,7 +1,7 @@
 {
   "name": "Game Tracker",
   "short_name": "Game Tracker",
-  "description": "Little league baseball and softball scorekeeper with team management, lineup tracking, and game history.",
+  "description": "Youth baseball and softball scorekeeper with team management, lineup tracking, and game history.",
   "start_url": "/games/",
   "scope": "/games/",
   "display": "standalone",

@@ -7,6 +7,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Game Tracker">
   <meta name="theme-color" content="#f0f2f5">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Game Tracker</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -1390,9 +1392,7 @@
   window.onload=()=>{
     loadLS();showHome();
     if('serviceWorker' in navigator){
-      const sw=`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
-      const blob=new Blob([sw],{type:'application/javascript'});
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+      navigator.serviceWorker.register('sw.js').catch(()=>{});
     }
   };
 </script>
