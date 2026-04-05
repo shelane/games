@@ -13,17 +13,20 @@
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#111;min-height:100vh;-webkit-tap-highlight-color:transparent}
     .screen{display:none}.screen.active{display:block}
     .page{padding:10px;max-width:480px;margin:0 auto}
+    /* nav bar */
     .navbar{display:flex;align-items:center;gap:8px;padding:10px;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:100}
     .navbar .back{background:none;border:none;color:#888;font-size:13px;cursor:pointer;font-weight:600;padding:0;white-space:nowrap}
-    .navbar .title{flex:1;text-align:center;font-size:16px;font-weight:700}
+    .navbar .title{flex:1;text-align:center;font-size:16px;font-weight:700;color:#111}
     .navbar .action{background:none;border:none;color:#1565c0;font-size:13px;cursor:pointer;font-weight:700;padding:0;white-space:nowrap}
+    /* cards */
     .card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #ddd}
     .card-title{font-size:13px;font-weight:700;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
     .lbl{display:block;font-size:12px;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
     .lbl:first-child{margin-top:0}
-    input[type=text],input[type=number],select{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid #bbb;background:#fff;color:#111;font-size:15px}
-    input::placeholder{color:#aaa}
+    input[type=text],input[type=number],select,textarea{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid #bbb;background:#fff;color:#111;font-size:15px}
+    input::placeholder,textarea::placeholder{color:#aaa}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    /* buttons */
     .btn{display:block;width:100%;padding:13px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;text-align:center}
     .btn-dark{background:#222;color:#fff}
     .btn-red{background:#c0392b;color:#fff}
@@ -31,51 +34,55 @@
     .btn:active{opacity:.75}
     .btn-sm{padding:8px 14px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer}
     .btn-sm:active{opacity:.75}
-    /* home */
+    /* home screen */
     .home-title{text-align:center;padding:30px 20px 10px;font-size:26px;font-weight:800}
     .home-subtitle{text-align:center;font-size:14px;color:#888;margin-bottom:24px}
     .home-btn{display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border-radius:12px;border:1px solid #ddd;margin-bottom:10px;cursor:pointer;width:100%;text-align:left}
     .home-btn:active{background:#f5f7fa}
     .home-btn .icon{font-size:28px;width:44px;text-align:center;flex-shrink:0}
-    .hb-title{font-size:16px;font-weight:700;color:#111}
-    .hb-sub{font-size:12px;color:#888;margin-top:2px}
-    /* lists */
+    .home-btn .hb-text .hb-title{font-size:16px;font-weight:700;color:#111}
+    .home-btn .hb-text .hb-sub{font-size:12px;color:#888;margin-top:2px}
+    /* team list items */
     .list-item{display:flex;align-items:center;gap:10px;padding:12px;background:#fff;border-radius:10px;border:1px solid #ddd;margin-bottom:8px;cursor:pointer}
     .list-item:active{background:#f5f7fa}
     .team-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0}
     .li-text{flex:1;min-width:0}
-    .li-title{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .li-title{font-size:15px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .li-sub{font-size:12px;color:#888;margin-top:1px}
     .li-arrow{color:#ccc;font-size:16px;flex-shrink:0}
     /* roster */
     .roster-item{display:flex;align-items:center;gap:8px;padding:9px 10px;background:#f5f7fa;border-radius:8px;border:1px solid #e8eaed;margin-bottom:6px}
-    .ri-num{font-size:12px;font-weight:700;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .ri-name{flex:1;font-size:14px;font-weight:600}
+    .ri-num{font-size:13px;font-weight:700;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+    .ri-name{flex:1;font-size:14px;font-weight:600;color:#111}
     .ri-btns{display:flex;gap:6px}
     /* swatches */
     .swatches{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
     .sw{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;flex-shrink:0}
     .sw.sel{border-color:#111;transform:scale(1.15)}
-    /* sport toggle */
+    /* game type toggle */
     .gt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
     .gt-btn{padding:11px;border-radius:10px;border:2px solid #ddd;cursor:pointer;font-size:14px;font-weight:700;background:#f5f7fa;color:#888;text-align:center}
     .gt-btn.sel{border-color:#333;color:#111;background:#fff}
-    /* lineup drag */
-    .lu-item{display:flex;align-items:center;gap:8px;padding:10px;background:#f5f7fa;border-radius:8px;border:1.5px solid #e8eaed;margin-bottom:6px}
+    /* lineup picker */
+    .lu-item{display:flex;align-items:center;gap:8px;padding:10px;background:#f5f7fa;border-radius:8px;border:1.5px solid #e8eaed;margin-bottom:6px;cursor:grab}
     .lu-item.selected{background:#fff;border-color:#1565c0}
-    .lu-item.dragging{opacity:.4}
+    .lu-item.dragging{opacity:.5}
+    .lu-check{width:20px;height:20px;border-radius:5px;border:2px solid #bbb;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
+    .lu-check.on{background:#1565c0;border-color:#1565c0}
     .lu-num{font-size:11px;font-weight:700;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .lu-name{flex:1;font-size:14px;font-weight:600}
+    .lu-name{flex:1;font-size:14px;font-weight:600;color:#111}
     .lu-handle{color:#ccc;font-size:18px;cursor:grab;padding:0 4px;user-select:none}
     .lu-order{font-size:13px;font-weight:800;color:#888;width:20px;text-align:center;flex-shrink:0}
     /* opponents */
-    .opp-item{display:flex;align-items:center;gap:10px;padding:11px;background:#fff;border-radius:10px;border:1px solid #ddd;margin-bottom:8px;cursor:pointer}
-    .opp-name{flex:1;font-size:15px;font-weight:600}
+    .opp-item{display:flex;align-items:center;gap:10px;padding:11px;background:#fff;border-radius:10px;border:1px solid #ddd;margin-bottom:8px}
+    .opp-name{flex:1;font-size:15px;font-weight:600;color:#111}
     .opp-sport{font-size:11px;color:#888;padding:2px 8px;background:#f0f0f0;border-radius:10px;font-weight:600}
+    /* divider */
     .divider{height:1px;background:#eee;margin:12px 0}
-    /* game screen */
+    /* game screen — inning bar */
     .inn-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:90}
-    .inn-ind{font-size:22px;font-weight:800;letter-spacing:1px}
+    .inn-ind{font-size:22px;font-weight:800;color:#111;letter-spacing:1px}
+    /* score header */
     .game-header{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:6px}
     .team-score{text-align:center}
@@ -83,6 +90,7 @@
     .t-score{font-size:44px;font-weight:800;line-height:1}
     .vs{font-size:16px;color:#bbb;font-weight:700}
     .game-meta{display:flex;justify-content:space-between;font-size:11px;color:#888;padding-top:7px;border-top:1px solid #eee;flex-wrap:wrap;gap:4px;font-weight:600}
+    /* strip */
     .strip{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;text-align:center;border:1px solid #ddd}
     .slbl{font-size:10px;color:#777;display:block;text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:1px}
     .val{font-size:19px;font-weight:800;color:#111}
@@ -95,6 +103,7 @@
     .base{position:absolute;width:15px;height:15px;border:2.5px solid #bbb;transform:rotate(45deg);background:#fff;cursor:pointer}
     .base.on{background:#e67e00;border-color:#e67e00}
     .b1{top:21px;left:42px}.b2{top:0;left:21px}.b3{top:21px;left:0}
+    /* count */
     .count-card{background:#fff;border-radius:12px;padding:10px 13px;margin-bottom:8px;border:1px solid #ddd}
     .count-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
     .count-hdr h3{font-size:12px;color:#666;font-weight:700}
@@ -110,6 +119,7 @@
     .cbtns{display:flex;gap:6px;justify-content:center;margin-top:5px}
     .cbtn{padding:4px 14px;border-radius:6px;border:1.5px solid #bbb;background:#fff;color:#333;font-size:16px;font-weight:700;cursor:pointer}
     .cbtn:active{background:#eee}
+    /* ctrl */
     .ctrl-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .ctrl-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .bat-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
@@ -119,9 +129,10 @@
     .cbig span{font-size:20px}.cbig small{font-size:10px;font-weight:600;opacity:.9}
     .cbig:active{transform:scale(.96)}
     .c-out{background:#333;color:#fff}
-    .c-next{background:#1a7a34;color:#fff;width:100%;padding:14px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px}
+    .c-next{background:#1a7a34;color:#fff;width:100%;padding:14px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-weight:700}
     .c-next:active{opacity:.85}
-    .c-undo{background:#e8eaed;color:#444;width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-size:13px;font-weight:600}
+    .c-undo{background:#e8eaed;color:#444;width:100%;margin-top:6px;padding:10px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-size:13px;font-weight:600}
+    /* inning table */
     .inn-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;border:1px solid #ddd}
     .inn-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:280px}
@@ -130,6 +141,7 @@
     td.tlbl{text-align:left;font-size:11px;white-space:nowrap;padding-right:6px;font-weight:700;color:inherit}
     td.ttot{font-weight:800;color:inherit}
     td.alim{color:#e67e00;font-weight:700}
+    /* lineup game */
     .lineup-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #ddd}
     .lineup-card h3{font-size:12px;color:#666;margin-bottom:8px;font-weight:700}
     .lscroll{max-height:220px;overflow-y:auto}
@@ -149,9 +161,10 @@
     .ladd button{padding:8px 12px;border-radius:8px;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:700}
     .lnext{margin-top:6px;width:100%;padding:9px;border-radius:8px;border:1px solid #ccc;background:#e8eaed;color:#333;font-size:13px;cursor:pointer;font-weight:600}
     .over-banner{background:#d4edda;border:1.5px solid #5a9a6a;border-radius:10px;padding:11px;text-align:center;margin-bottom:8px;font-size:14px;color:#155724;font-weight:700}
+    /* modal overlay */
     .modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px}
-    .modal{background:#fff;border-radius:14px;padding:16px;width:100%;max-width:340px;max-height:90vh;overflow-y:auto}
-    .modal-title{font-size:15px;font-weight:700;margin-bottom:14px;text-align:center}
+    .modal{background:#fff;border-radius:14px;padding:16px;width:100%;max-width:340px}
+    .modal-title{font-size:15px;font-weight:700;color:#111;margin-bottom:14px;text-align:center}
   </style>
 </head>
 <body>
@@ -159,7 +172,7 @@
 <!-- HOME -->
 <div id="s-home" class="screen active">
   <div class="page">
-    <div class="home-title">⚾ Game Tracker</div>
+    <div class="home-title" id="home-title">⚾ Game Tracker</div>
     <div class="home-subtitle">Little League Scorekeeper</div>
     <button class="home-btn" onclick="showNewGame()">
       <span class="icon">▶️</span>
@@ -197,7 +210,7 @@
 <!-- EDIT TEAM -->
 <div id="s-edit-team" class="screen">
   <div class="navbar">
-    <button class="back" onclick="nav('s-teams')">← Teams</button>
+    <button class="back" id="edit-team-back" onclick="nav('s-teams')">← Teams</button>
     <span class="title" id="edit-team-title">New Team</span>
     <button class="action" onclick="saveTeam()">Save</button>
   </div>
@@ -230,7 +243,7 @@
   </div>
 </div>
 
-<!-- OPPONENTS LIST -->
+<!-- OPPONENTS -->
 <div id="s-opponents" class="screen">
   <div class="navbar">
     <button class="back" onclick="nav('s-home')">← Home</button>
@@ -256,6 +269,8 @@
         <div class="gt-btn sel" id="eo-baseball" onclick="setEOSport('baseball')">⚾ Baseball</div>
         <div class="gt-btn" id="eo-softball" onclick="setEOSport('softball')">🥎 Softball</div>
       </div>
+      <span class="lbl">Opponent Color</span>
+      <div class="swatches" id="eo-swatches"></div>
     </div>
     <div class="card">
       <div class="card-title">Roster (optional)</div>
@@ -270,11 +285,11 @@
         <button class="btn-sm btn-outline" onclick="preloadOppRoster()" style="flex:1">Preload players</button>
       </div>
     </div>
-    <button class="btn btn-red" id="eo-delete-btn" style="display:none;margin-bottom:10px" onclick="deleteOpp()">Delete Opponent</button>
+    <button class="btn btn-red" id="eo-delete-btn" style="display:none;margin-bottom:10px" onclick="deleteOpp2()">Delete Opponent</button>
   </div>
 </div>
 
-<!-- NEW GAME -->
+<!-- NEW GAME SETUP -->
 <div id="s-new-game" class="screen">
   <div class="navbar">
     <button class="back" onclick="nav('s-home')">← Home</button>
@@ -285,7 +300,9 @@
     <div class="card">
       <div class="card-title">Your Team</div>
       <div id="ng-team-list"></div>
-      <div id="ng-no-teams" style="display:none;color:#aaa;font-size:13px;padding:6px 0">No teams yet. <span style="color:#1565c0;cursor:pointer" onclick="showTeams()">Create a team first →</span></div>
+      <div id="ng-no-teams" style="display:none;color:#aaa;font-size:13px;padding:6px 0">
+        No teams yet. <span style="color:#1565c0;cursor:pointer" onclick="showTeams()">Create a team first →</span>
+      </div>
       <div id="ng-ha-row" style="display:none;margin-top:10px">
         <span class="lbl" style="margin-top:0">Your team is</span>
         <div class="gt-row">
@@ -294,10 +311,12 @@
         </div>
       </div>
     </div>
+
     <div class="card" id="ng-lineup-card" style="display:none">
-      <div class="card-title">Your Lineup — drag to set batting order</div>
+      <div class="card-title">Lineup — drag to set batting order</div>
       <div id="ng-lineup-list"></div>
     </div>
+
     <div class="card">
       <div class="card-title">Opponent</div>
       <div id="ng-opp-list"></div>
@@ -309,10 +328,12 @@
         </div>
       </div>
     </div>
+
     <div class="card" id="ng-opp-lineup-card" style="display:none">
       <div class="card-title">Opponent Lineup — drag to set batting order</div>
       <div id="ng-opp-lineup-list"></div>
     </div>
+
     <div class="card">
       <div class="card-title">Run Limits</div>
       <div class="row2">
@@ -351,7 +372,25 @@
   </div>
 </div>
 
-<!-- GAME SCREEN -->
+<!-- HISTORY LIST -->
+<div id="s-history" class="screen">
+  <div class="navbar">
+    <button class="back" onclick="nav('s-home')">← Home</button>
+    <span class="title">Past Games</span>
+    <span></span>
+  </div>
+  <div class="page" id="history-list" style="padding-top:10px"></div>
+</div>
+
+<!-- GAME DETAIL -->
+<div id="s-game-detail" class="screen">
+  <div class="navbar">
+    <button class="back" onclick="nav('s-history')">← History</button>
+    <span class="title" id="gd-title">Game</span>
+    <span></span>
+  </div>
+  <div class="page" id="gd-content" style="padding-top:10px"></div>
+</div>
 <div id="s-game" class="screen">
   <div class="inn-bar">
     <button style="background:none;border:none;color:#888;font-size:12px;cursor:pointer;font-weight:600" onclick="goHome()">← Home</button>
@@ -397,25 +436,19 @@
         </div>
       </div>
     </div>
-    <!-- game controls — hidden when game over -->
-    <div id="game-controls">
-      <div class="ctrl-card">
-        <h3>Batting team</h3>
-        <div class="bat-toggle">
-          <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
-          <button class="tog" id="tog-h" onclick="setHalf('home')"></button>
-        </div>
-        <div class="action-row">
-          <button class="cbig" id="btn-run" onclick="addRun()"><span>+1</span><small id="cl-run">Run</small></button>
-          <button class="cbig" id="btn-ob" onclick="showBIPPicker()"><span>In Play</span><small>hit/FC/DP</small></button>
-          <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
-        </div>
-        <button class="c-next" onclick="nextHalf()">→ <span id="cl-nx">End top / start bottom</span></button>
-        <button class="c-undo" onclick="undo()">↩ Undo last action</button>
+    <div class="ctrl-card" id="game-controls">
+      <h3>Batting team</h3>
+      <div class="bat-toggle">
+        <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
+        <button class="tog" id="tog-h" onclick="setHalf('home')"></button>
       </div>
-      <div class="card" id="end-game-card" style="margin-bottom:8px">
-        <button class="btn btn-red" onclick="endGame()">⏹ End Game</button>
+      <div class="action-row">
+        <button class="cbig" id="btn-run" onclick="addRun()"><span>+1</span><small id="cl-run">Run</small></button>
+        <button class="cbig" id="btn-ob" onclick="showBIPPicker()"><span>In Play</span><small>hit / FC / DP</small></button>
+        <button class="cbig c-out" onclick="addOut()"><span>OUT</span><small>record out</small></button>
       </div>
+      <button class="c-next" onclick="nextHalf()">→ <span id="cl-nx">End top / start bottom</span></button>
+      <button class="c-undo" onclick="undo()">↩ Undo last action</button>
     </div>
     <div class="inn-card">
       <h3>Inning breakdown</h3>
@@ -430,32 +463,27 @@
       </div>
       <button class="lnext" onclick="advanceBatter()">Next batter ↓</button>
     </div>
+    <div class="card" id="end-game-card" style="margin-bottom:10px">
+      <button class="btn btn-red" onclick="endGame()">⏹ End Game</button>
+    </div>
   </div>
-</div>
-
-<!-- HISTORY LIST -->
-<div id="s-history" class="screen">
-  <div class="navbar">
-    <button class="back" onclick="nav('s-home')">← Home</button>
-    <span class="title">Past Games</span>
-    <span></span>
-  </div>
-  <div class="page" id="history-list" style="padding-top:10px"></div>
-</div>
-
-<!-- GAME DETAIL -->
-<div id="s-game-detail" class="screen">
-  <div class="navbar">
-    <button class="back" onclick="nav('s-history')">← History</button>
-    <span class="title" id="gd-title">Game</span>
-    <span></span>
-  </div>
-  <div class="page" id="gd-content" style="padding-top:10px"></div>
 </div>
 
 <script>
-  // ── Constants ─────────────────────────────────────────────────
-  const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
+  // ── Storage keys ──────────────────────────────────────────────
+  const LS={
+    TEAMS:'gt_teams', OPPS:'gt_opps',
+    GAME:'gt_game',   UNDO:'gt_undo',
+    GAMES:'gt_games'
+  };
+
+  // ── In-memory state ───────────────────────────────────────────
+  let teams=[], opps=[], games=[], g=null, _undo=[];
+  let etTeamId=null, etSport='baseball', etColor=0;
+  let ngTeamId=null, ngOppId=null, ngLineup=[], ngOppLineup=[], ngHA='home';
+  let dragSrc=null;
+
+  // ── Colour palette ────────────────────────────────────────────
   const COLORS=[
     {n:'Red',    bg:'#c0392b',lt:'#fdf0ef'},
     {n:'Blue',   bg:'#1565c0',lt:'#eff4fd'},
@@ -470,68 +498,33 @@
     {n:'Gray',   bg:'#555555',lt:'#f0f0f0'},
     {n:'Pink',   bg:'#c2185b',lt:'#fde8f1'},
   ];
-  const ST=['none','1st','2nd','3rd','scored','out'];
-  const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
-  const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
-
-  // ── State ─────────────────────────────────────────────────────
-  let teams=[],opps=[],games=[],g=null,_undo=[];
-  let etTeamId=null,etSport='baseball',etColor=0,etRoster=[];
-  let eoOppId=null,eoSport='baseball',eoRoster=[];
-  let ngTeamId=null,ngOppId=null,ngLineup=[],ngOppLineup=[],ngHA='home';
-  let dragSrc=null,dragOppSrc=null;
-  let _lpT=null,_lpI=null,_lpTmr=null;
 
   // ── Utilities ─────────────────────────────────────────────────
-  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-  function clr(id){return COLORS[id]||COLORS[0];}
-  function col(t){return COLORS[t==='away'?g.cA:g.cH];}
-  function sum(a){return a.reduce((x,y)=>x+y,0);}
-  function getSt(t,i){return(g.pSt||{})[t+'-'+i]||'none';}
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function col(t){ return COLORS[t==='away'?g.cA:g.cH]; }
+  function sum(a){ return a.reduce((x,y)=>x+y,0); }
+  function clr(id){ return COLORS[id]||COLORS[0]; }
 
-  // ── Storage ───────────────────────────────────────────────────
   function loadLS(){
-    try{teams=JSON.parse(localStorage.getItem(LS.TEAMS))||[];}catch{teams=[];}
-    try{opps=JSON.parse(localStorage.getItem(LS.OPPS))||[];}catch{opps=[];}
-    try{games=JSON.parse(localStorage.getItem(LS.GAMES))||[];}catch{games=[];}
-    try{const s=localStorage.getItem(LS.GAME);g=s?JSON.parse(s):null;}catch{g=null;}
-    try{_undo=JSON.parse(localStorage.getItem(LS.UNDO))||[];}catch{_undo=[];}
+    try{ teams=JSON.parse(localStorage.getItem(LS.TEAMS))||[]; }catch{ teams=[]; }
+    try{ opps=JSON.parse(localStorage.getItem(LS.OPPS))||[]; }catch{ opps=[]; }
+    try{ games=JSON.parse(localStorage.getItem(LS.GAMES))||[]; }catch{ games=[]; }
+    try{ const s=localStorage.getItem(LS.GAME); g=s?JSON.parse(s):null; }catch{ g=null; }
+    try{ _undo=JSON.parse(localStorage.getItem(LS.UNDO))||[]; }catch{ _undo=[]; }
   }
-  function saveTeams(){localStorage.setItem(LS.TEAMS,JSON.stringify(teams));}
-  function saveOpps(){localStorage.setItem(LS.OPPS,JSON.stringify(opps));}
-  function saveGames(){localStorage.setItem(LS.GAMES,JSON.stringify(games));}
-  function saveGame(){if(g){const c={...g};delete c._h;localStorage.setItem(LS.GAME,JSON.stringify(c));}}
-  function saveUndo(){try{localStorage.setItem(LS.UNDO,JSON.stringify(_undo));}catch(e){_undo.shift();}}
-  function snap(){const c={...g};delete c._h;return JSON.stringify(c);}
-  function pushUndo(s){_undo.push(s);if(_undo.length>40)_undo.shift();saveUndo();}
+  function saveGames(){ localStorage.setItem(LS.GAMES,JSON.stringify(games)); }
+  function saveTeams(){ localStorage.setItem(LS.TEAMS,JSON.stringify(teams)); }
+  function saveOpps(){ localStorage.setItem(LS.OPPS,JSON.stringify(opps)); }
+  function saveGame(){ if(g){ const c={...g};delete c._h; localStorage.setItem(LS.GAME,JSON.stringify(c)); } }
+  function saveUndo(){ try{ localStorage.setItem(LS.UNDO,JSON.stringify(_undo)); }catch(e){ _undo.shift(); } }
+  function snap(){ const c={...g};delete c._h;return JSON.stringify(c); }
+  function pushUndo(s){ _undo.push(s); if(_undo.length>40)_undo.shift(); saveUndo(); }
 
   // ── Navigation ────────────────────────────────────────────────
   function nav(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
-
-  // ── Toast ─────────────────────────────────────────────────────
-  function showToast(msg){
-    const old=document.getElementById('_toast');if(old)old.remove();
-    const t=document.createElement('div');
-    t.id='_toast';
-    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;pointer-events:none;white-space:nowrap';
-    t.textContent=msg;
-    document.body.appendChild(t);
-    setTimeout(()=>{t.style.transition='opacity .4s';t.style.opacity='0';setTimeout(()=>t.remove(),400);},2200);
-  }
-
-  // ── Modal ─────────────────────────────────────────────────────
-  function showModal(html){
-    closeModal();
-    const bg=document.createElement('div');
-    bg.className='modal-bg';bg.id='_modal';
-    bg.innerHTML=`<div class="modal">${html}</div>`;
-    bg.addEventListener('click',e=>{if(e.target===bg)closeModal();});
-    document.body.appendChild(bg);
-  }
-  function closeModal(){const m=document.getElementById('_modal');if(m)m.remove();}
 
   // ── Home ──────────────────────────────────────────────────────
   function showHome(){
@@ -541,12 +534,12 @@
       rb.style.display='flex';
       const emoji=g.type==='softball'?'🥎':'⚾';
       document.getElementById('resume-sub').textContent=`${emoji} ${g.away} vs ${g.home} — Inn ${g.inning+1}`;
-    }else rb.style.display='none';
+    } else rb.style.display='none';
   }
-  function resumeGame(){nav('s-game');render();}
+  function resumeGame(){ nav('s-game'); render(); }
   function goHome(){
-    if(g&&!g.gameOver){if(!confirm('Leave game? Progress is saved.'))return;}
-    if(g&&g.gameOver){localStorage.removeItem(LS.GAME);g=null;}
+    if(g&&!g.gameOver){ if(!confirm('Leave game? Progress is saved.')) return; }
+    if(g&&g.gameOver){ localStorage.removeItem(LS.GAME); g=null; }
     showHome();
   }
 
@@ -554,7 +547,10 @@
   function showTeams(){
     nav('s-teams');
     const el=document.getElementById('teams-list');
-    if(!teams.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No teams yet. Tap + New to create one.</div>';return;}
+    if(!teams.length){
+      el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No teams yet. Tap + New to create one.</div>';
+      return;
+    }
     el.innerHTML=teams.map(t=>`
     <div class="list-item" onclick="showEditTeam('${t.id}')">
       <div class="team-dot" style="background:${clr(t.color).bg}"></div>
@@ -565,32 +561,26 @@
       <span class="li-arrow">›</span>
     </div>`).join('');
   }
+
   function showEditTeam(id){
     etTeamId=id;
     const team=id?teams.find(t=>t.id===id):null;
     etSport=team?team.sport:'baseball';
     etColor=team?team.color:0;
-    etRoster=team?[...team.roster]:[];
     document.getElementById('edit-team-title').textContent=team?'Edit Team':'New Team';
     document.getElementById('et-name').value=team?team.name:'';
     document.getElementById('et-delete-btn').style.display=team?'block':'none';
-    setETSport(etSport);buildETSwatches();renderETRoster();
+    setETSport(etSport);
+    buildETSwatches();
+    renderETRoster(team?[...team.roster]:[]);
     nav('s-edit-team');
   }
-  function setETSport(s){
-    etSport=s;
-    document.getElementById('et-baseball').className='gt-btn'+(s==='baseball'?' sel':'');
-    document.getElementById('et-softball').className='gt-btn'+(s==='softball'?' sel':'');
-  }
-  function buildETSwatches(){
-    document.getElementById('et-swatches').innerHTML=COLORS.map((c,i)=>
-            `<div class="sw${etColor===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickETColor(${i})"></div>`).join('');
-    document.getElementById('et-add-btn').style.background=clr(etColor).bg;
-  }
-  function pickETColor(i){etColor=i;buildETSwatches();renderETRoster();}
-  function renderETRoster(){
+
+  let etRoster=[];
+  function renderETRoster(r){
+    etRoster=r;
     const el=document.getElementById('et-roster-list');
-    if(!etRoster.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>';return;}
+    if(!etRoster.length){ el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>'; return; }
     el.innerHTML=etRoster.map((p,i)=>`
     <div class="roster-item">
       <div class="ri-num" style="background:${clr(etColor).bg}">${p.num||'?'}</div>
@@ -604,42 +594,68 @@
   function addRosterPlayer(){
     const num=document.getElementById('et-pnum').value.trim();
     const name=document.getElementById('et-pname').value.trim();
-    if(!name)return;
+    if(!name) return;
     etRoster.push({id:uid(),num,name});
     document.getElementById('et-pnum').value='';
     document.getElementById('et-pname').value='';
-    renderETRoster();
+    renderETRoster(etRoster);
   }
-  function removeRosterPlayer(i){etRoster.splice(i,1);renderETRoster();}
+  function removeRosterPlayer(i){ etRoster.splice(i,1); renderETRoster(etRoster); }
   function editRosterPlayer(i){
     const p=etRoster[i];
-    const num=prompt('Jersey number:',p.num||'');if(num===null)return;
-    const name=prompt('Player name:',p.name);if(!name)return;
-    etRoster[i]={...p,num,name};renderETRoster();
+    const num=prompt('Jersey number:',p.num||'');
+    if(num===null) return;
+    const name=prompt('Player name:',p.name);
+    if(!name) return;
+    etRoster[i]={...p,num,name};
+    renderETRoster(etRoster);
   }
   function preloadRoster(){
     const n=parseInt(document.getElementById('et-preload-n').value)||0;
-    if(n<1||n>25)return;
-    for(let i=etRoster.length;i<n;i++)etRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
-    renderETRoster();
+    if(n<1||n>25) return;
+    for(let i=etRoster.length;i<n;i++) etRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
+    renderETRoster(etRoster);
   }
+  function setETSport(s){
+    etSport=s;
+    document.getElementById('et-baseball').className='gt-btn'+(s==='baseball'?' sel':'');
+    document.getElementById('et-softball').className='gt-btn'+(s==='softball'?' sel':'');
+  }
+  function buildETSwatches(){
+    const el=document.getElementById('et-swatches');
+    el.innerHTML=COLORS.map((c,i)=>
+            `<div class="sw${etColor===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickETColor(${i})"></div>`
+    ).join('');
+    document.getElementById('et-add-btn').style.background=clr(etColor).bg;
+  }
+  function pickETColor(i){ etColor=i; buildETSwatches(); renderETRoster(etRoster); }
   function saveTeam(){
     const name=document.getElementById('et-name').value.trim();
-    if(!name){alert('Please enter a team name.');return;}
-    if(etTeamId){const t=teams.find(t=>t.id===etTeamId);t.name=name;t.sport=etSport;t.color=etColor;t.roster=etRoster;}
-    else teams.push({id:uid(),name,sport:etSport,color:etColor,roster:etRoster});
-    saveTeams();showTeams();
+    if(!name){ alert('Please enter a team name.'); return; }
+    if(etTeamId){
+      const t=teams.find(t=>t.id===etTeamId);
+      t.name=name; t.sport=etSport; t.color=etColor; t.roster=etRoster;
+    } else {
+      teams.push({id:uid(),name,sport:etSport,color:etColor,roster:etRoster});
+    }
+    saveTeams(); showTeams();
   }
   function deleteTeam(){
-    if(!confirm('Delete this team?'))return;
-    teams=teams.filter(t=>t.id!==etTeamId);saveTeams();showTeams();
+    if(!confirm('Delete this team and its roster?')) return;
+    teams=teams.filter(t=>t.id!==etTeamId);
+    saveTeams(); showTeams();
   }
 
   // ── Opponents ─────────────────────────────────────────────────
+  let eoOppId=null, eoSport='baseball', eoColor=0, eoRoster=[];
+
   function showOpponents(){
     nav('s-opponents');
     const el=document.getElementById('opp-list');
-    if(!opps.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No opponents yet. Tap + New.</div>';return;}
+    if(!opps.length){
+      el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No opponents saved yet. Tap + New to add one.</div>';
+      return;
+    }
     el.innerHTML=opps.map(o=>`
     <div class="list-item" onclick="showEditOpp('${o.id}')">
       <div class="li-text">
@@ -649,28 +665,42 @@
       <span class="li-arrow">›</span>
     </div>`).join('');
   }
+
   function showEditOpp(id){
     eoOppId=id;
     const opp=id?opps.find(o=>o.id===id):null;
     eoSport=opp?opp.sport:'baseball';
+    eoColor=opp?(opp.color||0):0;
     eoRoster=opp?[...(opp.roster||[])]:[];
     document.getElementById('edit-opp-title').textContent=opp?'Edit Opponent':'New Opponent';
     document.getElementById('eo-name').value=opp?opp.name:'';
     document.getElementById('eo-delete-btn').style.display=opp?'block':'none';
-    setEOSport(eoSport);renderEORoster();
+    setEOSport(eoSport);
+    buildEOSwatches();
+    renderEORoster();
     nav('s-edit-opp');
   }
+
+  function buildEOSwatches(){
+    const el=document.getElementById('eo-swatches');
+    el.innerHTML=COLORS.map((c,i)=>
+            `<div class="sw${eoColor===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickEOColor(${i})"></div>`
+    ).join('');
+  }
+  function pickEOColor(i){ eoColor=i; buildEOSwatches(); renderEORoster(); }
+
   function setEOSport(s){
     eoSport=s;
     document.getElementById('eo-baseball').className='gt-btn'+(s==='baseball'?' sel':'');
     document.getElementById('eo-softball').className='gt-btn'+(s==='softball'?' sel':'');
   }
+
   function renderEORoster(){
     const el=document.getElementById('eo-roster-list');
     if(!eoRoster.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>';return;}
     el.innerHTML=eoRoster.map((p,i)=>`
     <div class="roster-item">
-      <div class="ri-num" style="background:#555">${p.num||'?'}</div>
+      <div class="ri-num" style="background:${clr(eoColor).bg}">${p.num||'?'}</div>
       <div class="ri-name">${p.name}</div>
       <div class="ri-btns">
         <button class="btn-sm btn-outline" onclick="editOppPlayer(${i})" style="padding:5px 10px">Edit</button>
@@ -690,34 +720,158 @@
   function removeOppPlayer(i){eoRoster.splice(i,1);renderEORoster();}
   function editOppPlayer(i){
     const p=eoRoster[i];
-    const num=prompt('Jersey number:',p.num||'');if(num===null)return;
-    const name=prompt('Player name:',p.name);if(!name)return;
-    eoRoster[i]={...p,num,name};renderEORoster();
+    const num=prompt('Jersey number:',p.num||'');
+    if(num===null)return;
+    const name=prompt('Player name:',p.name);
+    if(!name)return;
+    eoRoster[i]={...p,num,name};
+    renderEORoster();
   }
   function preloadOppRoster(){
     const n=parseInt(document.getElementById('eo-preload-n').value)||0;
     if(n<1||n>25)return;
-    for(let i=eoRoster.length;i<n;i++)eoRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
+    for(let i=eoRoster.length;i<n;i++) eoRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
     renderEORoster();
   }
   function saveOpp(){
     const name=document.getElementById('eo-name').value.trim();
     if(!name){alert('Please enter an opponent name.');return;}
-    if(eoOppId){const o=opps.find(o=>o.id===eoOppId);o.name=name;o.sport=eoSport;o.roster=eoRoster;}
-    else opps.push({id:uid(),name,sport:eoSport,roster:eoRoster});
+    if(eoOppId){
+      const o=opps.find(o=>o.id===eoOppId);
+      o.name=name;o.sport=eoSport;o.color=eoColor;o.roster=eoRoster;
+    } else {
+      opps.push({id:uid(),name,sport:eoSport,color:eoColor,roster:eoRoster});
+    }
     saveOpps();showOpponents();
   }
-  function deleteOpp(){
+  function deleteOpp2(){
     if(!confirm('Delete this opponent?'))return;
-    opps=opps.filter(o=>o.id!==eoOppId);saveOpps();showOpponents();
+    opps=opps.filter(o=>o.id!==eoOppId);
+    saveOpps();showOpponents();
+  }
+  function deleteOpp(id){
+    if(!confirm('Remove this opponent?'))return;
+    opps=opps.filter(o=>o.id!==id);
+    saveOpps();showOpponents();
   }
 
-  // ── New Game ──────────────────────────────────────────────────
+  // ── History ───────────────────────────────────────────────────
+  function showHistory(){
+    nav('s-history');
+    const el=document.getElementById('history-list');
+    if(!games.length){
+      el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No completed games yet.</div>';
+      return;
+    }
+    el.innerHTML=games.map((gm,idx)=>{
+      const aT=sum(gm.aR),hT=sum(gm.hR);
+      const emoji=gm.type==='softball'?'🥎':'⚾';
+      const aC=clr(gm.cA),hC=clr(gm.cH);
+      const winner=aT>hT?gm.away:hT>aT?gm.home:'Tie';
+      return `<div class="list-item" onclick="showGameDetail(${idx})">
+      <span style="font-size:22px;flex-shrink:0">${emoji}</span>
+      <div class="li-text">
+        <div class="li-title">
+          <span style="color:${aC.bg}">${gm.away}</span>
+          <span style="font-size:18px;font-weight:800;margin:0 6px">${aT}–${hT}</span>
+          <span style="color:${hC.bg}">${gm.home}</span>
+        </div>
+        <div class="li-sub">${gm.date} · ${winner==='Tie'?'Tie game':winner+' won'}</div>
+      </div>
+      <span class="li-arrow">›</span>
+    </div>`;
+    }).join('');
+  }
+
+  function showGameDetail(idx){
+    const gm=games[idx];
+    const aT=sum(gm.aR),hT=sum(gm.hR);
+    const emoji=gm.type==='softball'?'🥎':'⚾';
+    const aC=clr(gm.cA),hC=clr(gm.cH);
+    document.getElementById('gd-title').textContent=`${emoji} ${gm.away} vs ${gm.home}`;
+
+    // inning table
+    const totalInns=Math.max(gm.aR.length,gm.hR.length,1);
+    let tbl='<table style="width:100%;border-collapse:collapse;font-size:12px"><tr><th style="text-align:left;padding:3px 6px;color:#888;font-size:11px">Team</th>';
+    for(let i=0;i<totalInns;i++) tbl+=`<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">${i+1}</th>`;
+    tbl+='<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">R</th></tr>';
+    [[gm.away,gm.aR,aT,aC],[gm.home,gm.hR,hT,hC]].forEach(([nm,runs,tot,c])=>{
+      tbl+=`<tr><td style="text-align:left;padding:5px 6px;font-size:11px;font-weight:700;color:${c.bg};white-space:nowrap">${nm}</td>`;
+      for(let i=0;i<totalInns;i++) tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee">${runs[i]||0}</td>`;
+      tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee;font-weight:800;color:${c.bg}">${tot}</td></tr>`;
+    });
+    tbl+='</table>';
+
+    // lineup builder for both teams
+    function lineupHTML(lu,pSt,side,c){
+      if(!lu||!lu.length) return '<div style="color:#aaa;font-size:13px;padding:4px 0">No lineup recorded.</div>';
+      return lu.map((p,i)=>{
+        const v=(pSt||{})[side+'-'+i]||'none';
+        const stCls={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
+        const stLbl={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
+        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;background:#f5f7fa;border-radius:8px;margin-bottom:4px;border:1px solid #e8eaed">
+        <span style="font-size:12px;color:#999;width:18px;font-weight:600">${i+1}</span>
+        <span style="font-size:14px;font-weight:600;flex:1;color:#111">${p}</span>
+        <span class="bstat ${stCls[v]}">${stLbl[v]}</span>
+      </div>`;
+      }).join('');
+    }
+
+    document.getElementById('gd-content').innerHTML=`
+    <!-- Score -->
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:10px">
+        <div style="text-align:center">
+          <div style="font-size:12px;font-weight:700;color:${aC.bg}">${gm.away}</div>
+          <div style="font-size:44px;font-weight:800;color:${aC.bg}">${aT}</div>
+        </div>
+        <div style="font-size:14px;color:#bbb;font-weight:700">vs</div>
+        <div style="text-align:center">
+          <div style="font-size:12px;font-weight:700;color:${hC.bg}">${gm.home}</div>
+          <div style="font-size:44px;font-weight:800;color:${hC.bg}">${hT}</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#888;text-align:center">${gm.date} · ${gm.inning+1} innings played</div>
+    </div>
+
+    <!-- Box score -->
+    <div class="card">
+      <div class="card-title">Box Score</div>
+      <div style="overflow-x:auto">${tbl}</div>
+    </div>
+
+    <!-- Away lineup -->
+    <div class="card">
+      <div class="card-title" style="color:${aC.bg}">${gm.away} Lineup</div>
+      ${lineupHTML(gm.luA,gm.pSt,'away',aC)}
+    </div>
+
+    <!-- Home lineup -->
+    <div class="card">
+      <div class="card-title" style="color:${hC.bg}">${gm.home} Lineup</div>
+      ${lineupHTML(gm.luH,gm.pSt,'home',hC)}
+    </div>
+
+    <!-- Delete -->
+    <div class="card" style="margin-bottom:10px">
+      <button class="btn btn-red" onclick="deleteGame(${idx})">🗑 Delete This Game</button>
+    </div>`;
+
+    nav('s-game-detail');
+  }
+
+  function deleteGame(idx){
+    if(!confirm('Permanently delete this game record? This cannot be undone.'))return;
+    games.splice(idx,1);
+    saveGames();
+    showHistory();
+  }
   function showNewGame(){
-    ngTeamId=null;ngOppId=null;ngLineup=[];ngOppLineup=[];ngHA='home';
-    toggleNGLimit();renderNGTeams();renderNGOpps();
+    ngTeamId=null; ngOppId=null; ngLineup=[]; ngOppLineup=[]; ngHA='home';
+    toggleNGLimit();
+    renderNGTeams();
+    renderNGOpps();
     document.getElementById('ng-ha-row').style.display='none';
-    document.getElementById('ng-lineup-card').style.display='none';
     document.getElementById('ng-opp-lineup-card').style.display='none';
     setNGHA('home');
     nav('s-new-game');
@@ -735,10 +889,10 @@
   function renderNGTeams(){
     const el=document.getElementById('ng-team-list');
     const none=document.getElementById('ng-no-teams');
-    if(!teams.length){el.innerHTML='';none.style.display='block';return;}
+    if(!teams.length){ el.innerHTML=''; none.style.display='block'; return; }
     none.style.display='none';
     el.innerHTML=teams.map(t=>`
-    <div class="list-item" onclick="selectNGTeam('${t.id}')" style="${ngTeamId===t.id?`border-color:${clr(t.color).bg};border-width:2px;background:${clr(t.color).lt}`:''}">
+    <div class="list-item" id="ngt-${t.id}" onclick="selectNGTeam('${t.id}')" style="${ngTeamId===t.id?`border-color:${clr(t.color).bg};border-width:2px;background:${clr(t.color).lt}`:''}">
       <div class="team-dot" style="background:${clr(t.color).bg}"></div>
       <div class="li-text">
         <div class="li-title">${t.name}</div>
@@ -751,7 +905,8 @@
     ngTeamId=id;
     const team=teams.find(t=>t.id===id);
     ngLineup=team.roster.map(p=>({...p,inLineup:true}));
-    renderNGTeams();renderNGLineup();
+    renderNGTeams();
+    renderNGLineup();
     document.getElementById('ng-lineup-card').style.display='block';
     document.getElementById('ng-ha-row').style.display='block';
     renderNGOpps();
@@ -761,7 +916,7 @@
     const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
     const sport=team?team.sport:null;
     const filtered=sport?opps.filter(o=>o.sport===sport):opps;
-    if(!filtered.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No saved opponents for this sport yet.</div>';return;}
+    if(!filtered.length){ el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No saved opponents for this sport yet.</div>'; return; }
     el.innerHTML=filtered.map(o=>`
     <div class="opp-item" style="cursor:pointer;${ngOppId===o.id?'border:2px solid #1565c0;background:#eff4fd':''}" onclick="selectNGOpp('${o.id}')">
       <span class="opp-name">${o.name}</span>
@@ -776,135 +931,192 @@
       ngOppLineup=opp.roster.map(p=>({...p,inLineup:true}));
       renderNGOppLineup();
       document.getElementById('ng-opp-lineup-card').style.display='block';
-    }else{
+    } else {
       ngOppLineup=[];
       document.getElementById('ng-opp-lineup-card').style.display='none';
     }
     renderNGOpps();
   }
-  function addQuickOpponent(){
-    const name=document.getElementById('ng-opp-name').value.trim();
-    if(!name)return;
-    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
-    const sport=team?team.sport:'baseball';
-    const o={id:uid(),name,sport,roster:[]};
-    opps.push(o);saveOpps();ngOppId=o.id;
-    document.getElementById('ng-opp-name').value='';
-    renderNGOpps();
-  }
 
-  // lineup drag helpers
-  function renderNGLineup(){
-    const team=teams.find(t=>t.id===ngTeamId);
-    const c=team?clr(team.color):COLORS[0];
-    document.getElementById('ng-lineup-list').innerHTML=buildLineupHTML(ngLineup,c,'my');
-  }
   function renderNGOppLineup(){
-    document.getElementById('ng-opp-lineup-list').innerHTML=buildLineupHTML(ngOppLineup,{bg:'#555',lt:'#f0f0f0'},'opp');
-  }
-  function buildLineupHTML(lineup,c,prefix){
-    const sel=lineup.filter(p=>p.inLineup);
-    const bench=lineup.filter(p=>!p.inLineup);
+    const el=document.getElementById('ng-opp-lineup-list');
+    const selected=ngOppLineup.filter(p=>p.inLineup);
+    const unselected=ngOppLineup.filter(p=>!p.inLineup);
     let html='';
-    if(sel.length){
-      html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER — drag to reorder</div>';
-      html+=sel.map((p,i)=>`
+    if(selected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER (drag to reorder)</div>';
+      html+=selected.map((p,i)=>`
       <div class="lu-item selected" draggable="true"
-        ondragstart="dragStart(event,'${prefix}','${p.id}')"
-        ondragover="event.preventDefault()"
-        ondrop="dragDrop(event,'${prefix}','${p.id}')"
-        ondragend="event.currentTarget.classList.remove('dragging')">
+        ondragstart="dragOppStart(event,'${p.id}')"
+        ondragover="dragOver(event)"
+        ondrop="dragOppDrop(event,'${p.id}')"
+        ondragend="dragEnd(event)">
         <span class="lu-order">${i+1}</span>
-        <span class="lu-num" style="background:${c.bg}">${p.num||'?'}</span>
+        <span class="lu-num" style="background:#555">${p.num||'?'}</span>
         <span class="lu-name">${p.name}</span>
         <span class="lu-handle">⠿</span>
-        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLineup('${prefix}','${p.id}')">✕</button>
+        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleOppLineup('${p.id}')">✕</button>
       </div>`).join('');
     }
-    if(bench.length){
-      html+=`<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH — tap to add</div>`;
-      html+=bench.map(p=>`
-      <div class="lu-item" onclick="toggleLineup('${prefix}','${p.id}')">
+    if(unselected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH (tap to add)</div>';
+      html+=unselected.map(p=>`
+      <div class="lu-item" onclick="toggleOppLineup('${p.id}')">
         <span class="lu-num" style="background:#bbb">${p.num||'?'}</span>
         <span class="lu-name" style="color:#888">${p.name}</span>
         <span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span>
       </div>`).join('');
     }
-    return html;
+    el.innerHTML=html;
   }
-  function toggleLineup(prefix,pid){
-    const arr=prefix==='my'?ngLineup:ngOppLineup;
-    const p=arr.find(x=>x.id===pid);
-    if(p){p.inLineup=!p.inLineup;prefix==='my'?renderNGLineup():renderNGOppLineup();}
+  function toggleOppLineup(pid){
+    const p=ngOppLineup.find(x=>x.id===pid);
+    if(p){p.inLineup=!p.inLineup;renderNGOppLineup();}
   }
-  function dragStart(e,prefix,id){
-    if(prefix==='my')dragSrc=id; else dragOppSrc=id;
-    e.currentTarget.classList.add('dragging');
-    e.dataTransfer.effectAllowed='move';
-  }
-  function dragDrop(e,prefix,targetId){
+  let dragOppSrc=null;
+  function dragOppStart(e,id){dragOppSrc=id;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+  function dragOppDrop(e,targetId){
     e.preventDefault();
-    const src=prefix==='my'?dragSrc:dragOppSrc;
-    if(src===targetId)return;
-    const arr=prefix==='my'?ngLineup:ngOppLineup;
-    const sel=arr.filter(p=>p.inLineup);
-    const rest=arr.filter(p=>!p.inLineup);
-    const si=sel.findIndex(p=>p.id===src);
+    if(dragOppSrc===targetId)return;
+    const sel=ngOppLineup.filter(p=>p.inLineup);
+    const rest=ngOppLineup.filter(p=>!p.inLineup);
+    const si=sel.findIndex(p=>p.id===dragOppSrc);
     const ti=sel.findIndex(p=>p.id===targetId);
     if(si<0||ti<0)return;
     const[moved]=sel.splice(si,1);sel.splice(ti,0,moved);
-    if(prefix==='my'){ngLineup=[...sel,...rest];renderNGLineup();}
-    else{ngOppLineup=[...sel,...rest];renderNGOppLineup();}
+    ngOppLineup=[...sel,...rest];renderNGOppLineup();
+  }
+  function addQuickOpponent(){
+    const name=document.getElementById('ng-opp-name').value.trim();
+    if(!name) return;
+    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
+    const sport=team?team.sport:'baseball';
+    const o={id:uid(),name,sport};
+    opps.push(o); saveOpps();
+    ngOppId=o.id;
+    document.getElementById('ng-opp-name').value='';
+    renderNGOpps();
+  }
+
+  // lineup drag-to-reorder
+  function renderNGLineup(){
+    const el=document.getElementById('ng-lineup-list');
+    const selected=ngLineup.filter(p=>p.inLineup);
+    const unselected=ngLineup.filter(p=>!p.inLineup);
+    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
+    const c=team?clr(team.color):COLORS[0];
+
+    let html='';
+    if(selected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER (drag to reorder)</div>';
+      html+=selected.map((p,i)=>`
+      <div class="lu-item selected" draggable="true"
+        ondragstart="dragStart(event,'${p.id}')"
+        ondragover="dragOver(event)"
+        ondrop="dragDrop(event,'${p.id}')"
+        ondragend="dragEnd(event)">
+        <span class="lu-order">${i+1}</span>
+        <span class="lu-num" style="background:${c.bg}">${p.num||'?'}</span>
+        <span class="lu-name">${p.name}</span>
+        <span class="lu-handle">⠿</span>
+        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLineup('${p.id}')">✕</button>
+      </div>`).join('');
+    }
+    if(unselected.length){
+      html+='<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH (tap to add to lineup)</div>';
+      html+=unselected.map(p=>`
+      <div class="lu-item" onclick="toggleLineup('${p.id}')">
+        <span class="lu-num" style="background:#bbb">${p.num||'?'}</span>
+        <span class="lu-name" style="color:#888">${p.name}</span>
+        <span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span>
+      </div>`).join('');
+    }
+    el.innerHTML=html;
+  }
+  function toggleLineup(pid){
+    const p=ngLineup.find(x=>x.id===pid);
+    if(p){ p.inLineup=!p.inLineup; renderNGLineup(); }
+  }
+  // drag handlers
+  function dragStart(e,id){ dragSrc=id; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+  function dragOver(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; }
+  function dragEnd(e){ e.currentTarget.classList.remove('dragging'); }
+  function dragDrop(e,targetId){
+    e.preventDefault();
+    if(dragSrc===targetId) return;
+    const selected=ngLineup.filter(p=>p.inLineup);
+    const rest=ngLineup.filter(p=>!p.inLineup);
+    const si=selected.findIndex(p=>p.id===dragSrc);
+    const ti=selected.findIndex(p=>p.id===targetId);
+    if(si<0||ti<0) return;
+    const [moved]=selected.splice(si,1);
+    selected.splice(ti,0,moved);
+    ngLineup=[...selected,...rest];
+    renderNGLineup();
   }
 
   function startGame(){
-    if(!ngTeamId){alert('Please select your team.');return;}
+    if(!ngTeamId){ alert('Please select your team.'); return; }
     const team=teams.find(t=>t.id===ngTeamId);
     const lineup=ngLineup.filter(p=>p.inLineup);
-    if(!lineup.length){alert('Add at least one player to the lineup.');return;}
+    if(!lineup.length){ alert('Add at least one player to the lineup.'); return; }
+
     let oppName='Opponent';
-    if(ngOppId){const o=opps.find(x=>x.id===ngOppId);if(o)oppName=o.name;}
-    else{const custom=document.getElementById('ng-opp-name').value.trim();if(custom)oppName=custom;}
+    if(ngOppId){ const o=opps.find(x=>x.id===ngOppId); if(o) oppName=o.name; }
+    else {
+      const custom=document.getElementById('ng-opp-name').value.trim();
+      if(custom) oppName=custom;
+    }
+
     const ls=document.getElementById('ng-ls').value;
     const rl=parseInt(document.getElementById('ng-rl').value)||0;
-    const el2=parseInt(document.getElementById('ng-el').value)||0;
+    const el=parseInt(document.getElementById('ng-el').value)||0;
     const ll=parseInt(document.getElementById('ng-ll').value)||0;
     const sw=parseInt(document.getElementById('ng-sw').value)||3;
+
     const isHome=ngHA==='home';
+    const myName=team.name;
+    const myColor=team.color;
     const luMe=lineup.map(p=>`#${p.num} ${p.name}`);
-    const luOpp=ngOppLineup.filter(p=>p.inLineup).map(p=>`#${p.num} ${p.name}`);
+
+    const oppLineup=ngOppLineup.filter(p=>p.inLineup).map(p=>`#${p.num} ${p.name}`);
+
+    const opp=ngOppId?opps.find(o=>o.id===ngOppId):null;
+    const oppColor=opp?(opp.color||0):0;
+
     g={
-      away:isHome?oppName:team.name,
-      home:isHome?team.name:oppName,
-      cA:isHome?0:team.color,
-      cH:isHome?team.color:0,
-      type:team.sport,ls,rl,el:el2,ll,sw,
+      away:  isHome ? oppName : myName,
+      home:  isHome ? myName  : oppName,
+      cA:    isHome ? oppColor : myColor,
+      cH:    isHome ? myColor  : oppColor,
+      type:team.sport,
+      ls,rl,el,ll,sw,
       aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
-      luA:isHome?luOpp:luMe,
-      luH:isHome?luMe:luOpp,
+      luA: isHome ? oppLineup : luMe,
+      luH: isHome ? luMe      : oppLineup,
       bA:0,bH:0,pSt:{},
       date:new Date().toLocaleDateString()
     };
-    _undo=[];localStorage.removeItem(LS.UNDO);
-    saveGame();nav('s-game');render();
+    _undo=[]; localStorage.removeItem(LS.UNDO);
+    saveGame(); nav('s-game'); render();
   }
 
   // ── Undo ──────────────────────────────────────────────────────
   function undo(){
-    if(!_undo.length)return;
+    if(!_undo.length) return;
     g=JSON.parse(_undo.pop());
-    saveUndo();saveGame();render();
+    saveUndo(); saveGame(); render();
   }
 
   // ── Game helpers ──────────────────────────────────────────────
   function ensureInning(){
-    while(g.aR.length<=g.inning)g.aR.push(0);
-    while(g.hR.length<=g.inning)g.hR.push(0);
+    while(g.aR.length<=g.inning) g.aR.push(0);
+    while(g.hR.length<=g.inning) g.hR.push(0);
   }
   function limFor(idx){
-    if(!g||g.ls==='none')return 0;
-    if(g.ls==='single')return g.rl||0;
+    if(!g||g.ls==='none') return 0;
+    if(g.ls==='single') return g.rl||0;
     return idx<g.sw?(g.el||0):(g.ll===999?0:g.ll||0);
   }
   function nextBatter(){
@@ -916,9 +1128,19 @@
     ensureInning();
     const runs=g.half==='away'?g.aR:g.hR;
     const lim=limFor(g.inning);
-    if(lim&&runs[g.inning]>=lim)return false;
-    runs[g.inning]++;return true;
+    if(lim&&runs[g.inning]>=lim) return false;
+    runs[g.inning]++; return true;
   }
+  function showToast(msg){
+    const old=document.getElementById('_toast');if(old)old.remove();
+    const t=document.createElement('div');
+    t.id='_toast';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;pointer-events:none;opacity:1;transition:opacity .4s';
+    t.textContent=msg;
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),400);},2200);
+  }
+
   function checkRunLimit(){
     ensureInning();
     const runs=g.half==='away'?g.aR:g.hR;
@@ -945,13 +1167,6 @@
     g.bases=[false,false,false];g.balls=0;g.strikes=0;
     saveGame();render();
   }
-  function advanceBase(cur,n){
-    const order=['none','1st','2nd','3rd','scored'];
-    const idx=order.indexOf(cur);
-    if(idx<=0)return{pos:'none',scored:false};
-    const ni=Math.min(idx+n,4);
-    return{pos:order[ni],scored:ni>=4};
-  }
 
   // ── Game actions ──────────────────────────────────────────────
   function addRun(){
@@ -959,7 +1174,7 @@
     ensureInning();
     const t=g.half,runs=t==='away'?g.aR:g.hR;
     const lim=limFor(g.inning);
-    if(lim&&runs[g.inning]>=lim){showToast('Run limit reached!');return;}
+    if(lim&&runs[g.inning]>=lim){alert(`Run limit (${lim}) reached!`);return;}
     pushUndo(snap());
     runs[g.inning]++;
     const lu=t==='away'?g.luA:g.luH,k=i=>t+'-'+i;
@@ -989,10 +1204,14 @@
   function endGame(){
     if(!confirm('End the game now?'))return;
     pushUndo(snap());
-    g.gameOver=true;g.id=uid();
+    g.gameOver=true;
+    g.id=uid();
+    // save to history
     const saved={...g};delete saved._h;
-    games.unshift(saved);saveGames();
-    saveGame();render();
+    games.unshift(saved);
+    saveGames();
+    saveGame();
+    render();
   }
 
   // ── Count ─────────────────────────────────────────────────────
@@ -1023,7 +1242,7 @@
     saveGame();render();
   }
 
-  // ── BIP ───────────────────────────────────────────────────────
+  // ── BIP Picker ────────────────────────────────────────────────
   function showBIPPicker(){
     if(g.gameOver)return;
     showModal(`<div class="modal-title">Ball in Play</div>
@@ -1037,6 +1256,13 @@
     </div>
     <button onclick="closeModal()" style="display:block;width:100%;margin-top:10px;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
   }
+  function advanceBase(cur,n){
+    const order=['none','1st','2nd','3rd','scored'];
+    const idx=order.indexOf(cur);
+    if(idx<=0)return{pos:'none',scored:false};
+    const ni=Math.min(idx+n,4);
+    return{pos:order[ni],scored:ni>=4};
+  }
   function recordHit(bases){
     if(g.gameOver)return;
     const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
@@ -1045,7 +1271,7 @@
       const cur=getSt(t,i);
       if(cur==='none'||cur==='scored'||cur==='out')return;
       const{pos,scored:s}=advanceBase(cur,bases);
-      g.pSt[k(i)]=pos;if(s)scoreRun();
+      g.pSt[k(i)]=pos; if(s)scoreRun();
     });
     if(bases>=4){if(lu.length>0)g.pSt[k(bi)]='scored';scoreRun();}
     else{if(lu.length>0)g.pSt[k(bi)]=['none','1st','2nd','3rd'][bases];}
@@ -1057,8 +1283,8 @@
     pushUndo(snap());const k=i=>t+'-'+i;
     if(lu.length>0)g.pSt[k(bi)]='1st';
     syncDiamond();nextBatter();saveGame();render();
-    const prevBi=t==='away'?(g.bA===0?lu.length-1:g.bA-1):(g.bH===0?lu.length-1:g.bH-1);
-    const runners=lu.map((p,i)=>({p,i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st)&&r.i!==prevBi);
+    // show who was thrown out
+    const runners=lu.map((p,i)=>({p,i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st)&&r.i!==(t==='away'?g.bA:g.bH));
     if(!runners.length)return;
     showModal(`<div class="modal-title">FC — who was thrown out?</div>
     ${runners.map(r=>`<button onclick="fcOut('${t}',${r.i});closeModal()"
@@ -1077,7 +1303,7 @@
     const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
     pushUndo(snap());const k=i=>t+'-'+i;
     if(lu.length>0)g.pSt[k(bi)]='out';
-    const runners=lu.map((_,i)=>({i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st));
+    const runners=lu.map((p,i)=>({i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st));
     for(const base of['3rd','2nd','1st']){
       const lead=runners.find(r=>r.st===base);
       if(lead){g.pSt[k(lead.i)]='out';break;}
@@ -1105,6 +1331,10 @@
   }
 
   // ── Runner status ─────────────────────────────────────────────
+  const ST=['none','1st','2nd','3rd','scored','out'];
+  const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
+  const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
+  function getSt(t,i){return(g.pSt||{})[t+'-'+i]||'none';}
   function setSt(t,i,v){pushUndo(snap());g.pSt[t+'-'+i]=v;syncDiamond();saveGame();render();}
   function advSt(t,i){setSt(t,i,ST[(ST.indexOf(getSt(t,i))+1)%ST.length]);}
   function pickSt(t,i){
@@ -1114,92 +1344,26 @@
       <button onclick="setSt('${t}',${i},'${s}');closeModal()"
         style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;
         border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};
-        font-size:14px;font-weight:700;cursor:pointer">${ST_L[s]}</button>`).join('')}
+        font-size:14px;font-weight:700;cursor:pointer;color:#111">${ST_L[s]}</button>`).join('')}
     <button onclick="setSt('${t}',${i},'none');closeModal()"
       style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>
-    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
+    <button onclick="closeModal()"
+      style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
   }
+  let _lpT=null,_lpI=null,_lpTmr=null;
   function stTouch(e,t,i){e.stopPropagation();_lpT=t;_lpI=i;_lpTmr=setTimeout(()=>{_lpTmr=null;pickSt(t,i);},500);}
   function stTouchEnd(){if(_lpTmr){clearTimeout(_lpTmr);_lpTmr=null;advSt(_lpT,_lpI);}}
 
-  // ── History ───────────────────────────────────────────────────
-  function showHistory(){
-    nav('s-history');
-    const el=document.getElementById('history-list');
-    if(!games.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No completed games yet.</div>';return;}
-    el.innerHTML=games.map((gm,idx)=>{
-      const aT=sum(gm.aR),hT=sum(gm.hR);
-      const emoji=gm.type==='softball'?'🥎':'⚾';
-      const aC=clr(gm.cA),hC=clr(gm.cH);
-      const winner=aT>hT?gm.away:hT>aT?gm.home:'Tie';
-      return `<div class="list-item" onclick="showGameDetail(${idx})">
-      <span style="font-size:22px;flex-shrink:0">${emoji}</span>
-      <div class="li-text">
-        <div class="li-title">
-          <span style="color:${aC.bg}">${gm.away}</span>
-          <span style="font-size:18px;font-weight:800;margin:0 6px">${aT}–${hT}</span>
-          <span style="color:${hC.bg}">${gm.home}</span>
-        </div>
-        <div class="li-sub">${gm.date} · ${winner==='Tie'?'Tie game':winner+' won'}</div>
-      </div>
-      <span class="li-arrow">›</span>
-    </div>`;
-    }).join('');
+  // ── Modal helper ──────────────────────────────────────────────
+  function showModal(html){
+    closeModal();
+    const bg=document.createElement('div');
+    bg.className='modal-bg';bg.id='_modal';
+    bg.innerHTML=`<div class="modal">${html}</div>`;
+    bg.addEventListener('click',e=>{if(e.target===bg)closeModal();});
+    document.body.appendChild(bg);
   }
-  function showGameDetail(idx){
-    const gm=games[idx];
-    const aT=sum(gm.aR),hT=sum(gm.hR);
-    const emoji=gm.type==='softball'?'🥎':'⚾';
-    const aC=clr(gm.cA),hC=clr(gm.cH);
-    document.getElementById('gd-title').textContent=`${emoji} ${gm.away} vs ${gm.home}`;
-    const totalInns=Math.max(gm.aR.length,gm.hR.length,1);
-    let tbl='<table><tr><th style="text-align:left;padding:3px 6px;color:#888;font-size:11px">Team</th>';
-    for(let i=0;i<totalInns;i++)tbl+=`<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">${i+1}</th>`;
-    tbl+='<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">R</th></tr>';
-    [[gm.away,gm.aR,aT,aC],[gm.home,gm.hR,hT,hC]].forEach(([nm,runs,tot,c])=>{
-      tbl+=`<tr><td style="text-align:left;padding:5px 6px;font-size:11px;font-weight:700;color:${c.bg};white-space:nowrap">${nm}</td>`;
-      for(let i=0;i<totalInns;i++)tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee">${runs[i]||0}</td>`;
-      tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee;font-weight:800;color:${c.bg}">${tot}</td></tr>`;
-    });
-    tbl+='</table>';
-    function lineupHTML(lu,pSt,side,c){
-      if(!lu||!lu.length)return '<div style="color:#aaa;font-size:13px;padding:4px 0">No lineup recorded.</div>';
-      return lu.map((p,i)=>{
-        const v=(pSt||{})[side+'-'+i]||'none';
-        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;background:#f5f7fa;border-radius:8px;margin-bottom:4px;border:1px solid #e8eaed">
-        <span style="font-size:12px;color:#999;width:18px;font-weight:600">${i+1}</span>
-        <span style="font-size:14px;font-weight:600;flex:1">${p}</span>
-        <span class="bstat ${ST_C[v]}">${ST_L[v]}</span>
-      </div>`;
-      }).join('');
-    }
-    document.getElementById('gd-content').innerHTML=`
-    <div class="card">
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:10px">
-        <div style="text-align:center">
-          <div style="font-size:12px;font-weight:700;color:${aC.bg}">${gm.away}</div>
-          <div style="font-size:44px;font-weight:800;color:${aC.bg}">${aT}</div>
-        </div>
-        <div style="font-size:14px;color:#bbb;font-weight:700">vs</div>
-        <div style="text-align:center">
-          <div style="font-size:12px;font-weight:700;color:${hC.bg}">${gm.home}</div>
-          <div style="font-size:44px;font-weight:800;color:${hC.bg}">${hT}</div>
-        </div>
-      </div>
-      <div style="font-size:12px;color:#888;text-align:center">${gm.date} · ${gm.inning+1} inning${gm.inning+1!==1?'s':''} played</div>
-    </div>
-    <div class="card"><div class="card-title">Box Score</div><div style="overflow-x:auto">${tbl}</div></div>
-    <div class="card"><div class="card-title" style="color:${aC.bg}">${gm.away} Lineup</div>${lineupHTML(gm.luA,gm.pSt,'away',aC)}</div>
-    <div class="card"><div class="card-title" style="color:${hC.bg}">${gm.home} Lineup</div>${lineupHTML(gm.luH,gm.pSt,'home',hC)}</div>
-    <div class="card" style="margin-bottom:10px">
-      <button class="btn btn-red" onclick="deleteGame(${idx})">🗑 Delete This Game</button>
-    </div>`;
-    nav('s-game-detail');
-  }
-  function deleteGame(idx){
-    if(!confirm('Permanently delete this game record? This cannot be undone.'))return;
-    games.splice(idx,1);saveGames();showHistory();
-  }
+  function closeModal(){const m=document.getElementById('_modal');if(m)m.remove();}
 
   // ── Render ────────────────────────────────────────────────────
   function render(){
@@ -1208,57 +1372,62 @@
     const aC=col('away'),hC=col('home'),curC=col(g.half);
     const aT=sum(g.aR),hT=sum(g.hR);
     const emoji=g.type==='softball'?'🥎':'⚾';
+
     // inning indicator
     const ind=document.getElementById('inn-ind');
     ind.textContent=g.gameOver?`${emoji} Final`:(g.half==='away'?'▲':'▼')+' '+(g.inning+1);
-    // header
-    document.getElementById('h-an').textContent=g.away;document.getElementById('h-an').style.color=aC.bg;
-    document.getElementById('h-hn').textContent=g.home;document.getElementById('h-hn').style.color=hC.bg;
-    document.getElementById('h-as').textContent=aT;document.getElementById('h-as').style.color=aC.bg;
-    document.getElementById('h-hs').textContent=hT;document.getElementById('h-hs').style.color=hC.bg;
+
+    document.getElementById('h-an').textContent=g.away;
+    document.getElementById('h-an').style.color=aC.bg;
+    document.getElementById('h-hn').textContent=g.home;
+    document.getElementById('h-hn').style.color=hC.bg;
+    const as=document.getElementById('h-as');as.textContent=aT;as.style.color=aC.bg;
+    const hs=document.getElementById('h-hs');hs.textContent=hT;hs.style.color=hC.bg;
     document.getElementById('g-date').textContent=g.date;
     document.getElementById('h-half').textContent=g.gameOver?'':(g.half==='away'?`${g.away} batting`:`${g.home} batting`);
     const ld=()=>{if(g.ls==='none')return '';if(g.ls==='single')return `Limit:${g.rl}`;return `${g.el}→${g.ll===999?'∞':g.ll}(inn${g.sw+1}+)`;};
     document.getElementById('h-lim').textContent=ld();
-    // over banner + hide controls when game over
+
     const ob=document.getElementById('over-banner');
     if(g.gameOver){
       ob.style.display='block';
       const w=aT>hT?g.away:hT>aT?g.home:null;
       ob.textContent=w?`Game over — ${w} wins! (${aT}–${hT})`:`Tie! (${aT}–${aT})`;
-    }else ob.style.display='none';
+    } else ob.style.display='none';
     document.getElementById('game-controls').style.display=g.gameOver?'none':'block';
-    // outs
+    document.getElementById('end-game-card').style.display=g.gameOver?'none':'block';
+
     for(let i=0;i<3;i++)document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
-    // inn runs / left
+
     const ir=g.half==='away'?g.aR[g.inning]:g.hR[g.inning];
     const lim=g.gameOver?0:limFor(g.inning);
     document.getElementById('st-ir').textContent=g.gameOver?'—':ir;
     const le=document.getElementById('st-rl');
     if(!lim||g.gameOver){le.textContent='—';le.className='val';}
     else{const left=Math.max(0,lim-ir);le.textContent=left;le.className='val'+(left===0?' danger':left<=1?' warn':'');}
-    // bases
+
     ['b1','b2','b3'].forEach((id,i)=>{document.getElementById(id).className='base '+id+(g.bases[i]?' on':'');});
-    // count
+
     document.getElementById('ct-b').textContent=g.balls;
     document.getElementById('ct-s').textContent=g.strikes;
     document.getElementById('bd').innerHTML=[0,1,2,3].map(i=>`<div class="cdot${i<g.balls?' b':''}"></div>`).join('');
     document.getElementById('sd').innerHTML=[0,1,2].map(i=>`<div class="cdot${i<g.strikes?' s':''}"></div>`).join('');
-    // toggles
+
     const ta=document.getElementById('tog-a');
     ta.textContent=g.away+' batting';
     ta.style.cssText=`border-color:${g.half==='away'?aC.bg:'#ddd'};color:${g.half==='away'?aC.bg:'#888'};background:${g.half==='away'?aC.lt:'#f5f7fa'}`;
-    const th2=document.getElementById('tog-h');
-    th2.textContent=g.home+' batting';
-    th2.style.cssText=`border-color:${g.half==='home'?hC.bg:'#ddd'};color:${g.half==='home'?hC.bg:'#888'};background:${g.half==='home'?hC.lt:'#f5f7fa'}`;
-    // buttons
+    const th=document.getElementById('tog-h');
+    th.textContent=g.home+' batting';
+    th.style.cssText=`border-color:${g.half==='home'?hC.bg:'#ddd'};color:${g.half==='home'?hC.bg:'#888'};background:${g.half==='home'?hC.lt:'#f5f7fa'}`;
+
     const br=document.getElementById('btn-run');
     br.style.background=curC.bg;br.style.borderColor=curC.bg;
     document.getElementById('cl-run').textContent=(g.half==='away'?g.away:g.home)+' run';
-    document.getElementById('btn-ob').style.cssText=`background:${curC.lt};color:${curC.bg};border-color:${curC.bg}`;
+    const bo=document.getElementById('btn-ob');
+    bo.style.cssText=`background:${curC.lt};color:${curC.bg};border-color:${curC.bg}`;
     document.getElementById('add-p-btn').style.background=curC.bg;
     document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
-    // inning table
+
     const totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
     const tb=document.getElementById('inn-tbl');
     let hdr='<tr><th>Team</th>';for(let i=0;i<totalInns;i++)hdr+=`<th>${i+1}</th>`;hdr+='<th>R</th></tr>';
@@ -1275,21 +1444,17 @@
       return r+`<td class="ttot" style="color:${c.bg}">${tot}</td></tr>`;
     };
     tb.innerHTML=hdr+mkRow(g.away,g.aR,aT,!g.gameOver&&g.half==='away',aC)+mkRow(g.home,g.hR,hT,!g.gameOver&&g.half==='home',hC);
-    // lineup
+
     const t=g.half,lu=t==='away'?g.luA:g.luH;
     const bi=t==='away'?g.bA:g.bH;
     const od2=lu.length>1?(bi+1)%lu.length:null;
     const lut=document.getElementById('lu-team');lut.textContent=t==='away'?g.away:g.home;lut.style.color=curC.bg;
-    const ladd=document.getElementById('add-p-btn');ladd.style.background=curC.bg;
     const ll=document.getElementById('lu-list');
-    // hide add-batter controls when game over
-    document.querySelector('.ladd').style.display=g.gameOver?'none':'flex';
-    document.querySelector('.lnext').style.display=g.gameOver?'none':'block';
     if(!lu.length){ll.innerHTML='<div style="color:#aaa;font-size:13px;padding:6px 0">No players added yet.</div>';return;}
     ll.innerHTML=lu.map((p,i)=>{
       const isUp=i===bi,isDeck=i===od2;
       const rowStyle=isUp?`background:${curC.lt};border-color:${curC.bg};border-width:2px`:isDeck?`background:#f5f5e8;border-color:#b8a000;border-width:2px`:'';
-      const badge=isUp?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`:isDeck?`<span class="bbadge deck-badge">On deck</span>`:(g.gameOver?'':` <span class="bbadge" style="background:#ddd;color:#888;cursor:pointer" onclick="event.stopPropagation();setBatter('${t}',${i})">Set up</span>`);
+      const badge=isUp?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`:isDeck?`<span class="bbadge deck-badge">On deck</span>`:`<span class="bbadge" style="background:#ddd;color:#888;cursor:pointer" onclick="event.stopPropagation();setBatter('${t}',${i})">Set up</span>`;
       const v=getSt(t,i);
       return `<div class="litem" style="${rowStyle}">
       <span class="lnum2">${i+1}</span>
@@ -1297,16 +1462,18 @@
       ${badge}
       <span class="bstat ${ST_C[v]}" onclick="event.stopPropagation();advSt('${t}',${i})" ontouchstart="stTouch(event,'${t}',${i})" ontouchend="stTouchEnd()">${ST_L[v]}</span>
       <span class="pick-btn" onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
-      ${g.gameOver?'':'<span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer" onclick="event.stopPropagation();removeBatter(\''+t+'\','+i+')">✕</span>'}
+      <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer" onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
     </div>`;
     }).join('');
   }
 
   // ── Init ──────────────────────────────────────────────────────
   window.onload=()=>{
-    loadLS();showHome();
+    loadLS();
+    showHome();
+    // register service worker for PWA
     if('serviceWorker' in navigator){
-      const sw=`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))))`;
+      const sw=`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
       const blob=new Blob([sw],{type:'application/javascript'});
       navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
     }
