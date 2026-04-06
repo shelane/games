@@ -61,14 +61,10 @@
     .lu-item{display:flex;align-items:center;gap:8px;padding:10px;background:#f5f7fa;border-radius:8px;border:1.5px solid #e8eaed;margin-bottom:6px;cursor:grab}
     .lu-item.selected{background:#fff;border-color:#1565c0}
     .lu-item.dragging{opacity:.4}
-    .lu-check{width:20px;height:20px;border-radius:5px;border:2px solid #bbb;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
     .lu-num{font-size:11px;font-weight:700;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .lu-name{flex:1;font-size:14px;font-weight:600;color:#111}
     .lu-handle{color:#ccc;font-size:18px;cursor:grab;padding:0 4px;user-select:none}
     .lu-order{font-size:13px;font-weight:800;color:#888;width:20px;text-align:center;flex-shrink:0}
-    .opp-item{display:flex;align-items:center;gap:10px;padding:11px;background:#fff;border-radius:10px;border:1px solid #ddd;margin-bottom:8px}
-    .opp-name{flex:1;font-size:15px;font-weight:600;color:#111}
-    .opp-sport{font-size:11px;color:#888;padding:2px 8px;background:#f0f0f0;border-radius:10px;font-weight:600}
     .divider{height:1px;background:#eee;margin:12px 0}
     .inn-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:90}
     .inn-ind{font-size:22px;font-weight:800;color:#111;letter-spacing:1px}
@@ -197,7 +193,7 @@
   <div class="page" style="padding-top:10px">
     <div class="card">
       <div class="card-title">Export</div>
-      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Download all your teams, opponents, and game history as a JSON backup file. Save it to Files or email it to yourself.</p>
+      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Download all your teams, opponents, and game history as a JSON backup file.</p>
       <button class="btn btn-dark" onclick="exportData()">⬇ Download Backup</button>
     </div>
     <div class="card">
@@ -212,11 +208,13 @@
     </div>
     <div class="card">
       <div class="card-title" style="color:#c0392b">Danger Zone</div>
-      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Permanently delete all teams, opponents, and game history. This cannot be undone.</p>
+      <p style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">Permanently delete all teams, opponents, and game history.</p>
       <button class="btn btn-red" onclick="clearAllData()">🗑 Clear All Data</button>
     </div>
   </div>
 </div>
+
+<!-- TEAMS LIST -->
 <div id="s-teams" class="screen">
   <div class="navbar">
     <button class="back" onclick="nav('s-home')">← Home</button>
@@ -340,7 +338,7 @@
       <div style="margin-top:8px">
         <span class="lbl" style="margin-top:0">Or enter a new opponent</span>
         <div style="display:flex;gap:8px">
-          <input type="text" id="ng-opp-name" placeholder="Opponent name" maxlength="30" style="flex:1">
+          <input type="text" id="ng-opp-name" placeholder="Opponent name" maxlength="30" style="flex:1" autocorrect="off" autocapitalize="words">
           <button class="btn-sm" style="background:#1565c0;color:#fff" onclick="addQuickOpponent()">Add</button>
         </div>
       </div>
@@ -490,9 +488,10 @@
   const APP_VERSION = 'v1.1.0-alpha4';
   const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
   let teams=[],opps=[],games=[],g=null,_undo=[];
+  let etTeamId=null,etSport='baseball',etColor=0,etRoster=[];
   let eoOppId=null,eoSport='baseball',eoColor=0,eoRoster=[];
   let ngTeamId=null,ngOppId=null,ngLineup=[],ngOppLineup=[],ngHA='home';
-  let dragSrc=null,dragOppSrc=null;
+  let dragSrc=null;
 
   const COLORS=[
     {n:'Red',    bg:'#c0392b',lt:'#fdf0ef'},
@@ -508,6 +507,18 @@
     {n:'Gray',   bg:'#555555',lt:'#f0f0f0'},
     {n:'Pink',   bg:'#c2185b',lt:'#fde8f1'},
   ];
+
+  // AB result display config
+  const AB_COLOR={
+    'BB':'#1565c0','K':'#c0392b','OUT':'#555',
+    '1B':'#1a7a34','2B':'#1a7a34','3B':'#1a7a34','HR':'#6a1b9a',
+    'FC':'#e67e00','DP':'#c0392b'
+  };
+  const AB_BG={
+    'BB':'#eff4fd','K':'#fdf0ef','OUT':'#f0f0f0',
+    '1B':'#eaf4ec','2B':'#eaf4ec','3B':'#eaf4ec','HR':'#f5eaff',
+    'FC':'#fff3e0','DP':'#fdf0ef'
+  };
 
   function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
   function col(t){return COLORS[t==='away'?g.cA:g.cH];}
@@ -537,86 +548,6 @@
     document.getElementById(id).classList.add('active');
   }
 
-  // ── Data Manager ──────────────────────────────────────────────
-  function showDataManager(){nav('s-data');}
-
-  function exportData(){
-    const payload={
-      version:APP_VERSION,
-      exported:new Date().toISOString(),
-      teams,opps,games,
-      activeGame:g||null
-    };
-    const json=JSON.stringify(payload,null,2);
-    const blob=new Blob([json],{type:'application/json'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    const date=new Date().toISOString().slice(0,10);
-    a.href=url;
-    a.download=`game-tracker-backup-${date}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('Backup downloaded');
-  }
-
-  function importData(e){
-    const file=e.target.files[0];
-    if(!file)return;
-    const status=document.getElementById('import-status');
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      try{
-        const data=JSON.parse(ev.target.result);
-        if(!data.teams||!data.opps||!data.games)throw new Error('Invalid backup file');
-        if(!confirm('This will replace all current data with the backup. Continue?')){
-          e.target.value='';return;
-        }
-        teams=data.teams||[];
-        opps=data.opps||[];
-        games=data.games||[];
-        g=data.activeGame||null;
-        saveTeams();saveOpps();saveGames();
-        if(g)saveGame();else localStorage.removeItem(LS.GAME);
-        localStorage.removeItem(LS.UNDO);_undo=[];
-        status.style.display='block';
-        status.style.color='#1a7a34';
-        status.textContent=`✓ Restored ${teams.length} team(s), ${opps.length} opponent(s), ${games.length} game(s)`;
-        showToast('Data restored successfully');
-        showHome();
-      }catch(err){
-        status.style.display='block';
-        status.style.color='#c0392b';
-        status.textContent='✕ Invalid backup file — no data was changed';
-      }
-      e.target.value='';
-    };
-    reader.readAsText(file);
-  }
-
-  function clearAllData(){
-    if(!confirm('Delete ALL teams, opponents, and game history? This cannot be undone.'))return;
-    if(!confirm('Are you sure? This is permanent.'))return;
-    teams=[];opps=[];games=[];g=null;_undo=[];
-    Object.values(LS).forEach(k=>localStorage.removeItem(k));
-    showToast('All data cleared');
-    showHome();
-  }
-  function showHome(){
-    nav('s-home');
-    const rb=document.getElementById('resume-btn');
-    if(g&&!g.gameOver){
-      rb.style.display='flex';
-      const emoji=g.type==='softball'?'🥎':'⚾';
-      document.getElementById('resume-sub').textContent=`${emoji} ${g.away} vs ${g.home} — Inn ${g.inning+1}`;
-    }else rb.style.display='none';
-  }
-  function resumeGame(){nav('s-game');render();}
-  function goHome(){
-    if(g&&!g.gameOver){if(!confirm('Leave game? Progress is saved.'))return;}
-    if(g&&g.gameOver){localStorage.removeItem(LS.GAME);g=null;}
-    showHome();
-  }
-
   // ── Toast ─────────────────────────────────────────────────────
   function showToast(msg){
     const old=document.getElementById('_toast');if(old)old.remove();
@@ -632,85 +563,143 @@
     closeModal();
     const bg=document.createElement('div');
     bg.className='modal-bg';bg.id='_modal';
-    bg.innerHTML=`<div class="modal">${html}</div>`;
-    bg.addEventListener('click',e=>{if(e.target===bg)closeModal();});
+    bg.innerHTML='<div class="modal">'+html+'</div>';
+    bg.addEventListener('click',function(e){if(e.target===bg)closeModal();});
     document.body.appendChild(bg);
   }
   function closeModal(){const m=document.getElementById('_modal');if(m)m.remove();}
+
+  // ── Home ──────────────────────────────────────────────────────
+  function showHome(){
+    nav('s-home');
+    const rb=document.getElementById('resume-btn');
+    if(g&&!g.gameOver){
+      rb.style.display='flex';
+      const emoji=g.type==='softball'?'🥎':'⚾';
+      document.getElementById('resume-sub').textContent=emoji+' '+g.away+' vs '+g.home+' — Inn '+(g.inning+1);
+    }else rb.style.display='none';
+  }
+  function resumeGame(){nav('s-game');render();}
+  function goHome(){
+    if(g&&!g.gameOver){if(!confirm('Leave game? Progress is saved.'))return;}
+    if(g&&g.gameOver){localStorage.removeItem(LS.GAME);g=null;}
+    showHome();
+  }
+  let _swWaiting=null;
+  function applyUpdate(){
+    if(_swWaiting)_swWaiting.postMessage('skipWaiting');
+    else window.location.reload();
+  }
+
+  // ── Data Manager ──────────────────────────────────────────────
+  function showDataManager(){nav('s-data');}
+  function exportData(){
+    const payload={version:APP_VERSION,exported:new Date().toISOString(),teams,opps,games,activeGame:g||null};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='game-tracker-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    a.click();URL.revokeObjectURL(url);
+    showToast('Backup downloaded');
+  }
+  function importData(e){
+    const file=e.target.files[0];if(!file)return;
+    const status=document.getElementById('import-status');
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!data.teams||!data.opps||!data.games)throw new Error('Invalid');
+        if(!confirm('Replace all current data with backup?')){e.target.value='';return;}
+        teams=data.teams||[];opps=data.opps||[];games=data.games||[];g=data.activeGame||null;
+        saveTeams();saveOpps();saveGames();
+        if(g)saveGame();else localStorage.removeItem(LS.GAME);
+        localStorage.removeItem(LS.UNDO);_undo=[];
+        status.style.display='block';status.style.color='#1a7a34';
+        status.textContent='✓ Restored '+teams.length+' team(s), '+opps.length+' opponent(s), '+games.length+' game(s)';
+        showToast('Data restored successfully');showHome();
+      }catch(err){
+        status.style.display='block';status.style.color='#c0392b';
+        status.textContent='✕ Invalid backup file — no data was changed';
+      }
+      e.target.value='';
+    };
+    reader.readAsText(file);
+  }
+  function clearAllData(){
+    if(!confirm('Delete ALL teams, opponents, and game history? This cannot be undone.'))return;
+    if(!confirm('Are you sure? This is permanent.'))return;
+    teams=[];opps=[];games=[];g=null;_undo=[];
+    Object.values(LS).forEach(function(k){localStorage.removeItem(k);});
+    showToast('All data cleared');showHome();
+  }
 
   // ── Teams ─────────────────────────────────────────────────────
   function showTeams(){
     nav('s-teams');
     const el=document.getElementById('teams-list');
     if(!teams.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No teams yet. Tap + New to create one.</div>';return;}
-    el.innerHTML=teams.map(t=>`
-    <div class="list-item" onclick="showEditTeam('${t.id}')">
-      <div class="team-dot" style="background:${clr(t.color).bg}"></div>
-      <div class="li-text">
-        <div class="li-title">${t.name}</div>
-        <div class="li-sub">${t.sport==='softball'?'🥎 Softball':'⚾ Baseball'} · ${t.roster.length} players</div>
-      </div>
-      <span class="li-arrow">›</span>
-    </div>`).join('');
+    el.innerHTML=teams.map(function(t){
+      return '<div class="list-item" onclick="showEditTeam(\''+t.id+'\')">'+
+              '<div class="team-dot" style="background:'+clr(t.color).bg+'"></div>'+
+              '<div class="li-text"><div class="li-title">'+t.name+'</div>'+
+              '<div class="li-sub">'+(t.sport==='softball'?'🥎 Softball':'⚾ Baseball')+' · '+t.roster.length+' players</div></div>'+
+              '<span class="li-arrow">›</span></div>';
+    }).join('');
   }
   function showEditTeam(id){
     etTeamId=id;
-    const team=id?teams.find(t=>t.id===id):null;
-    etSport=team?team.sport:'baseball';
-    etColor=team?team.color:0;
-    etRoster=team?[...team.roster]:[];
+    const team=id?teams.find(function(t){return t.id===id;}):null;
+    etSport=team?team.sport:'baseball';etColor=team?team.color:0;etRoster=team?[...team.roster]:[];
     document.getElementById('edit-team-title').textContent=team?'Edit Team':'New Team';
     document.getElementById('et-name').value=team?team.name:'';
     document.getElementById('et-delete-btn').style.display=team?'block':'none';
-    setETSport(etSport);buildETSwatches();renderETRoster();
-    nav('s-edit-team');
+    setETSport(etSport);buildETSwatches();renderETRoster();nav('s-edit-team');
   }
   function renderETRoster(){
     const el=document.getElementById('et-roster-list');
     if(!etRoster.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>';return;}
-    el.innerHTML=etRoster.map((p,i)=>`
-    <div class="roster-item">
-      <div class="ri-num" style="background:${clr(etColor).bg}">${p.num||'?'}</div>
-      <div class="ri-name">${p.name}</div>
-      <div class="ri-btns">
-        <button class="btn-sm btn-outline" onclick="editRosterPlayer(${i})" style="padding:5px 10px">Edit</button>
-        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:5px 10px" onclick="removeRosterPlayer(${i})">✕</button>
-      </div>
-    </div>`).join('');
+    el.innerHTML=etRoster.map(function(p,i){
+      return '<div class="roster-item">'+
+              '<div class="ri-num" style="background:'+clr(etColor).bg+'">'+(p.num||'?')+'</div>'+
+              '<div class="ri-name">'+p.name+'</div>'+
+              '<div class="ri-btns">'+
+              '<button class="btn-sm btn-outline" onclick="editRosterPlayer('+i+')" style="padding:5px 10px">Edit</button>'+
+              '<button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:5px 10px" onclick="removeRosterPlayer('+i+')">✕</button>'+
+              '</div></div>';
+    }).join('');
   }
   function addRosterPlayer(){
     const num=document.getElementById('et-pnum').value.trim();
     const name=document.getElementById('et-pname').value.trim();
     if(!name)return;
-    etRoster.push({id:uid(),num,name});
-    document.getElementById('et-pnum').value='';
-    document.getElementById('et-pname').value='';
-    renderETRoster();
-    document.getElementById('et-pnum').focus();
+    etRoster.push({id:uid(),num:num,name:name});
+    document.getElementById('et-pnum').value='';document.getElementById('et-pname').value='';
+    renderETRoster();document.getElementById('et-pnum').focus();
   }
   function removeRosterPlayer(i){etRoster.splice(i,1);renderETRoster();}
   function editRosterPlayer(i){
     const p=etRoster[i];
-    showModal(`<div class="modal-title">Edit Player</div>
-    <span class="lbl" style="margin-top:0">Jersey Number</span>
-    <input type="number" id="ep-num" value="${p.num||''}" min="0" max="99" style="margin-bottom:10px">
-    <span class="lbl">Player Name</span>
-    <input type="text" id="ep-name" value="${p.name}" maxlength="30" autocorrect="off" autocapitalize="words" style="margin-bottom:14px">
-    <button onclick="saveRosterEdit(${i})" class="btn btn-dark" style="margin-bottom:8px">Save</button>
-    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
-    setTimeout(()=>document.getElementById('ep-num').focus(),50);
+    showModal('<div class="modal-title">Edit Player</div>'+
+            '<span class="lbl" style="margin-top:0">Jersey Number</span>'+
+            '<input type="number" id="ep-num" value="'+(p.num||'')+'" min="0" max="99" style="margin-bottom:10px">'+
+            '<span class="lbl">Player Name</span>'+
+            '<input type="text" id="ep-name" value="'+p.name+'" maxlength="30" autocorrect="off" autocapitalize="words" style="margin-bottom:14px">'+
+            '<button onclick="saveRosterEdit('+i+')" class="btn btn-dark" style="margin-bottom:8px">Save</button>'+
+            '<button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>');
+    setTimeout(function(){var el=document.getElementById('ep-num');if(el)el.focus();},50);
   }
   function saveRosterEdit(i){
     const num=document.getElementById('ep-num').value.trim();
     const name=document.getElementById('ep-name').value.trim();
     if(!name){alert('Player name is required.');return;}
-    etRoster[i]={...etRoster[i],num,name};
+    etRoster[i]=Object.assign({},etRoster[i],{num:num,name:name});
     closeModal();renderETRoster();
   }
   function preloadRoster(){
     const n=parseInt(document.getElementById('et-preload-n').value)||0;
     if(n<1||n>25)return;
-    for(let i=etRoster.length;i<n;i++) etRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
+    for(var i=etRoster.length;i<n;i++)etRoster.push({id:uid(),num:String(i+1),name:'Player '+(i+1)});
     renderETRoster();
   }
   function setETSport(s){
@@ -719,22 +708,22 @@
     document.getElementById('et-softball').className='gt-btn'+(s==='softball'?' sel':'');
   }
   function buildETSwatches(){
-    document.getElementById('et-swatches').innerHTML=COLORS.map((c,i)=>
-            `<div class="sw${etColor===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickETColor(${i})"></div>`
-    ).join('');
+    document.getElementById('et-swatches').innerHTML=COLORS.map(function(c,i){
+      return '<div class="sw'+(etColor===i?' sel':'')+'" style="background:'+c.bg+'" title="'+c.n+'" onclick="pickETColor('+i+')"></div>';
+    }).join('');
     document.getElementById('et-add-btn').style.background=clr(etColor).bg;
   }
   function pickETColor(i){etColor=i;buildETSwatches();renderETRoster();}
   function saveTeam(){
     const name=document.getElementById('et-name').value.trim();
     if(!name){alert('Please enter a team name.');return;}
-    if(etTeamId){const t=teams.find(t=>t.id===etTeamId);t.name=name;t.sport=etSport;t.color=etColor;t.roster=etRoster;}
-    else teams.push({id:uid(),name,sport:etSport,color:etColor,roster:etRoster});
+    if(etTeamId){const t=teams.find(function(t){return t.id===etTeamId;});t.name=name;t.sport=etSport;t.color=etColor;t.roster=etRoster;}
+    else teams.push({id:uid(),name:name,sport:etSport,color:etColor,roster:etRoster});
     saveTeams();showTeams();
   }
   function deleteTeam(){
     if(!confirm('Delete this team and its roster?'))return;
-    teams=teams.filter(t=>t.id!==etTeamId);
+    teams=teams.filter(function(t){return t.id!==etTeamId;});
     saveTeams();showTeams();
   }
 
@@ -743,27 +732,22 @@
     nav('s-opponents');
     const el=document.getElementById('opp-list');
     if(!opps.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No opponents saved yet.</div>';return;}
-    el.innerHTML=opps.map(o=>`
-    <div class="list-item" onclick="showEditOpp('${o.id}')">
-      <div class="team-dot" style="background:${clr(o.color||0).bg}"></div>
-      <div class="li-text">
-        <div class="li-title">${o.name}</div>
-        <div class="li-sub">${o.sport==='softball'?'🥎 Softball':'⚾ Baseball'} · ${(o.roster||[]).length} players</div>
-      </div>
-      <span class="li-arrow">›</span>
-    </div>`).join('');
+    el.innerHTML=opps.map(function(o){
+      return '<div class="list-item" onclick="showEditOpp(\''+o.id+'\')">'+
+              '<div class="team-dot" style="background:'+clr(o.color||0).bg+'"></div>'+
+              '<div class="li-text"><div class="li-title">'+o.name+'</div>'+
+              '<div class="li-sub">'+(o.sport==='softball'?'🥎 Softball':'⚾ Baseball')+' · '+(o.roster||[]).length+' players</div></div>'+
+              '<span class="li-arrow">›</span></div>';
+    }).join('');
   }
   function showEditOpp(id){
     eoOppId=id;
-    const opp=id?opps.find(o=>o.id===id):null;
-    eoSport=opp?opp.sport:'baseball';
-    eoColor=opp?(opp.color||0):0;
-    eoRoster=opp?[...(opp.roster||[])]:[];
+    const opp=id?opps.find(function(o){return o.id===id;}):null;
+    eoSport=opp?opp.sport:'baseball';eoColor=opp?(opp.color||0):0;eoRoster=opp?[...(opp.roster||[])]:[];
     document.getElementById('edit-opp-title').textContent=opp?'Edit Opponent':'New Opponent';
     document.getElementById('eo-name').value=opp?opp.name:'';
     document.getElementById('eo-delete-btn').style.display=opp?'block':'none';
-    setEOSport(eoSport);buildEOSwatches();renderEORoster();
-    nav('s-edit-opp');
+    setEOSport(eoSport);buildEOSwatches();renderEORoster();nav('s-edit-opp');
   }
   function setEOSport(s){
     eoSport=s;
@@ -771,69 +755,67 @@
     document.getElementById('eo-softball').className='gt-btn'+(s==='softball'?' sel':'');
   }
   function buildEOSwatches(){
-    document.getElementById('eo-swatches').innerHTML=COLORS.map((c,i)=>
-            `<div class="sw${eoColor===i?' sel':''}" style="background:${c.bg}" title="${c.n}" onclick="pickEOColor(${i})"></div>`
-    ).join('');
+    document.getElementById('eo-swatches').innerHTML=COLORS.map(function(c,i){
+      return '<div class="sw'+(eoColor===i?' sel':'')+'" style="background:'+c.bg+'" title="'+c.n+'" onclick="pickEOColor('+i+')"></div>';
+    }).join('');
   }
   function pickEOColor(i){eoColor=i;buildEOSwatches();renderEORoster();}
   function renderEORoster(){
     const el=document.getElementById('eo-roster-list');
     if(!eoRoster.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No players yet.</div>';return;}
-    el.innerHTML=eoRoster.map((p,i)=>`
-    <div class="roster-item">
-      <div class="ri-num" style="background:${clr(eoColor).bg}">${p.num||'?'}</div>
-      <div class="ri-name">${p.name}</div>
-      <div class="ri-btns">
-        <button class="btn-sm btn-outline" onclick="editOppPlayer(${i})" style="padding:5px 10px">Edit</button>
-        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:5px 10px" onclick="removeOppPlayer(${i})">✕</button>
-      </div>
-    </div>`).join('');
+    el.innerHTML=eoRoster.map(function(p,i){
+      return '<div class="roster-item">'+
+              '<div class="ri-num" style="background:'+clr(eoColor).bg+'">'+(p.num||'?')+'</div>'+
+              '<div class="ri-name">'+p.name+'</div>'+
+              '<div class="ri-btns">'+
+              '<button class="btn-sm btn-outline" onclick="editOppPlayer('+i+')" style="padding:5px 10px">Edit</button>'+
+              '<button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:5px 10px" onclick="removeOppPlayer('+i+')">✕</button>'+
+              '</div></div>';
+    }).join('');
   }
   function addOppRosterPlayer(){
     const num=document.getElementById('eo-pnum').value.trim();
     const name=document.getElementById('eo-pname').value.trim();
     if(!name)return;
-    eoRoster.push({id:uid(),num,name});
-    document.getElementById('eo-pnum').value='';
-    document.getElementById('eo-pname').value='';
-    renderEORoster();
-    document.getElementById('eo-pnum').focus();
+    eoRoster.push({id:uid(),num:num,name:name});
+    document.getElementById('eo-pnum').value='';document.getElementById('eo-pname').value='';
+    renderEORoster();document.getElementById('eo-pnum').focus();
   }
   function removeOppPlayer(i){eoRoster.splice(i,1);renderEORoster();}
   function editOppPlayer(i){
     const p=eoRoster[i];
-    showModal(`<div class="modal-title">Edit Player</div>
-    <span class="lbl" style="margin-top:0">Jersey Number</span>
-    <input type="number" id="ep-num" value="${p.num||''}" min="0" max="99" style="margin-bottom:10px">
-    <span class="lbl">Player Name</span>
-    <input type="text" id="ep-name" value="${p.name}" maxlength="30" style="margin-bottom:14px">
-    <button onclick="saveOppEdit(${i})" class="btn btn-dark" style="margin-bottom:8px">Save</button>
-    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
-    setTimeout(()=>document.getElementById('ep-num').focus(),50);
+    showModal('<div class="modal-title">Edit Player</div>'+
+            '<span class="lbl" style="margin-top:0">Jersey Number</span>'+
+            '<input type="number" id="ep-num" value="'+(p.num||'')+'" min="0" max="99" style="margin-bottom:10px">'+
+            '<span class="lbl">Player Name</span>'+
+            '<input type="text" id="ep-name" value="'+p.name+'" maxlength="30" autocorrect="off" autocapitalize="words" style="margin-bottom:14px">'+
+            '<button onclick="saveOppEdit('+i+')" class="btn btn-dark" style="margin-bottom:8px">Save</button>'+
+            '<button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>');
+    setTimeout(function(){var el=document.getElementById('ep-num');if(el)el.focus();},50);
   }
   function saveOppEdit(i){
     const num=document.getElementById('ep-num').value.trim();
     const name=document.getElementById('ep-name').value.trim();
     if(!name){alert('Player name is required.');return;}
-    eoRoster[i]={...eoRoster[i],num,name};
+    eoRoster[i]=Object.assign({},eoRoster[i],{num:num,name:name});
     closeModal();renderEORoster();
   }
   function preloadOppRoster(){
     const n=parseInt(document.getElementById('eo-preload-n').value)||0;
     if(n<1||n>25)return;
-    for(let i=eoRoster.length;i<n;i++) eoRoster.push({id:uid(),num:String(i+1),name:`Player ${i+1}`});
+    for(var i=eoRoster.length;i<n;i++)eoRoster.push({id:uid(),num:String(i+1),name:'Player '+(i+1)});
     renderEORoster();
   }
   function saveOpp(){
     const name=document.getElementById('eo-name').value.trim();
     if(!name){alert('Please enter an opponent name.');return;}
-    if(eoOppId){const o=opps.find(o=>o.id===eoOppId);o.name=name;o.sport=eoSport;o.color=eoColor;o.roster=eoRoster;}
-    else opps.push({id:uid(),name,sport:eoSport,color:eoColor,roster:eoRoster});
+    if(eoOppId){const o=opps.find(function(o){return o.id===eoOppId;});o.name=name;o.sport=eoSport;o.color=eoColor;o.roster=eoRoster;}
+    else opps.push({id:uid(),name:name,sport:eoSport,color:eoColor,roster:eoRoster});
     saveOpps();showOpponents();
   }
   function deleteOpp2(){
     if(!confirm('Delete this opponent?'))return;
-    opps=opps.filter(o=>o.id!==eoOppId);
+    opps=opps.filter(function(o){return o.id!==eoOppId;});
     saveOpps();showOpponents();
   }
 
@@ -844,8 +826,7 @@
     document.getElementById('ng-ha-row').style.display='none';
     document.getElementById('ng-lineup-card').style.display='none';
     document.getElementById('ng-opp-lineup-card').style.display='none';
-    setNGHA('home');
-    nav('s-new-game');
+    setNGHA('home');nav('s-new-game');
   }
   function toggleNGLimit(){
     const v=document.getElementById('ng-ls').value;
@@ -862,21 +843,19 @@
     const none=document.getElementById('ng-no-teams');
     if(!teams.length){el.innerHTML='';none.style.display='block';return;}
     none.style.display='none';
-    el.innerHTML=teams.map(t=>`
-    <div class="list-item" onclick="selectNGTeam('${t.id}')" style="${ngTeamId===t.id?`border-color:${clr(t.color).bg};border-width:2px;background:${clr(t.color).lt}`:''}">
-      <div class="team-dot" style="background:${clr(t.color).bg}"></div>
-      <div class="li-text">
-        <div class="li-title">${t.name}</div>
-        <div class="li-sub">${t.sport==='softball'?'🥎 Softball':'⚾ Baseball'} · ${t.roster.length} players</div>
-      </div>
-      ${ngTeamId===t.id?'<span style="color:#1565c0;font-weight:700">✓</span>':''}
-    </div>`).join('');
+    el.innerHTML=teams.map(function(t){
+      const sel=ngTeamId===t.id;
+      return '<div class="list-item" onclick="selectNGTeam(\''+t.id+'\')" style="'+(sel?'border-color:'+clr(t.color).bg+';border-width:2px;background:'+clr(t.color).lt:'')+'">'+
+              '<div class="team-dot" style="background:'+clr(t.color).bg+'"></div>'+
+              '<div class="li-text"><div class="li-title">'+t.name+'</div>'+
+              '<div class="li-sub">'+(t.sport==='softball'?'🥎 Softball':'⚾ Baseball')+' · '+t.roster.length+' players</div></div>'+
+              (sel?'<span style="color:#1565c0;font-weight:700">✓</span>':'')+'</div>';
+    }).join('');
   }
   function selectNGTeam(id){
     ngTeamId=id;
-    const team=teams.find(t=>t.id===id);
-    // copy roster with inLineup flag
-    ngLineup=team.roster.map(p=>({...p,inLineup:true}));
+    const team=teams.find(function(t){return t.id===id;});
+    ngLineup=team.roster.map(function(p){return Object.assign({},p,{inLineup:true});});
     renderNGTeams();renderNGLineup();
     document.getElementById('ng-lineup-card').style.display='block';
     document.getElementById('ng-ha-row').style.display='block';
@@ -884,25 +863,24 @@
   }
   function renderNGOpps(){
     const el=document.getElementById('ng-opp-list');
-    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
+    const team=ngTeamId?teams.find(function(t){return t.id===ngTeamId;}):null;
     const sport=team?team.sport:null;
-    const filtered=sport?opps.filter(o=>o.sport===sport):opps;
+    const filtered=sport?opps.filter(function(o){return o.sport===sport;}):opps;
     if(!filtered.length){el.innerHTML='<div style="color:#aaa;font-size:13px;padding:4px 0">No saved opponents for this sport yet.</div>';return;}
-    el.innerHTML=filtered.map(o=>`
-    <div class="list-item" onclick="selectNGOpp('${o.id}')" style="${ngOppId===o.id?'border-color:#1565c0;border-width:2px;background:#eff4fd':''}">
-      <div class="team-dot" style="background:${clr(o.color||0).bg}"></div>
-      <div class="li-text">
-        <div class="li-title">${o.name}</div>
-        <div class="li-sub">${(o.roster||[]).length} players</div>
-      </div>
-      ${ngOppId===o.id?'<span style="color:#1565c0;font-weight:700">✓</span>':''}
-    </div>`).join('');
+    el.innerHTML=filtered.map(function(o){
+      const sel=ngOppId===o.id;
+      return '<div class="list-item" onclick="selectNGOpp(\''+o.id+'\')" style="'+(sel?'border-color:#1565c0;border-width:2px;background:#eff4fd':'')+'">'+
+              '<div class="team-dot" style="background:'+clr(o.color||0).bg+'"></div>'+
+              '<div class="li-text"><div class="li-title">'+o.name+'</div>'+
+              '<div class="li-sub">'+((o.roster||[]).length)+' players</div></div>'+
+              (sel?'<span style="color:#1565c0;font-weight:700">✓</span>':'')+'</div>';
+    }).join('');
   }
   function selectNGOpp(id){
     ngOppId=id;
-    const opp=opps.find(o=>o.id===id);
+    const opp=opps.find(function(o){return o.id===id;});
     if(opp&&(opp.roster||[]).length){
-      ngOppLineup=opp.roster.map(p=>({...p,inLineup:true}));
+      ngOppLineup=opp.roster.map(function(p){return Object.assign({},p,{inLineup:true});});
       renderNGOppLineup();
       document.getElementById('ng-opp-lineup-card').style.display='block';
     }else{
@@ -912,116 +890,105 @@
     renderNGOpps();
   }
   function addQuickOpponent(){
-    const name=document.getElementById('ng-opp-name').value.trim();
-    if(!name)return;
-    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
+    const name=document.getElementById('ng-opp-name').value.trim();if(!name)return;
+    const team=ngTeamId?teams.find(function(t){return t.id===ngTeamId;}):null;
     const sport=team?team.sport:'baseball';
-    const o={id:uid(),name,sport,color:0,roster:[]};
-    opps.push(o);saveOpps();
-    ngOppId=o.id;ngOppLineup=[];
+    const o={id:uid(),name:name,sport:sport,color:0,roster:[]};
+    opps.push(o);saveOpps();ngOppId=o.id;ngOppLineup=[];
     document.getElementById('ng-opp-name').value='';
     document.getElementById('ng-opp-lineup-card').style.display='none';
     renderNGOpps();
   }
 
-  // lineup drag helpers
   function renderNGLineup(){
-    const team=ngTeamId?teams.find(t=>t.id===ngTeamId):null;
+    const team=ngTeamId?teams.find(function(t){return t.id===ngTeamId;}):null;
     const c=team?clr(team.color):COLORS[0];
-    const sel=ngLineup.filter(p=>p.inLineup);
-    const bench=ngLineup.filter(p=>!p.inLineup);
-    let html='';
+    const sel=ngLineup.filter(function(p){return p.inLineup;});
+    const bench=ngLineup.filter(function(p){return !p.inLineup;});
+    var html='';
     if(sel.length){
       html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER (drag to reorder)</div>';
-      html+=sel.map((p,i)=>`
-      <div class="lu-item selected" draggable="true"
-        ondragstart="dragStart(event,'${p.id}','my')"
-        ondragover="dragOver(event)"
-        ondrop="dragDrop(event,'${p.id}','my')"
-        ondragend="dragEnd(event)">
-        <span class="lu-order">${i+1}</span>
-        <span class="lu-num" style="background:${c.bg}">${p.num||'?'}</span>
-        <span class="lu-name">${p.name}</span>
-        <span class="lu-handle">⠿</span>
-        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLU('${p.id}','my')">✕</button>
-      </div>`).join('');
+      html+=sel.map(function(p,i){
+        return '<div class="lu-item selected" draggable="true" ondragstart="dragStart(event,\''+p.id+'\',\'my\')" ondragover="dragOver(event)" ondrop="dragDrop(event,\''+p.id+'\',\'my\')" ondragend="dragEnd(event)">'+
+                '<span class="lu-order">'+(i+1)+'</span>'+
+                '<span class="lu-num" style="background:'+c.bg+'">'+(p.num||'?')+'</span>'+
+                '<span class="lu-name">'+p.name+'</span>'+
+                '<span class="lu-handle">⠿</span>'+
+                '<button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLU(\''+p.id+'\',\'my\')">✕</button>'+
+                '</div>';
+      }).join('');
     }
     if(bench.length){
       html+='<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH</div>';
-      html+=bench.map(p=>`
-      <div class="lu-item" onclick="toggleLU('${p.id}','my')">
-        <span class="lu-num" style="background:#bbb">${p.num||'?'}</span>
-        <span class="lu-name" style="color:#888">${p.name}</span>
-        <span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span>
-      </div>`).join('');
+      html+=bench.map(function(p){
+        return '<div class="lu-item" onclick="toggleLU(\''+p.id+'\',\'my\')">'+
+                '<span class="lu-num" style="background:#bbb">'+(p.num||'?')+'</span>'+
+                '<span class="lu-name" style="color:#888">'+p.name+'</span>'+
+                '<span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span></div>';
+      }).join('');
     }
     document.getElementById('ng-lineup-list').innerHTML=html;
   }
   function renderNGOppLineup(){
-    const opp=ngOppId?opps.find(o=>o.id===ngOppId):null;
+    const opp=ngOppId?opps.find(function(o){return o.id===ngOppId;}):null;
     const c=opp?clr(opp.color||0):COLORS[0];
-    const sel=ngOppLineup.filter(p=>p.inLineup);
-    const bench=ngOppLineup.filter(p=>!p.inLineup);
-    let html='';
+    const sel=ngOppLineup.filter(function(p){return p.inLineup;});
+    const bench=ngOppLineup.filter(function(p){return !p.inLineup;});
+    var html='';
     if(sel.length){
       html+='<div style="font-size:11px;color:#888;font-weight:600;margin-bottom:4px">BATTING ORDER (drag to reorder)</div>';
-      html+=sel.map((p,i)=>`
-      <div class="lu-item selected" draggable="true"
-        ondragstart="dragStart(event,'${p.id}','opp')"
-        ondragover="dragOver(event)"
-        ondrop="dragDrop(event,'${p.id}','opp')"
-        ondragend="dragEnd(event)">
-        <span class="lu-order">${i+1}</span>
-        <span class="lu-num" style="background:${c.bg}">${p.num||'?'}</span>
-        <span class="lu-name">${p.name}</span>
-        <span class="lu-handle">⠿</span>
-        <button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLU('${p.id}','opp')">✕</button>
-      </div>`).join('');
+      html+=sel.map(function(p,i){
+        return '<div class="lu-item selected" draggable="true" ondragstart="dragStart(event,\''+p.id+'\',\'opp\')" ondragover="dragOver(event)" ondrop="dragDrop(event,\''+p.id+'\',\'opp\')" ondragend="dragEnd(event)">'+
+                '<span class="lu-order">'+(i+1)+'</span>'+
+                '<span class="lu-num" style="background:'+c.bg+'">'+(p.num||'?')+'</span>'+
+                '<span class="lu-name">'+p.name+'</span>'+
+                '<span class="lu-handle">⠿</span>'+
+                '<button class="btn-sm" style="background:#f8d7da;color:#c0392b;padding:4px 8px;font-size:12px" onclick="toggleLU(\''+p.id+'\',\'opp\')">✕</button>'+
+                '</div>';
+      }).join('');
     }
     if(bench.length){
       html+='<div style="font-size:11px;color:#888;font-weight:600;margin:8px 0 4px">BENCH</div>';
-      html+=bench.map(p=>`
-      <div class="lu-item" onclick="toggleLU('${p.id}','opp')">
-        <span class="lu-num" style="background:#bbb">${p.num||'?'}</span>
-        <span class="lu-name" style="color:#888">${p.name}</span>
-        <span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span>
-      </div>`).join('');
+      html+=bench.map(function(p){
+        return '<div class="lu-item" onclick="toggleLU(\''+p.id+'\',\'opp\')">'+
+                '<span class="lu-num" style="background:#bbb">'+(p.num||'?')+'</span>'+
+                '<span class="lu-name" style="color:#888">'+p.name+'</span>'+
+                '<span style="color:#1565c0;font-size:12px;font-weight:700">+ Add</span></div>';
+      }).join('');
     }
     document.getElementById('ng-opp-lineup-list').innerHTML=html;
   }
   function toggleLU(pid,side){
-    const arr=side==='my'?ngLineup:ngOppLineup;
-    const p=arr.find(x=>x.id===pid);
+    var arr=side==='my'?ngLineup:ngOppLineup;
+    var p=arr.find(function(x){return x.id===pid;});
     if(p)p.inLineup=!p.inLineup;
     if(side==='my')renderNGLineup();else renderNGOppLineup();
   }
-  function dragStart(e,id,side){dragSrc={id,side};e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+  function dragStart(e,id,side){dragSrc={id:id,side:side};e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
   function dragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move';}
   function dragEnd(e){e.currentTarget.classList.remove('dragging');}
   function dragDrop(e,targetId,side){
     e.preventDefault();
     if(!dragSrc||dragSrc.id===targetId||dragSrc.side!==side)return;
-    const arr=side==='my'?ngLineup:ngOppLineup;
-    const sel=arr.filter(p=>p.inLineup);
-    const rest=arr.filter(p=>!p.inLineup);
-    const si=sel.findIndex(p=>p.id===dragSrc.id);
-    const ti=sel.findIndex(p=>p.id===targetId);
+    var arr=side==='my'?ngLineup:ngOppLineup;
+    var sel=arr.filter(function(p){return p.inLineup;});
+    var rest=arr.filter(function(p){return !p.inLineup;});
+    var si=sel.findIndex(function(p){return p.id===dragSrc.id;});
+    var ti=sel.findIndex(function(p){return p.id===targetId;});
     if(si<0||ti<0)return;
-    const[moved]=sel.splice(si,1);sel.splice(ti,0,moved);
-    if(side==='my'){ngLineup=[...sel,...rest];renderNGLineup();}
-    else{ngOppLineup=[...sel,...rest];renderNGOppLineup();}
+    var moved=sel.splice(si,1)[0];sel.splice(ti,0,moved);
+    if(side==='my'){ngLineup=sel.concat(rest);renderNGLineup();}
+    else{ngOppLineup=sel.concat(rest);renderNGOppLineup();}
   }
 
   function startGame(){
     if(!ngTeamId){alert('Please select your team.');return;}
-    const team=teams.find(t=>t.id===ngTeamId);
-    const mySelected=ngLineup.filter(p=>p.inLineup);
+    const team=teams.find(function(t){return t.id===ngTeamId;});
+    const mySelected=ngLineup.filter(function(p){return p.inLineup;});
     if(!mySelected.length){alert('Add at least one player to your lineup.');return;}
-
-    let oppName='Opponent';
-    if(ngOppId){const o=opps.find(x=>x.id===ngOppId);if(o)oppName=o.name;}
-    else{const custom=document.getElementById('ng-opp-name').value.trim();if(custom)oppName=custom;}
-
+    var oppName='Opponent';
+    if(ngOppId){var o=opps.find(function(x){return x.id===ngOppId;});if(o)oppName=o.name;}
+    else{var custom=document.getElementById('ng-opp-name').value.trim();if(custom)oppName=custom;}
     const ls=document.getElementById('ng-ls').value;
     const rl=parseInt(document.getElementById('ng-rl').value)||0;
     const el=parseInt(document.getElementById('ng-el').value)||0;
@@ -1029,26 +996,19 @@
     const sw=parseInt(document.getElementById('ng-sw').value)||3;
     const isHome=ngHA==='home';
     const myColor=team.color;
-    const opp=ngOppId?opps.find(o=>o.id===ngOppId):null;
+    const opp=ngOppId?opps.find(function(o){return o.id===ngOppId;}):null;
     const oppColor=opp?(opp.color||0):0;
-
-    // build lineup string arrays from selected players
-    const luMe=mySelected.map(p=>playerLabel(p));
-    const oppSelected=ngOppLineup.filter(p=>p.inLineup);
-    const luOpp=oppSelected.map(p=>playerLabel(p));
-
+    const luMe=mySelected.map(function(p){return playerLabel(p);});
+    const oppSelected=ngOppLineup.filter(function(p){return p.inLineup;});
+    const luOpp=oppSelected.map(function(p){return playerLabel(p);});
     g={
-      away:  isHome?oppName:team.name,
-      home:  isHome?team.name:oppName,
-      cA:    isHome?oppColor:myColor,
-      cH:    isHome?myColor:oppColor,
-      type:  team.sport,
-      ls,rl,el,ll,sw,
+      away:isHome?oppName:team.name, home:isHome?team.name:oppName,
+      cA:isHome?oppColor:myColor, cH:isHome?myColor:oppColor,
+      type:team.sport, ls:ls,rl:rl,el:el,ll:ll,sw:sw,
       aR:[],hR:[],outs:0,inning:0,half:'away',gameOver:false,
       bases:[false,false,false],balls:0,strikes:0,
-      luA:  isHome?luOpp:luMe,
-      luH:  isHome?luMe:luOpp,
-      bA:0,bH:0,pSt:{},
+      luA:isHome?luOpp:luMe, luH:isHome?luMe:luOpp,
+      bA:0,bH:0,pSt:{},log:[],
       date:new Date().toLocaleDateString()
     };
     _undo=[];localStorage.removeItem(LS.UNDO);
@@ -1060,75 +1020,76 @@
     nav('s-history');
     const el=document.getElementById('history-list');
     if(!games.length){el.innerHTML='<div style="color:#aaa;font-size:14px;padding:20px;text-align:center">No completed games yet.</div>';return;}
-    el.innerHTML=games.map((gm,idx)=>{
+    el.innerHTML=games.map(function(gm,idx){
       const aT=sum(gm.aR),hT=sum(gm.hR);
       const emoji=gm.type==='softball'?'🥎':'⚾';
       const aC=clr(gm.cA),hC=clr(gm.cH);
       const winner=aT>hT?gm.away:hT>aT?gm.home:'Tie';
-      return `<div class="list-item" onclick="showGameDetail(${idx})">
-      <span style="font-size:22px;flex-shrink:0">${emoji}</span>
-      <div class="li-text">
-        <div class="li-title">
-          <span style="color:${aC.bg}">${gm.away}</span>
-          <span style="font-size:18px;font-weight:800;margin:0 6px">${aT}–${hT}</span>
-          <span style="color:${hC.bg}">${gm.home}</span>
-        </div>
-        <div class="li-sub">${gm.date} · ${winner==='Tie'?'Tie game':winner+' won'}</div>
-      </div>
-      <span class="li-arrow">›</span>
-    </div>`;
+      return '<div class="list-item" onclick="showGameDetail('+idx+')">'+
+              '<span style="font-size:22px;flex-shrink:0">'+emoji+'</span>'+
+              '<div class="li-text">'+
+              '<div class="li-title"><span style="color:'+aC.bg+'">'+gm.away+'</span>'+
+              '<span style="font-size:18px;font-weight:800;margin:0 6px">'+aT+'–'+hT+'</span>'+
+              '<span style="color:'+hC.bg+'">'+gm.home+'</span></div>'+
+              '<div class="li-sub">'+gm.date+' · '+(winner==='Tie'?'Tie game':winner+' won')+'</div>'+
+              '</div><span class="li-arrow">›</span></div>';
     }).join('');
   }
+
   function showGameDetail(idx){
     const gm=games[idx];
     const aT=sum(gm.aR),hT=sum(gm.hR);
     const emoji=gm.type==='softball'?'🥎':'⚾';
     const aC=clr(gm.cA),hC=clr(gm.cH);
-    document.getElementById('gd-title').textContent=`${emoji} ${gm.away} vs ${gm.home}`;
+    document.getElementById('gd-title').textContent=emoji+' '+gm.away+' vs '+gm.home;
     const totalInns=Math.max(gm.aR.length,gm.hR.length,1);
-    let tbl='<table style="width:100%;border-collapse:collapse;font-size:12px"><tr><th style="text-align:left;padding:3px 6px;color:#888;font-size:11px">Team</th>';
-    for(let i=0;i<totalInns;i++) tbl+=`<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">${i+1}</th>`;
+    var tbl='<table style="width:100%;border-collapse:collapse;font-size:12px"><tr><th style="text-align:left;padding:3px 6px;color:#888;font-size:11px">Team</th>';
+    for(var i=0;i<totalInns;i++)tbl+='<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">'+(i+1)+'</th>';
     tbl+='<th style="padding:3px 5px;text-align:center;color:#888;font-size:11px">R</th></tr>';
-    [[gm.away,gm.aR,aT,aC],[gm.home,gm.hR,hT,hC]].forEach(([nm,runs,tot,c])=>{
-      tbl+=`<tr><td style="text-align:left;padding:5px 6px;font-size:11px;font-weight:700;color:${c.bg};white-space:nowrap">${nm}</td>`;
-      for(let i=0;i<totalInns;i++) tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee">${runs[i]||0}</td>`;
-      tbl+=`<td style="padding:5px;text-align:center;border-top:1px solid #eee;font-weight:800;color:${c.bg}">${tot}</td></tr>`;
+    [[gm.away,gm.aR,aT,aC],[gm.home,gm.hR,hT,hC]].forEach(function(row){
+      var nm=row[0],runs=row[1],tot=row[2],c=row[3];
+      tbl+='<tr><td style="text-align:left;padding:5px 6px;font-size:11px;font-weight:700;color:'+c.bg+';white-space:nowrap">'+nm+'</td>';
+      for(var i=0;i<totalInns;i++)tbl+='<td style="padding:5px;text-align:center;border-top:1px solid #eee">'+(runs[i]||0)+'</td>';
+      tbl+='<td style="padding:5px;text-align:center;border-top:1px solid #eee;font-weight:800;color:'+c.bg+'">'+tot+'</td></tr>';
     });
     tbl+='</table>';
-    function lineupHTML(lu,pSt,side){
+
+    function lineupHTML(lu,log,side){
       if(!lu||!lu.length)return'<div style="color:#aaa;font-size:13px;padding:4px 0">No lineup recorded.</div>';
-      return lu.map((p,i)=>{
-        const v=(pSt||{})[side+'-'+i]||'none';
-        const sc={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
-        const sl={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
-        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;background:#f5f7fa;border-radius:8px;margin-bottom:4px;border:1px solid #e8eaed">
-        <span style="font-size:12px;color:#999;width:18px;font-weight:600">${i+1}</span>
-        <span style="font-size:14px;font-weight:600;flex:1;color:#111">${p}</span>
-        <span class="bstat ${sc[v]}">${sl[v]}</span>
-      </div>`;
+      var abMap={};
+      (log||[]).filter(function(e){return e.t===side;}).forEach(function(e){
+        if(!abMap[e.i])abMap[e.i]=[];
+        abMap[e.i].push(e.result);
+      });
+      return lu.map(function(p,i){
+        var abs=abMap[i]||[];
+        var badges=abs.length
+                ?abs.map(function(r){
+                  return '<span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;'+
+                          'background:'+(AB_BG[r]||'#f0f0f0')+';color:'+(AB_COLOR[r]||'#555')+';'+
+                          'border:1px solid '+(AB_COLOR[r]||'#ccc')+';margin-right:3px;white-space:nowrap">'+r+'</span>';
+                }).join('')
+                :'<span style="font-size:11px;color:#bbb">—</span>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 9px;background:#f5f7fa;border-radius:8px;margin-bottom:4px;border:1px solid #e8eaed">'+
+                '<span style="font-size:12px;color:#999;width:18px;font-weight:600;flex-shrink:0">'+(i+1)+'</span>'+
+                '<span style="font-size:13px;font-weight:600;color:#111;white-space:nowrap;flex-shrink:0;min-width:80px;max-width:120px;overflow:hidden;text-overflow:ellipsis">'+p+'</span>'+
+                '<div style="display:flex;flex-wrap:wrap;gap:3px;flex:1">'+badges+'</div></div>';
       }).join('');
     }
-    document.getElementById('gd-content').innerHTML=`
-    <div class="card">
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:10px">
-        <div style="text-align:center">
-          <div style="font-size:12px;font-weight:700;color:${aC.bg}">${gm.away}</div>
-          <div style="font-size:44px;font-weight:800;color:${aC.bg}">${aT}</div>
-        </div>
-        <div style="font-size:14px;color:#bbb;font-weight:700">vs</div>
-        <div style="text-align:center">
-          <div style="font-size:12px;font-weight:700;color:${hC.bg}">${gm.home}</div>
-          <div style="font-size:44px;font-weight:800;color:${hC.bg}">${hT}</div>
-        </div>
-      </div>
-      <div style="font-size:12px;color:#888;text-align:center">${gm.date} · ${gm.inning+1} innings played</div>
-    </div>
-    <div class="card"><div class="card-title">Box Score</div><div style="overflow-x:auto">${tbl}</div></div>
-    <div class="card"><div class="card-title" style="color:${aC.bg}">${gm.away} Lineup</div>${lineupHTML(gm.luA,gm.pSt,'away')}</div>
-    <div class="card"><div class="card-title" style="color:${hC.bg}">${gm.home} Lineup</div>${lineupHTML(gm.luH,gm.pSt,'home')}</div>
-    <div class="card" style="margin-bottom:10px">
-      <button class="btn btn-red" onclick="deleteGame(${idx})">🗑 Delete This Game</button>
-    </div>`;
+
+    document.getElementById('gd-content').innerHTML=
+            '<div class="card">'+
+            '<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-bottom:10px">'+
+            '<div style="text-align:center"><div style="font-size:12px;font-weight:700;color:'+aC.bg+'">'+gm.away+'</div>'+
+            '<div style="font-size:44px;font-weight:800;color:'+aC.bg+'">'+aT+'</div></div>'+
+            '<div style="font-size:14px;color:#bbb;font-weight:700">vs</div>'+
+            '<div style="text-align:center"><div style="font-size:12px;font-weight:700;color:'+hC.bg+'">'+gm.home+'</div>'+
+            '<div style="font-size:44px;font-weight:800;color:'+hC.bg+'">'+hT+'</div></div></div>'+
+            '<div style="font-size:12px;color:#888;text-align:center">'+gm.date+' · '+(gm.inning+1)+' innings played</div></div>'+
+            '<div class="card"><div class="card-title">Box Score</div><div style="overflow-x:auto">'+tbl+'</div></div>'+
+            '<div class="card"><div class="card-title" style="color:'+aC.bg+'">'+gm.away+'</div>'+lineupHTML(gm.luA,gm.log,'away')+'</div>'+
+            '<div class="card"><div class="card-title" style="color:'+hC.bg+'">'+gm.home+'</div>'+lineupHTML(gm.luH,gm.log,'home')+'</div>'+
+            '<div class="card" style="margin-bottom:10px"><button class="btn btn-red" onclick="deleteGame('+idx+')">🗑 Delete This Game</button></div>';
     nav('s-game-detail');
   }
   function deleteGame(idx){
@@ -1146,38 +1107,41 @@
     if(g.ls==='single')return g.rl||0;
     return idx<g.sw?(g.el||0):(g.ll===999?0:g.ll||0);
   }
+  function logAB(result){
+    if(!g.log)g.log=[];
+    var t=g.half,bi=t==='away'?g.bA:g.bH;
+    g.log.push({t:t,i:bi,inning:g.inning,half:g.half,result:result});
+  }
   function nextBatter(){
-    if(g.half==='away'){const n=g.luA.length;if(n)g.bA=(g.bA+1)%n;}
-    else{const n=g.luH.length;if(n)g.bH=(g.bH+1)%n;}
+    if(g.half==='away'){var n=g.luA.length;if(n)g.bA=(g.bA+1)%n;}
+    else{var n=g.luH.length;if(n)g.bH=(g.bH+1)%n;}
     g.balls=0;g.strikes=0;
-    // clear terminal status if batter is cycling back around
-    const t=g.half,bi=t==='away'?g.bA:g.bH;
-    const k=t+'-'+bi;
-    const cur=(g.pSt||{})[k]||'none';
-    if(cur==='scored'||cur==='out') g.pSt[k]='none';
+    var t=g.half,bi=t==='away'?g.bA:g.bH,k=t+'-'+bi;
+    var cur=(g.pSt||{})[k]||'none';
+    if(cur==='scored'||cur==='out')g.pSt[k]='none';
   }
   function scoreRun(){
     ensureInning();
-    const runs=g.half==='away'?g.aR:g.hR;
-    const lim=limFor(g.inning);
+    var runs=g.half==='away'?g.aR:g.hR;
+    var lim=limFor(g.inning);
     if(lim&&runs[g.inning]>=lim)return false;
     runs[g.inning]++;return true;
   }
   function checkRunLimit(){
     ensureInning();
-    const runs=g.half==='away'?g.aR:g.hR;
-    const lim=limFor(g.inning);
+    var runs=g.half==='away'?g.aR:g.hR;
+    var lim=limFor(g.inning);
     if(lim&&runs[g.inning]>=lim){
-      const next=g.half==='away'?'Bottom of inning '+(g.inning+1):'Inning '+(g.inning+2);
+      var next=g.half==='away'?'Bottom of inning '+(g.inning+1):'Inning '+(g.inning+2);
       showToast('Run limit reached — advancing to '+next);
-      setTimeout(()=>advHalf(),800);
+      setTimeout(function(){advHalf();},800);
     }
   }
   function syncDiamond(){
-    const t=g.half,lu=t==='away'?g.luA:g.luH;
+    var t=g.half,lu=t==='away'?g.luA:g.luH;
     g.bases=[false,false,false];
-    lu.forEach((_,i)=>{
-      const s=getSt(t,i);
+    lu.forEach(function(_,i){
+      var s=getSt(t,i);
       if(s==='1st')g.bases[0]=true;
       if(s==='2nd')g.bases[1]=true;
       if(s==='3rd')g.bases[2]=true;
@@ -1186,9 +1150,7 @@
   function advHalf(){
     if(g.half==='away'){g.half='home';g.outs=0;}
     else{g.inning++;g.half='away';g.outs=0;}
-    g.bases=[false,false,false];g.balls=0;g.strikes=0;
-    // clear all runner statuses for both teams at inning change
-    g.pSt={};
+    g.bases=[false,false,false];g.balls=0;g.strikes=0;g.pSt={};
     saveGame();render();
   }
 
@@ -1201,27 +1163,27 @@
   function addRun(){
     if(g.gameOver)return;
     ensureInning();
-    const t=g.half,runs=t==='away'?g.aR:g.hR;
-    const lim=limFor(g.inning);
-    if(lim&&runs[g.inning]>=lim){alert(`Run limit (${lim}) reached!`);return;}
+    var t=g.half,runs=t==='away'?g.aR:g.hR;
+    var lim=limFor(g.inning);
+    if(lim&&runs[g.inning]>=lim){alert('Run limit ('+lim+') reached!');return;}
     pushUndo(snap());runs[g.inning]++;
-    const lu=t==='away'?g.luA:g.luH,k=i=>t+'-'+i;
-    const bi=t==='away'?g.bA:g.bH;
-    const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-    const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
-    const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
-    let batterScored=false;
+    var lu=t==='away'?g.luA:g.luH;
+    var bi=t==='away'?g.bA:g.bH;
+    function k(i){return t+'-'+i;}
+    var on3=lu.findIndex(function(_,i){return getSt(t,i)==='3rd';});
+    var on2=lu.findIndex(function(_,i){return getSt(t,i)==='2nd';});
+    var on1=lu.findIndex(function(_,i){return getSt(t,i)==='1st';});
+    var batterScored=false;
     if(on3>=0){g.pSt[k(on3)]='scored';g.bases[2]=false;}
     else if(on2>=0){g.pSt[k(on2)]='scored';g.bases[1]=false;}
     else if(on1>=0){g.pSt[k(on1)]='scored';g.bases[0]=false;}
     else if(lu.length>0){g.pSt[k(bi)]='scored';batterScored=true;}
-    // only advance batter if they were the one who scored
     if(batterScored)nextBatter();
     saveGame();render();checkRunLimit();
   }
   function addOut(){
     if(g.gameOver)return;
-    pushUndo(snap());g.outs++;nextBatter();
+    pushUndo(snap());logAB('OUT');g.outs++;nextBatter();
     if(g.outs>=3)advHalf();else{saveGame();render();}
   }
   function toggleBase(i){
@@ -1233,42 +1195,35 @@
   function endGame(){
     if(!confirm('End the game now?'))return;
     pushUndo(snap());
-    g.gameOver=true;
-    g.bases=[false,false,false];
-    g.pSt={};
-    g.balls=0;g.strikes=0;g.outs=0;
+    g.gameOver=true;g.bases=[false,false,false];g.pSt={};g.balls=0;g.strikes=0;g.outs=0;
     g.id=uid();
-    const saved={...g};delete saved._h;
+    var saved=Object.assign({},g);delete saved._h;
     games.unshift(saved);saveGames();saveGame();render();
   }
 
   // ── Count ─────────────────────────────────────────────────────
   function adjC(type,d){
     if(g.gameOver)return;
-    const mx=type==='balls'?4:3;
-    const nv=Math.max(0,Math.min(mx,g[type]+d));
+    var mx=type==='balls'?4:3;
+    var nv=Math.max(0,Math.min(mx,g[type]+d));
     if(nv===g[type])return;
     pushUndo(snap());g[type]=nv;
     if(type==='strikes'&&nv===3){
-      g.outs++;nextBatter();
+      logAB('K');g.outs++;nextBatter();
       if(g.outs>=3)advHalf();else{saveGame();render();}
       return;
     }
     if(type==='balls'&&nv===4){
-      const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
-      const k=i=>t+'-'+i;
-      const on1=lu.findIndex((_,i)=>getSt(t,i)==='1st');
-      const on2=lu.findIndex((_,i)=>getSt(t,i)==='2nd');
-      const on3=lu.findIndex((_,i)=>getSt(t,i)==='3rd');
-      // walk force-advance rules:
-      // 1st is always forced (batter taking 1st pushes them)
-      // 2nd is forced only if 1st is occupied
-      // 3rd is forced only if both 1st and 2nd are occupied (bases loaded)
+      var t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+      function k(i){return t+'-'+i;}
+      var on1=lu.findIndex(function(_,i){return getSt(t,i)==='1st';});
+      var on2=lu.findIndex(function(_,i){return getSt(t,i)==='2nd';});
+      var on3=lu.findIndex(function(_,i){return getSt(t,i)==='3rd';});
       if(on3>=0&&on2>=0&&on1>=0){g.pSt[k(on3)]='scored';scoreRun();}
-      if(on2>=0&&on1>=0) g.pSt[k(on2)]='3rd';
-      if(on1>=0) g.pSt[k(on1)]='2nd';
-      if(lu.length>0) g.pSt[k(bi)]='1st';
-      syncDiamond();nextBatter();saveGame();render();checkRunLimit();
+      if(on2>=0&&on1>=0)g.pSt[k(on2)]='3rd';
+      if(on1>=0)g.pSt[k(on1)]='2nd';
+      if(lu.length>0)g.pSt[k(bi)]='1st';
+      logAB('BB');syncDiamond();nextBatter();saveGame();render();checkRunLimit();
       return;
     }
     saveGame();render();
@@ -1277,49 +1232,56 @@
   // ── BIP ───────────────────────────────────────────────────────
   function showBIPPicker(){
     if(g.gameOver)return;
-    showModal(`<div class="modal-title">Ball in Play</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <button onclick="recordHit(1);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">1B</button>
-      <button onclick="recordHit(2);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">2B</button>
-      <button onclick="recordHit(3);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">3B</button>
-      <button onclick="recordHit(4);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">HR</button>
-      <button onclick="recordFC();closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:18px;font-weight:800;cursor:pointer;color:#1565c0">FC</button>
-      <button onclick="recordDP();closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:18px;font-weight:800;cursor:pointer;color:#c0392b">DP</button>
-    </div>
-    <button onclick="closeModal()" style="display:block;width:100%;margin-top:10px;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
+    showModal('<div class="modal-title">Ball in Play</div>'+
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+            '<button onclick="recordHit(1);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">1B</button>'+
+            '<button onclick="recordHit(2);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">2B</button>'+
+            '<button onclick="recordHit(3);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">3B</button>'+
+            '<button onclick="recordHit(4);closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:20px;font-weight:800;cursor:pointer">HR</button>'+
+            '<button onclick="recordFC();closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:18px;font-weight:800;cursor:pointer;color:#1565c0">FC</button>'+
+            '<button onclick="recordDP();closeModal()" style="padding:16px;border-radius:10px;border:2px solid #e0e0e0;background:#fff;font-size:18px;font-weight:800;cursor:pointer;color:#c0392b">DP</button>'+
+            '</div>'+
+            '<button onclick="closeModal()" style="display:block;width:100%;margin-top:10px;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>');
   }
   function advanceBase(cur,n){
-    const order=['none','1st','2nd','3rd','scored'];
-    const idx=order.indexOf(cur);if(idx<=0)return{pos:'none',scored:false};
-    const ni=Math.min(idx+n,4);return{pos:order[ni],scored:ni>=4};
+    var order=['none','1st','2nd','3rd','scored'];
+    var idx=order.indexOf(cur);if(idx<=0)return{pos:'none',scored:false};
+    var ni=Math.min(idx+n,4);return{pos:order[ni],scored:ni>=4};
   }
   function recordHit(bases){
     if(g.gameOver)return;
-    const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
-    pushUndo(snap());const k=i=>t+'-'+i;
-    lu.forEach((_,i)=>{
-      const cur=getSt(t,i);
+    var t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    function k(i){return t+'-'+i;}
+    lu.forEach(function(_,i){
+      var cur=getSt(t,i);
       if(cur==='none'||cur==='scored'||cur==='out')return;
-      const{pos,scored:s}=advanceBase(cur,bases);
-      g.pSt[k(i)]=pos;if(s)scoreRun();
+      var res=advanceBase(cur,bases);
+      g.pSt[k(i)]=res.pos;if(res.scored)scoreRun();
     });
     if(bases>=4){if(lu.length>0)g.pSt[k(bi)]='scored';scoreRun();}
     else{if(lu.length>0)g.pSt[k(bi)]=['none','1st','2nd','3rd'][bases];}
+    var labels=['','1B','2B','3B','HR'];
+    logAB(labels[bases]||'1B');
     syncDiamond();nextBatter();saveGame();render();checkRunLimit();
   }
   function recordFC(){
     if(g.gameOver)return;
-    const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
-    pushUndo(snap());const k=i=>t+'-'+i;
+    var t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    function k(i){return t+'-'+i;}
     if(lu.length>0)g.pSt[k(bi)]='1st';
-    syncDiamond();nextBatter();saveGame();render();
-    const runners=lu.map((p,i)=>({p,i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st)&&r.i!==(t==='away'?g.bA:g.bH));
+    logAB('FC');syncDiamond();nextBatter();saveGame();render();
+    var runners=lu.map(function(p,i){return {p:p,i:i,st:getSt(t,i)};})
+            .filter(function(r){return ['1st','2nd','3rd'].indexOf(r.st)>=0&&r.i!==(t==='away'?g.bA:g.bH);});
     if(!runners.length)return;
-    showModal(`<div class="modal-title">FC — who was thrown out?</div>
-    ${runners.map(r=>`<button onclick="fcOut('${t}',${r.i});closeModal()"
-      style="display:block;width:100%;margin-bottom:8px;padding:12px;border-radius:9px;border:2px solid #e0e0e0;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:left">
-      <span style="color:#888;font-size:12px;margin-right:8px">${r.st}</span>${r.p}</button>`).join('')}
-    <button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Skip</button>`);
+    showModal('<div class="modal-title">FC — who was thrown out?</div>'+
+            runners.map(function(r){
+              return '<button onclick="fcOut(\''+t+'\','+r.i+');closeModal()" '+
+                      'style="display:block;width:100%;margin-bottom:8px;padding:12px;border-radius:9px;border:2px solid #e0e0e0;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:left">'+
+                      '<span style="color:#888;font-size:12px;margin-right:8px">'+r.st+'</span>'+r.p+'</button>';
+            }).join('')+
+            '<button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Skip</button>');
   }
   function fcOut(t,i){
     pushUndo(snap());g.pSt[t+'-'+i]='out';g.outs++;syncDiamond();
@@ -1327,22 +1289,25 @@
   }
   function recordDP(){
     if(g.gameOver)return;
-    const t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
-    pushUndo(snap());const k=i=>t+'-'+i;
+    var t=g.half,lu=t==='away'?g.luA:g.luH,bi=t==='away'?g.bA:g.bH;
+    pushUndo(snap());
+    function k(i){return t+'-'+i;}
     if(lu.length>0)g.pSt[k(bi)]='out';
-    const runners=lu.map((_,i)=>({i,st:getSt(t,i)})).filter(r=>['1st','2nd','3rd'].includes(r.st));
-    for(const base of['3rd','2nd','1st']){
-      const lead=runners.find(r=>r.st===base);
+    var runners=lu.map(function(_,i){return {i:i,st:getSt(t,i)};})
+            .filter(function(r){return ['1st','2nd','3rd'].indexOf(r.st)>=0;});
+    var bases=['3rd','2nd','1st'];
+    for(var b=0;b<bases.length;b++){
+      var lead=runners.find(function(r){return r.st===bases[b];});
       if(lead){g.pSt[k(lead.i)]='out';break;}
     }
-    g.outs+=2;syncDiamond();nextBatter();
+    g.outs+=2;syncDiamond();logAB('DP');nextBatter();
     if(g.outs>=3)advHalf();else{saveGame();render();}
   }
 
   // ── Lineup (game) ─────────────────────────────────────────────
   function addBatter(){
-    const inp=document.getElementById('new-p');
-    const v=inp.value.trim();if(!v)return;
+    var inp=document.getElementById('new-p');
+    var v=inp.value.trim();if(!v)return;
     if(g.half==='away')g.luA.push(v);else g.luH.push(v);
     inp.value='';saveGame();render();
   }
@@ -1350,15 +1315,13 @@
   function setBatter(t,i){
     if(t==='away')g.bA=i;else g.bH=i;
     g.balls=0;g.strikes=0;
-    // clear terminal status so batter can bat again (bat around)
-    const k=t+'-'+i;
-    const cur=(g.pSt||{})[k]||'none';
-    if(cur==='scored'||cur==='out') g.pSt[k]='none';
+    var k=t+'-'+i,cur=(g.pSt||{})[k]||'none';
+    if(cur==='scored'||cur==='out')g.pSt[k]='none';
     saveGame();render();
   }
   function removeBatter(t,i){
-    const name=t==='away'?g.luA[i]:g.luH[i];
-    if(!confirm(`Remove "${name}" from the lineup?`))return;
+    var name=t==='away'?g.luA[i]:g.luH[i];
+    if(!confirm('Remove "'+name+'" from the lineup?'))return;
     pushUndo(snap());
     if(t==='away'){g.luA.splice(i,1);if(g.bA>=g.luA.length)g.bA=0;}
     else{g.luH.splice(i,1);if(g.bH>=g.luH.length)g.bH=0;}
@@ -1366,195 +1329,166 @@
   }
 
   // ── Runner status ─────────────────────────────────────────────
-  const ST=['none','1st','2nd','3rd','scored','out'];
-  const ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
-  const ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
+  var ST=['none','1st','2nd','3rd','scored','out'];
+  var ST_L={none:'—','1st':'1st','2nd':'2nd','3rd':'3rd',scored:'Scored',out:'Out'};
+  var ST_C={none:'bs0','1st':'bs1','2nd':'bs1','3rd':'bs1',scored:'bs2',out:'bs3'};
   function getSt(t,i){return(g.pSt||{})[t+'-'+i]||'none';}
   function setSt(t,i,v){
-    const prev=getSt(t,i);
-    const bi=t==='away'?g.bA:g.bH;
-    const wasUp=i===bi;
-    const wasInBox=prev==='none'||prev==='out'||prev==='scored';
-    const goingOnBase=['1st','2nd','3rd'].includes(v);
-    // if current batter going on base from box, use hit logic to advance runners
-    if(wasUp&&wasInBox&&goingOnBase){
-      recordHit({'1st':1,'2nd':2,'3rd':3}[v]);
-      return;
-    }
-    pushUndo(snap());
-    g.pSt[t+'-'+i]=v;
-    // manually scoring a runner counts the run
-    if(v==='scored'&&prev!=='scored'&&!wasInBox){
-      scoreRun();
-    }
-    // manually marking a baserunner out counts the out
+    var prev=getSt(t,i);
+    var bi=t==='away'?g.bA:g.bH;
+    var wasUp=i===bi;
+    var wasInBox=prev==='none'||prev==='out'||prev==='scored';
+    var goingOnBase=['1st','2nd','3rd'].indexOf(v)>=0;
+    if(wasUp&&wasInBox&&goingOnBase){recordHit({'1st':1,'2nd':2,'3rd':3}[v]);return;}
+    pushUndo(snap());g.pSt[t+'-'+i]=v;
+    if(v==='scored'&&prev!=='scored'&&!wasInBox)scoreRun();
     if(v==='out'&&prev!=='out'&&!wasInBox){
-      g.outs++;
-      syncDiamond();
+      g.outs++;syncDiamond();
       if(g.outs>=3){saveGame();advHalf();return;}
     }
     syncDiamond();
     if(wasUp&&(goingOnBase||v==='scored'||v==='out')&&wasInBox)nextBatter();
-    saveGame();render();
-    checkRunLimit();
+    saveGame();render();checkRunLimit();
   }
   function advSt(t,i){
-    const cur=getSt(t,i);
-    // terminal states — tap does nothing
-    if(cur==='scored'||cur==='out') return;
-    const bi=t==='away'?g.bA:g.bH;
-    const wasUp=i===bi;
-    const wasInBox=cur==='none'||cur==='out'||cur==='scored';
-    const next=ST[(ST.indexOf(cur)+1)%ST.length];
-    const goingOnBase=['1st','2nd','3rd'].includes(next);
+    var cur=getSt(t,i);
+    if(cur==='scored'||cur==='out')return;
+    var bi=t==='away'?g.bA:g.bH;
+    var wasUp=i===bi;
+    var wasInBox=cur==='none'||cur==='out'||cur==='scored';
+    var next=ST[(ST.indexOf(cur)+1)%ST.length];
+    var goingOnBase=['1st','2nd','3rd'].indexOf(next)>=0;
     if(wasUp&&wasInBox&&goingOnBase){recordHit({'1st':1,'2nd':2,'3rd':3}[next]);return;}
     setSt(t,i,next);
   }
   function pickSt(t,i){
-    const cur=getSt(t,i);
-    // terminal states — picker only allows clearing
-    const options=cur==='scored'||cur==='out'
-            ? []
-            : ST.filter(s=>s!=='none'&&s!=='scored'||cur==='none');
-    // available options: if on base, can move to further base or scored or out
-    // if none (batter), handled via recordHit — show all
-    const avail=cur==='none'
-            ? ST.filter(s=>s!=='none')
-            : cur==='scored'||cur==='out'
-                    ? [] // terminal — no progression options
-                    : ST.filter(s=>s!=='none'&&s!==cur);
-
-    showModal(`<div class="modal-title">Set runner status</div>
-    ${avail.map(s=>`
-      <button onclick="setSt('${t}',${i},'${s}');closeModal()"
-        style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;
-        border:2px solid ${s===cur?'#333':'#e0e0e0'};background:${s===cur?'#f0f0f0':'#fff'};
-        font-size:14px;font-weight:700;cursor:pointer;color:#111">${ST_L[s]}</button>`).join('')}
-    ${avail.length===0?`<div style="color:#aaa;font-size:13px;text-align:center;padding:8px 0">${ST_L[cur]} — no further advancement</div>`:''}
-    <button onclick="setSt('${t}',${i},'none');closeModal()"
-      style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>
-    <button onclick="closeModal()"
-      style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>`);
+    var cur=getSt(t,i);
+    var avail=cur==='scored'||cur==='out'?[]:ST.filter(function(s){return s!=='none'&&s!==cur;});
+    showModal('<div class="modal-title">Set runner status</div>'+
+            avail.map(function(s){
+              return '<button onclick="setSt(\''+t+'\','+i+',\''+s+'\');closeModal()" '+
+                      'style="display:block;width:100%;margin-bottom:7px;padding:11px;border-radius:9px;'+
+                      'border:2px solid '+(s===cur?'#333':'#e0e0e0')+';background:'+(s===cur?'#f0f0f0':'#fff')+';'+
+                      'font-size:14px;font-weight:700;cursor:pointer;color:#111">'+ST_L[s]+'</button>';
+            }).join('')+
+            (avail.length===0?'<div style="color:#aaa;font-size:13px;text-align:center;padding:8px 0">'+ST_L[cur]+' — no further advancement</div>':'')+
+            '<button onclick="setSt(\''+t+'\','+i+',\'none\');closeModal()" '+
+            'style="display:block;width:100%;padding:9px;border-radius:9px;border:1px solid #e0e0e0;background:#fff;font-size:13px;color:#aaa;cursor:pointer;margin-top:4px">Clear (—)</button>'+
+            '<button onclick="closeModal()" style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>');
   }
-  let _lpT=null,_lpI=null,_lpTmr=null;
-  function stTouch(e,t,i){e.stopPropagation();_lpT=t;_lpI=i;_lpTmr=setTimeout(()=>{_lpTmr=null;pickSt(t,i);},500);}
+  var _lpT=null,_lpI=null,_lpTmr=null;
+  function stTouch(e,t,i){e.stopPropagation();_lpT=t;_lpI=i;_lpTmr=setTimeout(function(){_lpTmr=null;pickSt(t,i);},500);}
   function stTouchEnd(){if(_lpTmr){clearTimeout(_lpTmr);_lpTmr=null;advSt(_lpT,_lpI);}}
 
   // ── Render ────────────────────────────────────────────────────
   function render(){
     if(!g)return;
     ensureInning();
-    const aC=col('away'),hC=col('home'),curC=col(g.half);
-    const aT=sum(g.aR),hT=sum(g.hR);
-    const emoji=g.type==='softball'?'🥎':'⚾';
-    document.getElementById('inn-ind').textContent=g.gameOver?`${emoji} Final`:(g.half==='away'?'▲':'▼')+' '+(g.inning+1);
-    const an=document.getElementById('h-an');an.textContent=g.away;an.style.color=aC.bg;
-    const hn=document.getElementById('h-hn');hn.textContent=g.home;hn.style.color=hC.bg;
-    const as=document.getElementById('h-as');as.textContent=aT;as.style.color=aC.bg;
-    const hs=document.getElementById('h-hs');hs.textContent=hT;hs.style.color=hC.bg;
+    var aC=col('away'),hC=col('home'),curC=col(g.half);
+    var aT=sum(g.aR),hT=sum(g.hR);
+    var emoji=g.type==='softball'?'🥎':'⚾';
+    document.getElementById('inn-ind').textContent=g.gameOver?emoji+' Final':(g.half==='away'?'▲':'▼')+' '+(g.inning+1);
+    var an=document.getElementById('h-an');an.textContent=g.away;an.style.color=aC.bg;
+    var hn=document.getElementById('h-hn');hn.textContent=g.home;hn.style.color=hC.bg;
+    var as=document.getElementById('h-as');as.textContent=aT;as.style.color=aC.bg;
+    var hs=document.getElementById('h-hs');hs.textContent=hT;hs.style.color=hC.bg;
     document.getElementById('g-date').textContent=g.date;
-    document.getElementById('h-half').textContent=g.gameOver?'':(g.half==='away'?`${g.away} batting`:`${g.home} batting`);
-    const ld=()=>{if(g.ls==='none')return'';if(g.ls==='single')return`Limit:${g.rl}`;return`${g.el}→${g.ll===999?'∞':g.ll}(inn${g.sw+1}+)`;};
-    document.getElementById('h-lim').textContent=ld();
-    const ob=document.getElementById('over-banner');
-    if(g.gameOver){ob.style.display='block';const w=aT>hT?g.away:hT>aT?g.home:null;ob.textContent=w?`Game over — ${w} wins! (${aT}–${hT})`:`Tie! (${aT}–${aT})`;}
+    document.getElementById('h-half').textContent=g.gameOver?'':(g.half==='away'?g.away+' batting':g.home+' batting');
+    var ld=g.ls==='none'?'':g.ls==='single'?'Limit:'+g.rl:(g.el+'→'+(g.ll===999?'∞':g.ll)+' (inn'+(g.sw+1)+'+)');
+    document.getElementById('h-lim').textContent=ld;
+    var ob=document.getElementById('over-banner');
+    if(g.gameOver){ob.style.display='block';var w=aT>hT?g.away:hT>aT?g.home:null;ob.textContent=w?'Game over — '+w+' wins! ('+aT+'–'+hT+')':'Tie! ('+aT+'–'+aT+')';}
     else ob.style.display='none';
     document.getElementById('game-controls').style.display=g.gameOver?'none':'block';
     document.getElementById('end-game-card').style.display=g.gameOver?'none':'block';
-    for(let i=0;i<3;i++)document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
-    const ir=g.half==='away'?g.aR[g.inning]:g.hR[g.inning];
-    const lim=g.gameOver?0:limFor(g.inning);
+    for(var i=0;i<3;i++)document.getElementById('od'+i).className='od'+(i<g.outs?' on':'');
+    var ir=g.half==='away'?g.aR[g.inning]:g.hR[g.inning];
+    var lim=g.gameOver?0:limFor(g.inning);
     document.getElementById('st-ir').textContent=g.gameOver?'—':ir;
-    const le=document.getElementById('st-rl');
+    var le=document.getElementById('st-rl');
     if(!lim||g.gameOver){le.textContent='—';le.className='val';}
-    else{const left=Math.max(0,lim-ir);le.textContent=left;le.className='val'+(left===0?' danger':left<=1?' warn':'');}
-    ['b1','b2','b3'].forEach((id,i)=>{document.getElementById(id).className='base '+id+(g.bases[i]?' on':'');});
+    else{var left=Math.max(0,lim-ir);le.textContent=left;le.className='val'+(left===0?' danger':left<=1?' warn':'');}
+    ['b1','b2','b3'].forEach(function(id,i){document.getElementById(id).className='base '+id+(g.bases[i]?' on':'');});
     document.getElementById('ct-b').textContent=g.balls;
     document.getElementById('ct-s').textContent=g.strikes;
-    document.getElementById('bd').innerHTML=[0,1,2,3].map(i=>`<div class="cdot${i<g.balls?' b':''}"></div>`).join('');
-    document.getElementById('sd').innerHTML=[0,1,2].map(i=>`<div class="cdot${i<g.strikes?' s':''}"></div>`).join('');
-    const ta=document.getElementById('tog-a');
+    document.getElementById('bd').innerHTML=[0,1,2,3].map(function(i){return '<div class="cdot'+(i<g.balls?' b':'')+'"></div>';}).join('');
+    document.getElementById('sd').innerHTML=[0,1,2].map(function(i){return '<div class="cdot'+(i<g.strikes?' s':'')+'"></div>';}).join('');
+    var ta=document.getElementById('tog-a');
     ta.textContent=g.away+' batting';
-    ta.style.cssText=`border-color:${g.half==='away'?aC.bg:'#ddd'};color:${g.half==='away'?aC.bg:'#888'};background:${g.half==='away'?aC.lt:'#f5f7fa'}`;
-    const th=document.getElementById('tog-h');
+    ta.style.cssText='border-color:'+(g.half==='away'?aC.bg:'#ddd')+';color:'+(g.half==='away'?aC.bg:'#888')+';background:'+(g.half==='away'?aC.lt:'#f5f7fa');
+    var th=document.getElementById('tog-h');
     th.textContent=g.home+' batting';
-    th.style.cssText=`border-color:${g.half==='home'?hC.bg:'#ddd'};color:${g.half==='home'?hC.bg:'#888'};background:${g.half==='home'?hC.lt:'#f5f7fa'}`;
-    const br=document.getElementById('btn-run');
+    th.style.cssText='border-color:'+(g.half==='home'?hC.bg:'#ddd')+';color:'+(g.half==='home'?hC.bg:'#888')+';background:'+(g.half==='home'?hC.lt:'#f5f7fa');
+    var br=document.getElementById('btn-run');
     br.style.background=curC.bg;br.style.borderColor=curC.bg;
     document.getElementById('cl-run').textContent=(g.half==='away'?g.away:g.home)+' run';
-    const bo=document.getElementById('btn-ob');
-    bo.style.cssText=`background:${curC.lt};color:${curC.bg};border-color:${curC.bg}`;
+    var bo=document.getElementById('btn-ob');
+    bo.style.cssText='background:'+curC.lt+';color:'+curC.bg+';border-color:'+curC.bg;
     document.getElementById('add-p-btn').style.background=curC.bg;
     document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
-    const totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
-    const tb=document.getElementById('inn-tbl');
-    let hdr='<tr><th>Team</th>';for(let i=0;i<totalInns;i++)hdr+=`<th>${i+1}</th>`;hdr+='<th>R</th></tr>';
-    const mkRow=(nm,runs,tot,isAct,c)=>{
-      let r=`<tr><td class="tlbl" style="color:${c.bg}">${nm}</td>`;
-      for(let i=0;i<totalInns;i++){
-        const v=runs[i]||0;
-        const act=!g.gameOver&&i===g.inning&&isAct;
-        const atLim=limFor(i)&&v>=limFor(i);
-        const halfDone=i<g.inning||(i===g.inning&&!isAct&&runs[i]!==undefined);
-        const shown=g.gameOver||halfDone?v:(act?`<b>${v}</b>`:'—');
-        r+=`<td class="${act?'ainn':''}${atLim?' alim':''}"${act?` style="background:${c.lt}"`:''}>${shown}</td>`;
+    var totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
+    var tb=document.getElementById('inn-tbl');
+    var hdr='<tr><th>Team</th>';
+    for(var i=0;i<totalInns;i++)hdr+='<th>'+(i+1)+'</th>';
+    hdr+='<th>R</th></tr>';
+    function mkRow(nm,runs,tot,isAct,c){
+      var r='<tr><td class="tlbl" style="color:'+c.bg+'">'+nm+'</td>';
+      for(var i=0;i<totalInns;i++){
+        var v=runs[i]||0;
+        var act=!g.gameOver&&i===g.inning&&isAct;
+        var atLim=limFor(i)&&v>=limFor(i);
+        var halfDone=i<g.inning||(i===g.inning&&!isAct&&runs[i]!==undefined);
+        var shown=g.gameOver||halfDone?v:(act?'<b>'+v+'</b>':'—');
+        r+='<td class="'+(act?'ainn':'')+(atLim?' alim':'')+'"'+(act?' style="background:'+c.lt+'"':'')+'>'+shown+'</td>';
       }
-      return r+`<td class="ttot" style="color:${c.bg}">${tot}</td></tr>`;
-    };
+      return r+'<td class="ttot" style="color:'+c.bg+'">'+tot+'</td></tr>';
+    }
     tb.innerHTML=hdr+mkRow(g.away,g.aR,aT,!g.gameOver&&g.half==='away',aC)+mkRow(g.home,g.hR,hT,!g.gameOver&&g.half==='home',hC);
-    const t=g.half,lu=t==='away'?g.luA:g.luH;
-    const bi=t==='away'?g.bA:g.bH;
-    const od2=lu.length>1?(bi+1)%lu.length:null;
-    const lut=document.getElementById('lu-team');lut.textContent=t==='away'?g.away:g.home;lut.style.color=curC.bg;
-    const ll=document.getElementById('lu-list');
+    var t=g.half,lu=t==='away'?g.luA:g.luH;
+    var bi=t==='away'?g.bA:g.bH;
+    var od2=lu.length>1?(bi+1)%lu.length:null;
+    var lut=document.getElementById('lu-team');lut.textContent=t==='away'?g.away:g.home;lut.style.color=curC.bg;
+    var ll=document.getElementById('lu-list');
     if(!lu.length){ll.innerHTML='<div style="color:#aaa;font-size:13px;padding:6px 0">No players added yet.</div>';return;}
-    ll.innerHTML=lu.map((p,i)=>{
-      const isUp=i===bi,isDeck=i===od2;
-      const rowStyle=isUp?`background:${curC.lt};border-color:${curC.bg};border-width:2px`:isDeck?`background:#f5f5e8;border-color:#b8a000;border-width:2px`:'';
-      const badge=isUp?`<span class="bbadge" style="background:${curC.bg}">▶ Up</span>`:isDeck?`<span class="bbadge deck-badge">On deck</span>`:`<span class="bbadge" style="background:#ddd;color:#888;cursor:pointer" onclick="event.stopPropagation();setBatter('${t}',${i})">Set up</span>`;
-      const v=getSt(t,i);
-      return `<div class="litem" style="${rowStyle}">
-      <span class="lnum2">${i+1}</span>
-      <span class="lname2">${p}</span>
-      ${badge}
-      <span class="bstat ${ST_C[v]}" onclick="event.stopPropagation();advSt('${t}',${i})" ontouchstart="stTouch(event,'${t}',${i})" ontouchend="stTouchEnd()">${ST_L[v]}</span>
-      <span class="pick-btn" onclick="event.stopPropagation();pickSt('${t}',${i})">⋯</span>
-      <span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer" onclick="event.stopPropagation();removeBatter('${t}',${i})">✕</span>
-    </div>`;
+    ll.innerHTML=lu.map(function(p,i){
+      var isUp=i===bi,isDeck=i===od2;
+      var rowStyle=isUp?'background:'+curC.lt+';border-color:'+curC.bg+';border-width:2px':isDeck?'background:#f5f5e8;border-color:#b8a000;border-width:2px':'';
+      var badge=isUp?'<span class="bbadge" style="background:'+curC.bg+'">▶ Up</span>':
+              isDeck?'<span class="bbadge deck-badge">On deck</span>':
+                      '<span class="bbadge" style="background:#ddd;color:#888;cursor:pointer" onclick="event.stopPropagation();setBatter(\''+t+'\','+i+')">Set up</span>';
+      var v=getSt(t,i);
+      return '<div class="litem" style="'+rowStyle+'">'+
+              '<span class="lnum2">'+(i+1)+'</span>'+
+              '<span class="lname2">'+p+'</span>'+
+              badge+
+              '<span class="bstat '+ST_C[v]+'" onclick="event.stopPropagation();advSt(\''+t+'\','+i+')" ontouchstart="stTouch(event,\''+t+'\','+i+')" ontouchend="stTouchEnd()">'+ST_L[v]+'</span>'+
+              '<span class="pick-btn" onclick="event.stopPropagation();pickSt(\''+t+'\','+i+')">⋯</span>'+
+              '<span style="color:#ccc;font-size:15px;padding:2px 4px;cursor:pointer" onclick="event.stopPropagation();removeBatter(\''+t+'\','+i+')">✕</span>'+
+              '</div>';
     }).join('');
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  let _swWaiting=null;
-  function applyUpdate(){
-    if(_swWaiting){_swWaiting.postMessage('skipWaiting');}
-    else window.location.reload();
-  }
-
-  window.onload=()=>{
+  window.onload=function(){
     loadLS();showHome();
     document.getElementById('app-version').textContent=APP_VERSION;
     if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('sw.js').then(reg=>{
-        // new SW waiting on first install — no banner needed
-        // new SW waiting after an update
-        reg.addEventListener('updatefound',()=>{
-          const newSW=reg.installing;
-          newSW.addEventListener('statechange',()=>{
+      navigator.serviceWorker.register('sw.js').then(function(reg){
+        reg.addEventListener('updatefound',function(){
+          var newSW=reg.installing;
+          newSW.addEventListener('statechange',function(){
             if(newSW.state==='installed'&&navigator.serviceWorker.controller){
               _swWaiting=newSW;
               document.getElementById('update-banner').style.display='block';
             }
           });
         });
-        // if a SW is already waiting when page loads
         if(reg.waiting&&navigator.serviceWorker.controller){
           _swWaiting=reg.waiting;
           document.getElementById('update-banner').style.display='block';
         }
-      }).catch(()=>{});
-      // reload all tabs after SW activates
-      navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+      }).catch(function(){});
+      navigator.serviceWorker.addEventListener('controllerchange',function(){window.location.reload();});
     }
   };
 </script>
