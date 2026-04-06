@@ -1,4 +1,4 @@
-const CACHE = 'game-tracker-v1.1.0-alpha4';
+const CACHE = 'game-tracker-v1.1.0-alpha5';
 const ASSETS = [
     '/games/',
     '/games/index.html',
