@@ -487,7 +487,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v1.1.0-alpha3';
+  const APP_VERSION = 'v1.1.0-alpha4';
   const LS={TEAMS:'gt_teams',OPPS:'gt_opps',GAME:'gt_game',UNDO:'gt_undo',GAMES:'gt_games'};
   let teams=[],opps=[],games=[],g=null,_undo=[];
   let eoOppId=null,eoSport='baseball',eoColor=0,eoRoster=[];
@@ -1232,7 +1232,12 @@
   function setHalf(h){pushUndo(snap());g.half=h;saveGame();render();}
   function endGame(){
     if(!confirm('End the game now?'))return;
-    pushUndo(snap());g.gameOver=true;g.id=uid();
+    pushUndo(snap());
+    g.gameOver=true;
+    g.bases=[false,false,false];
+    g.pSt={};
+    g.balls=0;g.strikes=0;g.outs=0;
+    g.id=uid();
     const saved={...g};delete saved._h;
     games.unshift(saved);saveGames();saveGame();render();
   }
