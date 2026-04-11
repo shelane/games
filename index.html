@@ -452,7 +452,10 @@
       </div>
     </div>
     <div class="ctrl-card" id="game-controls">
-      <h3>Batting team</h3>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+        <h3 style="margin:0">Batting team</h3>
+        <div id="cur-batter" style="font-size:12px;font-weight:700;color:#888"></div>
+      </div>
       <div class="bat-toggle">
         <button class="tog" id="tog-a" onclick="setHalf('away')"></button>
         <button class="tog" id="tog-h" onclick="setHalf('home')"></button>
@@ -1465,6 +1468,17 @@
     var bo=document.getElementById('btn-ob');
     bo.style.cssText='background:'+curC.lt+';color:'+curC.bg+';border-color:'+curC.bg;
     document.getElementById('add-p-btn').style.background=curC.bg;
+    // current batter indicator
+    var cbEl=document.getElementById('cur-batter');
+    var battingTeam=g.half;
+    var curLu=battingTeam==='away'?g.luA:g.luH;
+    var curBi=battingTeam==='away'?g.bA:g.bH;
+    if(curLu.length){
+      cbEl.textContent='▶ '+(curBi+1)+'. '+curLu[curBi];
+      cbEl.style.color=curC.bg;
+    }else{
+      cbEl.textContent='';
+    }
     document.getElementById('cl-nx').textContent=g.half==='away'?'End top / start bottom':'End bottom / next inn';
     var totalInns=Math.max(g.aR.length,g.hR.length,g.inning+1);
     var tb=document.getElementById('inn-tbl');
