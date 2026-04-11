@@ -1186,9 +1186,46 @@
     pushUndo(snap());logAB('OUT');g.outs++;nextBatter();
     if(g.outs>=3)advHalf();else{saveGame();render();}
   }
-  function toggleBase(i){
+  function toggleBase(baseIdx){
     if(g.gameOver)return;
-    pushUndo(snap());g.bases[i]=!g.bases[i];saveGame();render();
+    if(!g.bases[baseIdx])return;
+    var baseName=['1st','2nd','3rd'][baseIdx];
+    var nextBase=['2nd','3rd',null][baseIdx];
+    var t=g.half,lu=t==='away'?g.luA:g.luH;
+    var runner=null;
+    lu.forEach(function(_,i){if(getSt(t,i)===baseName)runner=i;});
+    var advBtn=nextBase
+            ?'<button onclick="baseRunnerAction(\''+t+'\','+runner+',\'advance\',\''+nextBase+'\');closeModal()" '+
+            'style="display:block;width:100%;margin-bottom:8px;padding:14px;border-radius:10px;border:2px solid #1565c0;background:#eff4fd;font-size:15px;font-weight:700;cursor:pointer;color:#1565c0">'+
+            '→ Advance to '+nextBase+'</button>'
+            :'';
+    showModal('<div class="modal-title">Runner on '+baseName+'</div>'+
+            advBtn+
+            '<button onclick="baseRunnerAction(\''+t+'\','+runner+',\'scored\',null);closeModal()" '+
+            'style="display:block;width:100%;margin-bottom:8px;padding:14px;border-radius:10px;border:2px solid #1a7a34;background:#eaf4ec;font-size:15px;font-weight:700;cursor:pointer;color:#1a7a34">'+
+            '✓ Scored</button>'+
+            '<button onclick="baseRunnerAction(\''+t+'\','+runner+',\'out\',null);closeModal()" '+
+            'style="display:block;width:100%;margin-bottom:8px;padding:14px;border-radius:10px;border:2px solid #c0392b;background:#fdf0ef;font-size:15px;font-weight:700;cursor:pointer;color:#c0392b">'+
+            '✕ Out</button>'+
+            '<button onclick="closeModal()" '+
+            'style="display:block;width:100%;padding:9px;border-radius:9px;border:none;background:none;font-size:13px;color:#bbb;cursor:pointer">Cancel</button>');
+  }
+  function baseRunnerAction(t,i,result,targetBase){
+    if(i===null||i===undefined)return;
+    pushUndo(snap());
+    if(result==='advance'){
+      g.pSt[t+'-'+i]=targetBase;
+      syncDiamond();saveGame();render();
+      return;
+    }
+    g.pSt[t+'-'+i]=result;
+    if(result==='scored')scoreRun();
+    if(result==='out'){
+      g.outs++;
+      if(g.outs>=3){syncDiamond();saveGame();advHalf();return;}
+    }
+    syncDiamond();saveGame();render();
+    if(result==='scored')checkRunLimit();
   }
   function nextHalf(){if(g.gameOver)return;pushUndo(snap());advHalf();}
   function setHalf(h){pushUndo(snap());g.half=h;saveGame();render();}
